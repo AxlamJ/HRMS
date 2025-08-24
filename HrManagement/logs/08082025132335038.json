@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-08 13:23:35 041",
+  "Message": "Nullable object must have a value.",
+  "StackTrace": "   at System.Nullable`1.get_Value()\r\n   at HrManagement.WebApi.TrainingsController.UpsertAssessment(Assessment model) in D:\\Projects\\Dotnet Project\\Revital\\revital\\HrManagement\\WebApi\\TrainingsController.cs:line 939",
+  "Source": "System.Private.CoreLib",
+  "InnerException": null
+}

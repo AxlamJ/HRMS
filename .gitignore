@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/revital/v17/DocumentLayout.json
+/.vs/revital/CopilotIndices/17.14.878.3237
+/.vs/revital/FileContentIndex
+*.wsuo
+/.vs/slnx.sqlite
+/.vs/HrManagement/CopilotIndices/17.14.878.3237
+/.vs/HrManagement/FileContentIndex
+/.vs/slnx.sqlite-journal
+
+.vs/
+**/bin/
+**/obj/

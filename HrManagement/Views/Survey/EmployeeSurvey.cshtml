@@ -1,0 +1,183 @@
+﻿@{
+    ViewData["Title"] = "Employee Survey";
+
+    var loggedInEmployeeCode = 0;
+    if (ViewBag.LoggedInEmployeeCode != null)
+    {
+        loggedInEmployeeCode = Convert.ToInt32(ViewBag.LoggedInEmployeeCode);
+    }
+
+}
+
+<style>
+    .help-block.error {
+        margin-bottom: 5px;
+    }
+
+    .has-error {
+        color: red;
+    }
+
+    .has-error .form-control {
+        border-color: red;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    }
+
+    .slider-value {
+        font-size: 18px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .rating-container {
+        display: flex;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .rating-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rating-label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .rating-icon {
+        font-size: 30px;
+        cursor: pointer;
+        transition: color 0.2s ease-in-out, filter 0.2s ease-in-out;
+        color: gray; /* Default color */
+    }
+
+    /* Smiley needs a filter to change its color */
+    .rating-icon.smiley-icon {
+        filter: grayscale(100%) brightness(50%);
+    }
+
+    .rating-icon.smiley-icon.selected {
+        filter: grayscale(0%) brightness(100%);
+    }
+
+    /* Thumbs-up needs SVG fill to change color */
+    .rating-icon.thumb-icon svg {
+        fill: gray;
+    }
+
+    .rating-icon.selected {
+        color: #FFD700 !important; /* Gold */
+    }
+
+    /* Smiley should match this color */
+    .rating-icon.smiley-icon {
+        filter: grayscale(100%) brightness(50%);
+    }
+
+        .rating-icon.smiley-icon.selected {
+            filter: grayscale(0%) brightness(120%);
+        }
+
+    /* Thumbs-up uses SVG fill */
+    .rating-icon.thumb-icon svg {
+        fill: gray;
+    }
+
+    .rating-icon.selected.thumb-icon svg {
+        fill: #FFD700; /* Gold */
+    }
+
+    .rating-icon.heart-icon {
+        font-size: 30px;
+        cursor: pointer;
+        transition: color 0.2s ease-in-out;
+        color: gray; /* Default color */
+    }
+
+    .rating-icon.heart-icon.selected {
+        color: red !important; /* Red color when selected */
+    }
+
+</style>
+
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+                    <div class="card mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="employeeSurveyForm">
+                                    <h3 id="surveyTitle">Employee Survey</h3>
+                                    <p id="surveyDescription"></p>
+                                    <div id="surveyQuestionsContainer"></div>
+                                </form>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="justify-content-end text-end">
+                                        <button id="submitSurvey" class="btn btn-success float-end">
+                                            <i class="fa fa-save fs-4 me-2"></i>
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="@Url.Content("/scripts/Survey/EmployeeSurvey.js")" asp-append-version="true"></script>
+    <script src="@Url.Content("/js/validate.min.js")"></script>
+
+    <script>
+        var curPage = "EmployeeSurvey";
+        var employeeCode = "@loggedInEmployeeCode";
+
+        var DropDownsData = {};
+        @if (ViewBag.DropDownData != null)
+        {
+            <text>
+                    DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+            </text>
+        }
+
+    </script>
+}

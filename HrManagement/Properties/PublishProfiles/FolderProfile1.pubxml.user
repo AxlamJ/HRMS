@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>E:\pub</_PublishTargetUrl>
+    <History>True|2025-08-18T21:19:00.6372168Z||;True|2025-08-19T00:05:26.5834250+05:00||;True|2025-08-18T23:01:34.0345120+05:00||;True|2025-08-14T22:09:24.2491993+05:00||;True|2025-08-12T22:16:57.9937483+05:00||;True|2025-08-11T21:44:22.9131357+05:00||;True|2025-08-11T21:29:25.0835152+05:00||;True|2025-08-09T01:53:14.1827616+05:00||;True|2025-08-08T22:24:06.5819210+05:00||;True|2025-08-06T22:25:21.9974935+05:00||;True|2025-08-04T22:50:45.7048822+05:00||;True|2025-08-01T22:27:15.7884961+05:00||;True|2025-07-30T22:51:12.1523464+05:00||;True|2025-07-28T22:22:06.3844045+05:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Views/Shared/_LayoutUsers.cshtml">
+      <publishTime>08/13/2025 22:52:24</publishTime>
+    </File>
+    <File Include="Views/Shared/_LayoutUsers.cshtml.css">
+      <publishTime>08/12/2025 21:41:07</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

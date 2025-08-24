@@ -1,0 +1,213 @@
+﻿@{
+    ViewData["Title"] = "Tarining_Assesment";
+}
+
+@section PageCSS {
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+}
+
+
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    <div class="d-flex flex-column flex-column-fluid">
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                        <li class="breadcrumb-item">
+                            <a href="/Products/Index"
+                               class="fw-bold fs-14px" style="color:#1F4293 !important">
+                                <i class="fa fa-home"
+                                   style="color:#1F4293 !important"></i> &nbsp;Trainings
+
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <i class="fa fa-chevron-right fs-11px"
+                               style="color:#1F4293 !important"></i>
+                        </li>
+                        <li class="breadcrumb-item fs-14px fw-bold" style="color:#1F4293 !important"
+                            data-i18n="Assessments">Assessments</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+
+                    <div class="container my-5">
+                        <form>
+                            <input type="hidden" id="trainingcategory_Id" name="trainingcategory_Id" value="@ViewBag.Id" />
+                            <input type="hidden" id="AssessmentId" name="AssessmentId" />
+                            <div class="card p-4">
+                                <!-- Header Section -->
+                                <div class="mb-2">
+                                    <h1 class="h3 text-dark">Assessment Manage</h1>
+                                    <p class="text-muted">Create or edit a Assessment</p>
+
+                                    <div class="d-flex justify-content-end gap-2 mt-4">
+                                        <button id="btnPreviewAssessment" class="btn btn-sm btn-success btn-sm me-2">
+                                            <i class="bi bi-eye"></i> Preview
+                                        </button>
+
+                                        <button type="button" class="btn btn-sm btn-secondary">
+                                            <i class="bi bi-file-earmark-text me-1"></i> Draft
+                                        </button>
+
+                                        <button type="button" class="btn btn-sm btn-primary" id="submitBtn">
+                                            <i class="bi bi-save me-1"></i> Save
+                                        </button>
+
+                                        <button type="button" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <!-- Action Buttons -->
+
+
+                                <form>
+                                    <div class="row g-4">
+                                        <!-- Left Column -->
+                                        <div class="col-md-12 col-lg-12">
+                                            <!-- Category Information Section -->
+                                            <!-- Thick dark line -->
+                                            <hr class="mb-4" style="height: 3px; background-color: #343a40; border: none;">
+
+                                            <!-- Title Field -->
+
+
+                                            <div class="row mb-4">
+                                                <div class="col-lg-8 col-md-8">
+                                                    <div class="mb-3">
+                                                        <label for="Title" class="form-label">Quiz Title</label>
+                                                        <input type="text" id="Title" name="Title" class="form-control"
+                                                               placeholder="Enter category title...">
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label for="PassingGrade" class="form-label">Passing Grade</label>
+                                                                <input type="text" id="PassingGrade" name="PassingGrade" class="form-control"
+                                                                       placeholder="Enter category title...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label for="IsPassingGrade" class="form-label"> This quiz requires passing grade</label>
+                                                                <div class="form-check form-switch fs-4">
+                                                                    <input class="form-check-input" type="checkbox" id="IsPassingGrade" name="IsPassingGrade">
+
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-md-4 col-lg-4">
+
+                                                    <input type="hidden" id="ImageId" name="ImageId" />
+
+                                                    <div class="mb-2">
+                                                        <img id="imageThumbnail"
+                                                             src="https://staging.cdn.apisystem.tech/assets/membership/image-placeholder.svg"
+                                                             class="rounded-3 border img-thumbnail"
+                                                             style="width:100%;height:280px;object-fit: cover;"
+                                                             alt="Thumbnail">
+                                                    </div>
+
+                                                    <p class="text-muted small mb-3">Recommended dimensions: 1280x720, Max size: 2MB</p>
+
+                                                    <div class="d-flex gap-2">
+                                                        <!-- Upload Button -->
+                                                        <button type="button" class="btn btn-primary btn-sm" onclick="$('#imageInput').click();">
+                                                            <i class="bi bi-upload me-1"></i>Upload
+                                                        </button>
+
+                                                        <!-- Hidden File Input -->
+                                                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+
+                                                        <!-- Remove Button -->
+                                                        <button type="button" class="btn btn-danger btn-sm" id="removeImageBtn">
+                                                            <i class="bi bi-x-circle me-1"></i> Remove
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label for="PassConfirmationMessage" class="form-label">Pass Confirmation Message</label>
+                                                        <div class="rich_textbox_editor" id="PassConfirmationMessage" name="PassConfirmationMessage"
+                                                             style="height: 150px;"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-lg-12">
+                                                    <div class="mb-3">
+                                                        <label for="FailConfirmationMessage" class="form-label">Fail Confirmation Message</label>
+                                                        <div class="rich_textbox_editor" id="FailConfirmationMessage" name="FailConfirmationMessage"
+                                                             style="height: 150px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card mb-3" id="questionContainer">
+                                            </div>
+
+
+                                            <div class="card">
+                                                <div class="card-header d-flex justify-content-between align-items-center">
+                                                    <div class="btn-group">
+                                                        <!-- Add Question Button -->
+                                                        <button type="button" id="addQuestionBtn" class="btn btn-sm btn-primary mx-2">
+                                                            <i class="fa fa-question me-1" aria-hidden="true"></i> Add Question
+                                                        </button>
+
+                                                        <!-- Import Question Button -->
+                                                        <button type="button" class="btn btn-sm btn-dark">
+                                                            <i class="bi bi-upload me-1"></i> Import Question
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <script src="~/scripts/tariningDetails/Assessment/create.js" asp-append-version="true"></script>
+    <script src="~/scripts/tariningDetails/Assessment/index.js" asp-append-version="true"></script>
+
+
+
+}

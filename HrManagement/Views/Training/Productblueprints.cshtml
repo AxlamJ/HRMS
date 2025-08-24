@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Manage Departments";
+}
+
+@section PageCSS {
+    <link href="~/css/accordion-style.css" rel="stylesheet" />
+    <link href="~/css/custom/Product.css" rel="stylesheet" />
+}
+
+
+<div class="m-10 bg-light min-vh-100 d-flex flex-column">
+    <!-- Banner Section -->
+    <div class="position-relative rounded overflow-hidden d-flex mb-5" style="height: 360px; background-color: #374047;">
+        <div class="flex-grow-1" style="background: url('https://staging.cdn.apisystem.tech/assets/membership/product-template-banner.jpg') center/cover no-repeat;">
+        </div>
+        <div class="d-flex flex-column justify-content-center text-white p-4" style="width: 25%; background-color: rgba(55, 63, 71, 0.9); height: 360px;">
+            <h2 class="fw-bold mt-2">Create Digital Products in Minutes.</h2>
+            <p class="fw-semibold mt-4">Pick a Product Template and start building!</p>
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="row gx-4 gy-4 mx-xl-5">
+        <!-- Card 1 -->
+        <div class="col-md-6">
+            <div class="bg-white p-4 shadow rounded d-flex">
+                <div class="d-flex justify-content-center align-items-center rounded" style="background-color: #ffbc01; width: 128px; height: 128px;">
+                    <i class="bi bi-bookmark-fill text-white fs-1"></i>
+                </div>
+                <div class="ms-4 flex-grow-1">
+                    <h5 class="fw-semibold">Sprint Course</h5>
+                    <p class="my-3">Short courses to build gateway to memberships.</p>
+
+                    <a type="button" asp-controller="Courses" asp-action="Product_detail" class="btn btn-outline-primary">Start Building</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-6">
+            <div class="bg-white p-4 shadow rounded d-flex">
+                <div class="d-flex justify-content-center align-items-center rounded" style="background-color: #2883de; width: 128px; height: 128px;">
+                    <i class="bi bi-laptop-fill text-white fs-1"></i>
+                </div>
+                <div class="ms-4 flex-grow-1">
+                    <h5 class="fw-semibold">Marathon Course</h5>
+                    <p class="my-3">Train and upskill your audience within your niche.</p>
+                    <a type="button" asp-controller="Courses" asp-action="Product_detail" class="btn btn-outline-primary">Start Building</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-6">
+            <div class="bg-white p-4 shadow rounded d-flex">
+                <div class="d-flex justify-content-center align-items-center rounded" style="background-color: #38ca3b; width: 128px; height: 128px;">
+                    <i class="bi bi-people-fill text-white fs-1"></i>
+                </div>
+                <div class="ms-4 flex-grow-1">
+                    <h5 class="fw-semibold">Membership</h5>
+                    <p class="my-3">Nurture and mentor your network.</p>
+                    <a type="button" asp-controller="Courses" asp-action="Product_detail" class="btn btn-outline-primary">Start Building</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="col-md-6">
+            <div class="bg-white p-4 shadow rounded d-flex">
+                <div class="d-flex justify-content-center align-items-center rounded" style="background-color: #a0aec0; width: 128px; height: 128px;">
+                    <i class="bi bi-send-fill text-white fs-1"></i>
+                </div>
+                <div class="ms-4 flex-grow-1">
+                    <h5 class="fw-semibold">Build your own</h5>
+                    <p class="my-3">Build a custom product that matches your content.</p>
+                    <a type="button" asp-controller="Courses" asp-action="Product_detail" class="btn btn-outline-primary">Start Building</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+
+    <script src="~/scripts/Products/index.js" asp-append-version="true"></script>
+}
+;
+
+<script>
+    var curPage = "Index";
+    var DropDownsData = {};
+    @if (ViewBag.DropDownData != null)
+    {
+                    <text>
+                              DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+
+
+                    </text>
+    }
+
+</script>

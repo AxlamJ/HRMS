@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Certificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var FirstName = HttpContextAccessor.HttpContext?.Session?.GetString("FirstName");
+    var LastName = HttpContextAccessor.HttpContext?.Session?.GetString("LastName");
+}
+@section PageCSS {
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link href="~/css/accordion-style.css" rel="stylesheet" />
+    <link href="~/css/custom/certificate.css" rel="stylesheet" />
+}
+
+
+
+<div class="certificates-preview">
+    <div style="position: absolute; top: 118.6px; left: 109.5px; width: 377px;">
+        <h3 style="text-align: center; font-size: 24px; color: #CB8600;">CERTIFICATE OF COMPLETION</h3>
+    </div>
+
+    <div style="position: absolute; top: 179.8px; left: 195px; width: 202px;">
+        <h6 style="text-align: center; font-size: 14px; color: #475467;">REVITAL HEALTH</h6>
+    </div>
+
+    <div style="position: absolute; top: 241px; left: 125.5px; width: 341px;">
+        <h6 style="text-align: center; font-size: 24px; color: #CB8600;"><strong>@FirstName @LastName </strong></h6>
+    </div>
+
+    <div style="position: absolute; top: 313px; left: 194px; width: 206px;">
+        <p style="text-align: center; font-size: 14px; color: #475467; line-height: 1;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tellus nulla tellus, vitae vitae amet fusce. Nam nec aliquet nunc vitae eget mattis. Sem nec ut nisi, et malesuada
+        </p>
+    </div>
+
+    <img src="/images/CertifcateBadge.png" alt="badge" style="position: absolute; top: 457.2px; left: 262.5px; width: 71px; height: 110px;" />
+
+    <div style="position: absolute; top: 585.4px; left: 342px; width: 193px;">
+        <h2 style="text-align: center; font-size: 24px; color: #CB8600; font-family: 'Pinyon Script', cursive;">Jonathan Harrie</h2>
+        <p style="text-align: center;">Jonathan Harrie</p>
+        <p style="text-align: center; color: #FF9700;">Director</p>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+    hideSpinner();
+    });
+</script>

@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-24 22:40:59 752",
+  "Message": "The input string '\u0000\u0000\u0000\f' was not in a correct format.",
+  "StackTrace": "   at System.Number.ThrowFormatException[TChar](ReadOnlySpan`1 value)\r\n   at System.Convert.ToInt32(String value)\r\n   at HrManagement.WebApi.LessonQuizAttemptController.UpsertUserLessonProgress(UserLessonProgress progress) in D:\\Projects\\Dotnet Project\\Revital 19-08-2025\\Revital\\revital\\HrManagement\\WebApi\\LessonQuizAttemptController.cs:line 61",
+  "Source": "System.Private.CoreLib",
+  "InnerException": null
+}

@@ -1,0 +1,317 @@
+﻿
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 11px;
+}
+/*#calendar {
+    max-width: 1100px;
+    margin: 40px auto;
+}*/
+@media screen and (max-width: 766px) {
+    .sidebars {
+        /*  margin-top: 142px !important;*/
+        max-height: 170px !important;
+    }
+}
+
+@media screen and (max-width: 421px) {
+    .sidebars {
+        /* margin-top: 182px !important;*/
+        max-height: 170px !important;
+    }
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+}
+
+.sidebars {
+    /* margin-top: 66px;*/
+    overflow: auto;
+    /* max-height: 450px;*/
+}
+
+.list-group h6 {
+    padding-top: 10px;
+    text-align: center;
+}
+
+#searchInput {
+    width: 80%;
+    /*    margin-bottom: 10px;*/
+    border: 1px solid #dbdfe9;
+    /* border-radius: 10px;*/
+    padding: 0.375rem 0.75rem;
+}
+
+    #searchInput:focus {
+        /* border-color: #3788d8;*/
+        outline: 0;
+        box-shadow: none;
+    }
+
+.input-group-text {
+    padding: .5rem .5rem;
+    cursor: pointer;
+}
+
+/* Change FullCalendar button size */
+.fc .btn {
+    font-size: 0.9rem; /*Adjust font size as needed */
+}
+
+.control-label {
+    font-weight: bold;
+}
+
+.textarea {
+    resize: none;
+}
+
+.fc-header-toolbar {
+    font-size: 12.5px !important;
+}
+
+
+.fc .fc-button:hover {
+    color: #fff !important;
+    background-color: #428bca !important;
+}
+
+.fc .fc-button.fc-button-active {
+    color: #fff !important;
+    background-color: #428bca !important;
+}
+
+.fc-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fc-prev-button, .fc-next-button, .fc-backwardButton-button, .fc-forwardButton-button {
+    background: transparent !important;
+    color: black !important;
+    padding: 0;
+}
+
+    .fc-prev-button:hover,
+    .fc-next-button:hover,
+    .fc-backwardButton-button:hover,
+    .fc-forwardButton-button:hover {
+        background-color: #428bca !important;
+        color: #fff !important;
+    }
+
+.tooltip-custom-body {
+    padding: 10px;
+}
+
+.tooltip-custom-content {
+    font-size: 14px;
+}
+
+.tooltip-row {
+    display: flex;
+    padding: 5px 0;
+}
+
+.tooltip-label {
+    font-weight: normal;
+    margin-right: 5px; /* Space between label and value */
+    width: 40%;
+}
+
+.tooltip-value {
+    width: 60%;
+    overflow-wrap: break-word; /* Ensures long text wraps properly */
+}
+
+.popover-inner {
+    max-width: inherit !important;
+    padding: 0;
+    background: white;
+    color: #333333;
+    font-size: 14px;
+    border: 1px solid #3788d8;
+    border-bottom: 2px solid #3788d8;
+    font-family: "Open Sans", sans-serif;
+}
+
+.popover.top .arrow:after {
+    border-top-color: #428bca;
+}
+
+.popover.top .arrow {
+    border-top-color: #428bca;
+}
+
+.popper,
+.popover {
+    max-width: 350px;
+    width: 350px;
+    border: 1px solid #3788d8;
+    border-bottom: 4px solid #3788d8;
+    color: #333333;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+}
+
+
+
+/***
+UI Loading
+***/
+.loading-message {
+    display: inline-block;
+    min-width: 125px;
+    margin-left: -60px;
+    padding: 10px;
+    margin: 0 auto;
+    color: #000 !important;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .loading-message.loading-message-boxed {
+        border: 1px solid #ddd;
+        background-color: #eee;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading-message > span {
+        line-height: 20px;
+        vertical-align: middle;
+    }
+
+.page-loading {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 125px;
+    margin-left: -60px;
+    margin-top: -30px;
+    padding: 7px;
+    text-align: center;
+    color: #333;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    background-color: #eee;
+    vertical-align: middle;
+    -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .page-loading > span {
+        line-height: 20px;
+        vertical-align: middle;
+    }
+
+.page-spinner-bar {
+    position: fixed;
+    z-index: 10051;
+    width: 100px;
+    top: 40%;
+    left: 50%;
+    margin-left: -55px;
+    text-align: center;
+}
+
+    .page-spinner-bar > div {
+        margin: 0 5px;
+        width: 18px;
+        height: 18px;
+        background: #eee;
+        border-radius: 100% !important;
+        display: inline-block;
+        -webkit-animation: bounceDelay 1.4s infinite ease-in-out;
+        animation: bounceDelay 1.4s infinite ease-in-out;
+        /* Prevent first frame from flickering when animation starts */
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+
+    .page-spinner-bar .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .page-spinner-bar .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+.block-spinner-bar {
+    display: inline-block;
+    width: 80px;
+    text-align: center;
+}
+
+    .block-spinner-bar > div {
+        margin: 0 2px;
+        width: 15px;
+        height: 15px;
+        background: #eee;
+        border-radius: 100% !important;
+        display: inline-block;
+        -webkit-animation: bounceDelay 1.4s infinite ease-in-out;
+        animation: bounceDelay 1.4s infinite ease-in-out;
+        /* Prevent first frame from flickering when animation starts */
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+
+    .block-spinner-bar .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .block-spinner-bar .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+#backgroundfade {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: #ECE8E8;
+    z-index: 20003;
+    -moz-opacity: 0.8;
+    opacity: .78;
+    filter: alpha(opacity=80);
+    display: none;
+}
+
+.placeholder {
+    background-color: transparent !important;
+}
+
+
+.flatpickr-current-month {
+    line-height: 2 !important;
+}
+
+.ellipses {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

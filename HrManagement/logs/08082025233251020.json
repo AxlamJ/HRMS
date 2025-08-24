@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-08 23:32:51 025",
+  "Message": "File extension '.mp4' is not allowed.",
+  "StackTrace": "   at HrManagement.Service.FileUploadService.UploadAsync(IFormFile file, String folderName, String[] allowedExtensions) in D:\\Projects\\Dotnet Project\\Revital\\revital\\HrManagement\\Service\\FileUploadService.cs:line 33\r\n   at HrManagement.WebApi.TrainingsController.UploadMedia(UploadMediaDto model) in D:\\Projects\\Dotnet Project\\Revital\\revital\\HrManagement\\WebApi\\TrainingsController.cs:line 1016",
+  "Source": "HrManagement",
+  "InnerException": null
+}

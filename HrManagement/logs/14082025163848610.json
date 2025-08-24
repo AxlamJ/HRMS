@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-14 16:38:48 610",
+  "Message": "Object reference not set to an instance of an object.",
+  "StackTrace": "   at HrManagement.WebApi.TrainingSessionsController.WatchLesson(Int32 trainingId)",
+  "Source": "HrManagement",
+  "InnerException": null
+}

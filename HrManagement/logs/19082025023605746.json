@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-19 02:36:05 750",
+  "Message": "Incorrect syntax near '|'.",
+  "StackTrace": "   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)\r\n   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n--- End of stack trace from previous location ---\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)\r\n--- End of stack trace from previous location ---\r\n   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434\r\n   at HrManagement.Repository.TrainingCommentRepository.GetCommentsByCategoryAsync(Int32 categoryId, Int32 UserId) in D:\\Projects\\Dotnet Project\\Revital\\revital\\HrManagement\\Repository\\TrainingCommentRepository.cs:line 23\r\n   at HrManagement.WebApi.ChatController.loadUserComments(Int32 Id) in D:\\Projects\\Dotnet Project\\Revital\\revital\\HrManagement\\WebApi\\ChatController.cs:line 78",
+  "Source": "Core Microsoft SqlClient Data Provider",
+  "InnerException": null
+}

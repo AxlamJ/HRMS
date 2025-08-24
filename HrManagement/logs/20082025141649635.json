@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-20 14:16:49 636",
+  "Message": "Must declare the scalar variable \"@UserId\".",
+  "StackTrace": "   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n--- End of stack trace from previous location ---\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)\r\n--- End of stack trace from previous location ---\r\n   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489\r\n   at HrManagement.Repository.PermissionRepository.GetPermissionsByRoleNameAsync(Nullable`1 ItemId, Int32 PermissionId, String RoleName)\r\n   at HrManagement.Repository.PermissionRepository.UpsertPermissionAsync(TrainingPermission permission)\r\n   at HrManagement.WebApi.TrainingPermissionsController.UpsertPermission(List`1 permissionList)",
+  "Source": "Core Microsoft SqlClient Data Provider",
+  "InnerException": null
+}

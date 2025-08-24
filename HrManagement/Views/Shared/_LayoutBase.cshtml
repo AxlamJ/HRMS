@@ -1,0 +1,14 @@
+﻿@using Newtonsoft.Json;
+@using System.Web;
+@{
+    Layout = null;
+
+
+}
+
+@RenderBody()
+<script>
+
+    var LayoutConfigs = @(string.IsNullOrWhiteSpace(ViewBag.LayoutConfigs) ? "null" : Html.Raw(ViewBag.LayoutConfigs))
+
+</script>

@@ -1,0 +1,2205 @@
+﻿@{
+    ViewData["Title"] = "Employee Details";
+}
+
+@section PageCSS {
+    <link href="~/css/tabs.css" rel="stylesheet" />
+    <link href="~/css/tabstyles.css" rel="stylesheet" />
+}
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <span type="button" id="btn-notify-user" class="btn btn-sm fw-bold btn-primary float-end d-none">
+                        <i class="fas fa-bell fs-4 me-2"></i>Notify User
+                    </span>
+                </div>
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                            <div class="card card-flush min-h-325px">
+                                <!--begin::Header-->
+                                <div class="card-header">
+
+                                    <div class="card-toolbar w-100 justify-content-end">
+                                        <span class="btn btn-sm btn-icon btn-primary btn-basic-details"><i class="fa fa-pencil"></i></span>
+                                    </div>
+                                </div>
+                                <!--end::Header-->
+                                <!--begin::Card body-->
+                                <div class="card-body pt-0">
+                                    <!--begin::Image-->
+                                    <div class="mx-auto mb-6 bgi-no-repeat bgi-size-contain bgi-position-center rounded-circle w-125px h-125px">
+                                        <img class="w-125px" id="profile-picture" style="border-radius:50%" />
+                                    </div>
+                                    <!--end::Image-->
+                                    <!--begin::Section-->
+                                    <div class="text-center mb-5">
+                                        <!--begin::Title-->
+                                        <h1 class="text-black" id="user-fullname"></h1>
+                                        <!--end::Title-->
+                                        <!--begin::Title-->
+                                        <h4 class="text-black opacity-75 fw-semibold" id="user-email"></h4>
+                                        <!--end::Title-->
+                                        <!--begin::Title-->
+                                        <h4 class="text-black opacity-75 fw-semibold" id="user-dob"></h4>
+                                        <!--end::Title-->
+                                    </div>
+                                    <!--end::Section-->
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                            <div class="card card-flush min-h-325px">
+                                <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                    <div class="card-title d-flex flex-column">
+                                        <span class="card-label text-black">Employment Details</span>
+                                    </div>
+                                    <div class="card-toolbar justify-content-end">
+                                        <span class="btn btn-sm btn-icon btn-primary btn-employment-details"><i class="fa fa-pencil"></i></span>
+                                    </div>
+
+                                </div>
+                                <!--begin::Card body-->
+                                <div class="card-body pt-5">
+                                    <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Position:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-position">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Employment Status:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-employmentstatus">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Department:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-department">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Site:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-site">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Date of Hire:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-hire-date">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Direct Manager:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-direct-manager">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Level:</strong>
+                                                    <span class="h-auto justify-content-end" id="user-level">
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                            <div class="col-md-12">
+                                                <div class="d-flex flex-stack">
+                                                    <strong class="text-black">Acceptance Date:</strong>
+                                                    <span class="h-auto justify-content-end" id="date-of-acceptance">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="separator separator-dashed my-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-8 col-lg-8 col-sm-6 col-xs-12">
+                            <div class="card card-flush min-h-325px">
+                                <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                    <div class="card-title d-flex flex-column">
+                                        <span class="card-label text-black">In My Own Words</span>
+                                    </div>
+                                    <div class="card-toolbar justify-content-end">
+                                        <span class="btn btn-sm btn-icon btn-primary btn-edit-bio"><i class="fa fa-pencil"></i></span>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-5">
+                                    <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                        <div class="row border-1 border-bottom-dotted">
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <h3 class="bold">Get to know me better:</h3>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
+                                                <span id="user-about"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row border-1 border-bottom-dotted mt-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <h5>
+                                                    Hobbies:
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
+
+                                                <span id="user-hobbies"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row border-1 border-bottom-dotted mt-3">
+
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <h5>
+                                                    Favorite Books:
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
+
+                                                <span id="user-fav-books"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row border-1 border-bottom-dotted mt-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <h5>
+                                                    Music Preference:
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
+
+                                                <span id="user-music-pref"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row border-1 border-bottom-dotted mt-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <h5>
+                                                    Sports:
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
+                                                <span id="user-sports"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
+                            <div class="card card-flush min-h-325px">
+                                <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                    <div class="card-title d-flex flex-column">
+                                        <span class="card-label text-black">Manager Notes</span>
+                                    </div>
+                                    <div class="card-toolbar justify-content-end d-none">
+                                        <span class="btn btn-sm btn-icon btn-primary"><i class="fa fa-pencil"></i></span>
+                                    </div>
+
+                                </div>
+                                <!--begin::Card body-->
+                                <div class="card-body pt-0">
+                                    <!--begin::Labels-->
+                                    <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                        <div class="row mt-5">
+                                            <div class="mt-3 text-center mb-0 font-18 text-primary">
+                                                <i class="fa fa-info-circle mr-1"></i> We couldn't find any records.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Labels-->
+                                </div>
+                                <!--end::Card body-->
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                            <div class="card card-flush">
+                                <div class="card-body pt-0 mt-4">
+                                    <div class="tabs tabs-style-linebox">
+                                        <nav>
+                                            <ul>
+                                                <li class="tab-current"><a href="#nav-time-off-sec" id="nav-time-off-tab"><span>Time-Off</span></a></li>
+                                                <li class=""><a href="#nav-emergency-sec" id="nav-emergency-contact-tab"><span>Emergency Contact</span></a></li>
+                                                <li class=""><a href="#nav-contact-sec" id="nav-contact-information-tab"><span>Contact Information</span></a></li>
+                                                <li class=""><a href="#nav-education-sec" id="nav-education-tab"><span>Education</span></a></li>
+                                                <li class=""><a href="#nav-equipment-sec" id="nav-equipment-tab"><span>Equipment</span></a></li>
+                                                <li class=""><a href="#nav-license-sec" id="nav-license-tab"><span>License & Certifications</span></a></li>
+                                                @* <li class=""><a href="#nav-working-hours-sec" id="nav-working-hours-tab"><span>Working Hours</span></a></li> *@
+                                                <li class=""><a href="#nav-supporting-documents-sec" id="nav-supporting-documents-tab"><span>Supporting Documents</span></a></li>
+                                            </ul>
+                                        </nav>
+                                        <div class="content-wrap">
+                                            <section id="nav-time-off-sec" class="content-current">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">UPCOMING TIME OFF</span>
+                                                                </div>
+                                                                <div class="card-toolbar justify-content-end d-none">
+                                                                    <span class="btn btn-sm btn-icon btn-primary"><i class="fa fa-pencil"></i></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="card-body pt-0  scroll mh-300px h-300px">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid" id="leaves-data">
+                                                                    <div class="row mt-5">
+                                                                        <div class="mt-3 text-center mb-0 font-18 text-primary">
+                                                                            <i class="fa fa-info-circle mr-1"></i> We couldn't find any records.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">UPCOMING OCASIONS</span>
+                                                                </div>
+                                                                <div class="card-toolbar justify-content-end d-none">
+                                                                    <span class="btn btn-sm btn-icon btn-primary"><i class="fa fa-pencil"></i></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="card-body pt-0 scroll mh-300px h-300px">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid" id="upcoming-occasions">
+                                                                    <div class="row mt-5">
+                                                                        <div class="mt-3 text-center mb-0 font-18 text-primary">
+                                                                            <i class="fa fa-info-circle mr-1"></i> We couldn't find any records.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <section id="nav-emergency-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-toolbar justify-content-end w-100">
+                                                                    <span class="btn btn-sm btn-icon btn-primary btn-emergency-contact-new"><i class="fa fa-plus"></i></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="card-body pt-0">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5" id="tableContainer">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <section id="nav-contact-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-toolbar justify-content-end w-100">
+                                                                    <span class="btn btn-sm btn-icon btn-primary btn-edit-contact-details"><i class="fa fa-pencil"></i></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body pt-0">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5">
+                                                                        <div class="col-sm-12 col-md-6 block-info">
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Email:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-email"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Alternative Email:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-alter-email"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Office Phone Number:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-office-phone"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Extension:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-extension"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Mobile Phone Number:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-mobile"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                        </div>
+                                                                        <div class="col-sm-12  col-md-6  block-info">
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Country:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-country"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Address:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-address"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">City:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-city"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">State:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-state"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                            <div class="d-flex flex-stack mt-4">
+                                                                                <strong class="text-black">Zip Code:</strong>
+                                                                                <span class="h-auto justify-content-end" id="contact-zip-code"></span>
+                                                                            </div>
+                                                                            <div class="my-1 separator separator-dashed"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <section id="nav-education-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-toolbar justify-content-end w-100">
+                                                                    <span class="btn btn-sm btn-icon btn-primary btn-education-detail-new"><i class="fa fa-plus"></i></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <!--begin::Card body-->
+                                                            <div class="card-body pt-0">
+                                                                <!--begin::Labels-->
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5" id="education-details-table">
+                                                                    </div>
+                                                                </div>
+                                                                <!--end::Labels-->
+                                                            </div>
+                                                            <!--end::Card body-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <section id="nav-equipment-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">IN USE</span>
+                                                                </div>
+                                                                <div class="card-toolbar justify-content-end">
+                                                                    <span class="btn btn-primary btn-add-equipment">Add new</span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="card-body pt-0">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5" id="ApprovedContainer">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">REQUESTED</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body pt-0">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5" id="RequestedContainer">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <section id="nav-license-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">LICENSE & CERTIFICATIONS</span>
+                                                                </div>
+
+                                                                <div class="card-toolbar justify-content-end">
+                                                                    <span class="btn btn-primary btn-add-cert">Add License or Certification</span>
+                                                                </div>
+
+                                                            </div>
+                                                            <!--begin::Card body-->
+                                                            <div class="card-body pt-0">
+                                                                <!--begin::Labels-->
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5" id="CertLicenseList">
+                                                                    </div>
+                                                                </div>
+                                                                <!--end::Labels-->
+                                                            </div>
+                                                            <!--end::Card body-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            @* <section id="nav-working-hours-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">WORKING HOURS</span>
+                                                                </div>
+
+                                                                <div class="card-toolbar justify-content-end d-none">
+                                                                    <span class="btn btn-primary ">Add License or Certification</span>
+                                                                </div>
+
+                                                            </div>
+                                                            <!--begin::Card body-->
+                                                            <div class="card-body pt-0">
+                                                                <!--begin::Labels-->
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5">
+                                                                        <div class="mt-3 text-center mb-0 font-18 text-primary">
+                                                                            <i class="fa fa-info-circle mr-1"></i> We couldn't find any records.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!--end::Labels-->
+                                                            </div>
+                                                            <!--end::Card body-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section> *@
+                                            <section id="nav-supporting-documents-sec" class="">
+                                                <div class="row mt-5">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="card card-flush min-h-325px ">
+                                                            <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                                <div class="card-title d-flex flex-column">
+                                                                    <span class="card-label text-black">Supporting Documents</span>
+                                                                </div>
+
+                                                                <div class="card-toolbar justify-content-end">
+                                                                    <span class="btn btn-primary btn-add-supporting-docs">Add Supporting Documents</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body pt-0  mh-300px scroll-y">
+                                                                <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                                    <div class="row mt-5" id="SupportingDocumentsList">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-basic-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Details</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10 overflow-y-scroll mh-700px">
+                <form id="basic-details-form" novalidate>
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 me-lg-12">
+                            <label data-i18n="Image/Photo" class="form-label">Profile Photo (White Background)</label>
+                            <div class="photo-ctrl">
+                                <div class="form-group mb-3" style="height:160px; width: 100%;">
+                                    <img crossorigin="Anonymous" style="max-height: 100%;max-width:100%" class="user-photo" id="user-photo" name="user-photo" data-id="user-photo" src="/Images/no-image.svg">
+                                    <span class="col-sm-5 mt-2 messages"></span>
+                                </div>
+                                <div class="edit-btns mt-5 text-center hidden" style="display:none">
+                                    <div class="mb-3 form-group">
+                                        <button type="button" class="btn has-img btn-danger btn-del-image hidden">
+                                            <i class="fa fa-times"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="image-select-buttons" style="display:block">
+                                    <div class="mb-3 form-group text-center">
+                                        <input type="file" class="invisible profile-photo" id="profile-photo" name="profile-photo" accept="image/*" hidden />
+                                        <span class="col-sm-5 mt-2 messages"></span>
+                                        <button type="button" class="btn no-img btn-primary btn-upload-photo mt-10px">
+                                            <i class="fa fa-upload"></i> Upload Photo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 me-lg-12">
+                            <label data-i18n="Image/Photo" class="form-label">Signature</label>
+                            <div class="photo-ctrl">
+                                <div class="form-group mb-3" style="height:160px; width: 100%;">
+                                    <img crossorigin="Anonymous" style="max-height: 100%;max-width:100%" class="sign-photo" id="sign-photo" name="sign-photo" data-id="sign-photo" src="/Images/no-image.svg">
+                                    <span class="col-sm-5 mt-2 messages"></span>
+                                </div>
+                                <div class="edit-sign-btns mt-5 text-center hidden" style="display:none">
+                                    <div class="mb-3 form-group">
+                                        <button type="button" class="btn has-img btn-danger btn-del-sign hidden">
+                                            <i class="fa fa-times"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="image-select-sign-buttons" style="display:block">
+                                    <div class="mb-3 form-group text-center">
+                                        <input type="file" class="invisible signature-photo" id="signature-photo" name="signature-photo" accept="image/*" hidden />
+                                        <span class="col-sm-5 mt-2 messages"></span>
+                                        <button type="button" class="btn no-img btn-primary btn-upload-sign mt-10px">
+                                            <i class="fa fa-upload"></i> Upload Signature
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 me-lg-12">
+                            <label class="form-label">Copy of Driving License</label>
+                            <div class="photo-ctrl">
+                                <div class="form-group mb-3" style="height:160px; width: 100%;">
+                                    <img crossorigin="Anonymous" style="max-height: 100%;max-width:100%" class="licen-photo" id="licen-photo" name="licen-photo" data-id="licen-photo" src="/Images/no-image.svg">
+                                    <span class="col-sm-5 mt-2 messages"></span>
+                                </div>
+                                <div class="edit-license-btns mt-5 text-center hidden" style="display:none">
+                                    <div class="mb-3 form-group">
+                                        <button type="button" class="btn has-img btn-danger btn-del-license hidden">
+                                            <i class="fa fa-times"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="image-select-license-buttons" style="display:block">
+                                    <div class="mb-3 form-group text-center">
+                                        <input type="file" class="invisible license-photo" id="license-photo" name="license-photo" accept="image/*" hidden />
+                                        <span class="col-sm-5 mt-2 messages"></span>
+                                        <button type="button" class="btn no-img btn-primary btn-upload-license mt-10px">
+                                            <i class="fa fa-upload"></i> Upload License
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Employee Code</label>
+                                <input type="text" class="form-control" name="employee-code" id="employee-code" placeholder="Enter Employee Code">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">First Name</label>
+                                <input class="form-control" type="text" placeholder="" name="first-name" id="first-name" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Last Name</label>
+                                <input class="form-control" type="text" placeholder="" name="last-name" id="last-name" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Gender</label>
+                                <select class="form-select form-control" id="gender" name="gender" data-control="select2" data-placeholder="Select Gender" data-allow-clear="true" data-dropdown-parent="#modal-basic-details">
+                                    <option></option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Marital Status</label>
+                                <select class="form-select form-control" id="marital-status" name="marital-status" data-control="select2" data-placeholder="Select Marital Status" data-allow-clear="true" data-dropdown-parent="#modal-basic-details">
+                                    <option></option>
+                                    <option value="Married">Married</option>
+                                    <option value="NA">N/A</option>
+                                    <option value="Single">Single</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">DOB</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="dob" name="dob" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">On-boarding Date</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="on-boarding-date" name="on-boarding-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Phone No.</label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter Phone">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Country</label>
+                                <select class="form-select form-control" id="country" name="country" data-control="select2" data-placeholder="Select Country" data-allow-clear="true" data-dropdown-parent="#modal-basic-details">
+                                    <option></option>
+                                    <option value="AF">Afghanistan</option>
+                                    <option value="AX">Åland Islands</option>
+                                    <option value="AL">Albania</option>
+                                    <option value="DZ">Algeria</option>
+                                    <option value="AS">American Samoa</option>
+                                    <option value="AD">Andorra</option>
+                                    <option value="AO">Angola</option>
+                                    <option value="AI">Anguilla</option>
+                                    <option value="AQ">Antarctica</option>
+                                    <option value="AG">Antigua and Barbuda</option>
+                                    <option value="AR">Argentina</option>
+                                    <option value="AM">Armenia</option>
+                                    <option value="AW">Aruba</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="AT">Austria</option>
+                                    <option value="AZ">Azerbaijan</option>
+                                    <option value="BS">Bahamas</option>
+                                    <option value="BH">Bahrain</option>
+                                    <option value="BD">Bangladesh</option>
+                                    <option value="BB">Barbados</option>
+                                    <option value="BY">Belarus</option>
+                                    <option value="BE">Belgium</option>
+                                    <option value="BZ">Belize</option>
+                                    <option value="BJ">Benin</option>
+                                    <option value="BM">Bermuda</option>
+                                    <option value="BT">Bhutan</option>
+                                    <option value="BO">Bolivia (Plurinational State of)</option>
+                                    <option value="BA">Bosnia and Herzegovina</option>
+                                    <option value="BW">Botswana</option>
+                                    <option value="BV">Bouvet Island</option>
+                                    <option value="BR">Brazil</option>
+                                    <option value="IO">British Indian Ocean Territory</option>
+                                    <option value="BN">Brunei Darussalam</option>
+                                    <option value="BG">Bulgaria</option>
+                                    <option value="BF">Burkina Faso</option>
+                                    <option value="BI">Burundi</option>
+                                    <option value="CV">Cabo Verde</option>
+                                    <option value="KH">Cambodia</option>
+                                    <option value="CM">Cameroon</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="BQ">Caribbean Netherlands</option>
+                                    <option value="KY">Cayman Islands</option>
+                                    <option value="CF">Central African Republic</option>
+                                    <option value="TD">Chad</option>
+                                    <option value="CL">Chile</option>
+                                    <option value="CN">China</option>
+                                    <option value="CX">Christmas Island</option>
+                                    <option value="CC">Cocos (Keeling) Islands</option>
+                                    <option value="CO">Colombia</option>
+                                    <option value="KM">Comoros</option>
+                                    <option value="CG">Congo</option>
+                                    <option value="CD">Congo, Democratic Republic of the</option>
+                                    <option value="CK">Cook Islands</option>
+                                    <option value="CR">Costa Rica</option>
+                                    <option value="HR">Croatia</option>
+                                    <option value="CU">Cuba</option>
+                                    <option value="CW">Curaçao</option>
+                                    <option value="CY">Cyprus</option>
+                                    <option value="CZ">Czech Republic</option>
+                                    <option value="CI">Côte d'Ivoire</option>
+                                    <option value="DK">Denmark</option>
+                                    <option value="DJ">Djibouti</option>
+                                    <option value="DM">Dominica</option>
+                                    <option value="DO">Dominican Republic</option>
+                                    <option value="EC">Ecuador</option>
+                                    <option value="EG">Egypt</option>
+                                    <option value="SV">El Salvador</option>
+                                    <option value="GQ">Equatorial Guinea</option>
+                                    <option value="ER">Eritrea</option>
+                                    <option value="EE">Estonia</option>
+                                    <option value="SZ">Eswatini (Swaziland)</option>
+                                    <option value="ET">Ethiopia</option>
+                                    <option value="FK">Falkland Islands (Malvinas)</option>
+                                    <option value="FO">Faroe Islands</option>
+                                    <option value="FJ">Fiji</option>
+                                    <option value="FI">Finland</option>
+                                    <option value="FR">France</option>
+                                    <option value="GF">French Guiana</option>
+                                    <option value="PF">French Polynesia</option>
+                                    <option value="TF">French Southern Territories</option>
+                                    <option value="GA">Gabon</option>
+                                    <option value="GM">Gambia</option>
+                                    <option value="GE">Georgia</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="GH">Ghana</option>
+                                    <option value="GI">Gibraltar</option>
+                                    <option value="GR">Greece</option>
+                                    <option value="GL">Greenland</option>
+                                    <option value="GD">Grenada</option>
+                                    <option value="GP">Guadeloupe</option>
+                                    <option value="GU">Guam</option>
+                                    <option value="GT">Guatemala</option>
+                                    <option value="GG">Guernsey</option>
+                                    <option value="GN">Guinea</option>
+                                    <option value="GW">Guinea-Bissau</option>
+                                    <option value="GY">Guyana</option>
+                                    <option value="HT">Haiti</option>
+                                    <option value="HM">Heard Island and Mcdonald Islands</option>
+                                    <option value="HN">Honduras</option>
+                                    <option value="HK">Hong Kong</option>
+                                    <option value="HU">Hungary</option>
+                                    <option value="IS">Iceland</option>
+                                    <option value="IN">India</option>
+                                    <option value="ID">Indonesia</option>
+                                    <option value="IR">Iran</option>
+                                    <option value="IQ">Iraq</option>
+                                    <option value="IE">Ireland</option>
+                                    <option value="IM">Isle of Man</option>
+                                    <option value="IL">Israel</option>
+                                    <option value="IT">Italy</option>
+                                    <option value="JM">Jamaica</option>
+                                    <option value="JP">Japan</option>
+                                    <option value="JE">Jersey</option>
+                                    <option value="JO">Jordan</option>
+                                    <option value="KZ">Kazakhstan</option>
+                                    <option value="KE">Kenya</option>
+                                    <option value="KI">Kiribati</option>
+                                    <option value="KP">Korea, North</option>
+                                    <option value="KR">Korea, South</option>
+                                    <option value="XK">Kosovo</option>
+                                    <option value="KW">Kuwait</option>
+                                    <option value="KG">Kyrgyzstan</option>
+                                    <option value="LA">Lao People's Democratic Republic</option>
+                                    <option value="LV">Latvia</option>
+                                    <option value="LB">Lebanon</option>
+                                    <option value="LS">Lesotho</option>
+                                    <option value="LR">Liberia</option>
+                                    <option value="LY">Libya</option>
+                                    <option value="LI">Liechtenstein</option>
+                                    <option value="LT">Lithuania</option>
+                                    <option value="LU">Luxembourg</option>
+                                    <option value="MO">Macao</option>
+                                    <option value="MK">Macedonia North</option>
+                                    <option value="MG">Madagascar</option>
+                                    <option value="MW">Malawi</option>
+                                    <option value="MY">Malaysia</option>
+                                    <option value="MV">Maldives</option>
+                                    <option value="ML">Mali</option>
+                                    <option value="MT">Malta</option>
+                                    <option value="MH">Marshall Islands</option>
+                                    <option value="MQ">Martinique</option>
+                                    <option value="MR">Mauritania</option>
+                                    <option value="MU">Mauritius</option>
+                                    <option value="YT">Mayotte</option>
+                                    <option value="MX">Mexico</option>
+                                    <option value="FM">Micronesia</option>
+                                    <option value="MD">Moldova</option>
+                                    <option value="MC">Monaco</option>
+                                    <option value="MN">Mongolia</option>
+                                    <option value="ME">Montenegro</option>
+                                    <option value="MS">Montserrat</option>
+                                    <option value="MA">Morocco</option>
+                                    <option value="MZ">Mozambique</option>
+                                    <option value="MM">Myanmar (Burma)</option>
+                                    <option value="NA">Namibia</option>
+                                    <option value="NR">Nauru</option>
+                                    <option value="NP">Nepal</option>
+                                    <option value="NL">Netherlands</option>
+                                    <option value="AN">Netherlands Antilles</option>
+                                    <option value="NC">New Caledonia</option>
+                                    <option value="NZ">New Zealand</option>
+                                    <option value="NI">Nicaragua</option>
+                                    <option value="NE">Niger</option>
+                                    <option value="NG">Nigeria</option>
+                                    <option value="NU">Niue</option>
+                                    <option value="NF">Norfolk Island</option>
+                                    <option value="MP">Northern Mariana Islands</option>
+                                    <option value="NO">Norway</option>
+                                    <option value="OM">Oman</option>
+                                    <option value="PK">Pakistan</option>
+                                    <option value="PW">Palau</option>
+                                    <option value="PS">Palestine</option>
+                                    <option value="PA">Panama</option>
+                                    <option value="PG">Papua New Guinea</option>
+                                    <option value="PY">Paraguay</option>
+                                    <option value="PE">Peru</option>
+                                    <option value="PH">Philippines</option>
+                                    <option value="PN">Pitcairn Islands</option>
+                                    <option value="PL">Poland</option>
+                                    <option value="PT">Portugal</option>
+                                    <option value="PR">Puerto Rico</option>
+                                    <option value="QA">Qatar</option>
+                                    <option value="RE">Reunion</option>
+                                    <option value="RO">Romania</option>
+                                    <option value="RU">Russian Federation</option>
+                                    <option value="RW">Rwanda</option>
+                                    <option value="BL">Saint Barthelemy</option>
+                                    <option value="SH">Saint Helena</option>
+                                    <option value="KN">Saint Kitts and Nevis</option>
+                                    <option value="LC">Saint Lucia</option>
+                                    <option value="MF">Saint Martin</option>
+                                    <option value="PM">Saint Pierre and Miquelon</option>
+                                    <option value="VC">Saint Vincent and the Grenadines</option>
+                                    <option value="WS">Samoa</option>
+                                    <option value="SM">San Marino</option>
+                                    <option value="ST">Sao Tome and Principe</option>
+                                    <option value="SA">Saudi Arabia</option>
+                                    <option value="SN">Senegal</option>
+                                    <option value="RS">Serbia</option>
+                                    <option value="CS">Serbia and Montenegro</option>
+                                    <option value="SC">Seychelles</option>
+                                    <option value="SL">Sierra Leone</option>
+                                    <option value="SG">Singapore</option>
+                                    <option value="SX">Sint Maarten</option>
+                                    <option value="SK">Slovakia</option>
+                                    <option value="SI">Slovenia</option>
+                                    <option value="SB">Solomon Islands</option>
+                                    <option value="SO">Somalia</option>
+                                    <option value="ZA">South Africa</option>
+                                    <option value="GS">South Georgia and the South Sandwich Islands</option>
+                                    <option value="SS">South Sudan</option>
+                                    <option value="ES">Spain</option>
+                                    <option value="LK">Sri Lanka</option>
+                                    <option value="SD">Sudan</option>
+                                    <option value="SR">Suriname</option>
+                                    <option value="SJ">Svalbard and Jan Mayen</option>
+                                    <option value="SE">Sweden</option>
+                                    <option value="CH">Switzerland</option>
+                                    <option value="SY">Syria</option>
+                                    <option value="TW">Taiwan</option>
+                                    <option value="TJ">Tajikistan</option>
+                                    <option value="TZ">Tanzania</option>
+                                    <option value="TH">Thailand</option>
+                                    <option value="TL">Timor-Leste</option>
+                                    <option value="TG">Togo</option>
+                                    <option value="TK">Tokelau</option>
+                                    <option value="TO">Tonga</option>
+                                    <option value="TT">Trinidad and Tobago</option>
+                                    <option value="TN">Tunisia</option>
+                                    <option value="TR">Turkey (Türkiye)</option>
+                                    <option value="TM">Turkmenistan</option>
+                                    <option value="TC">Turks and Caicos Islands</option>
+                                    <option value="TV">Tuvalu</option>
+                                    <option value="UM">U.S. Outlying Islands</option>
+                                    <option value="UG">Uganda</option>
+                                    <option value="UA">Ukraine</option>
+                                    <option value="AE">United Arab Emirates</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="US">United States</option>
+                                    <option value="UY">Uruguay</option>
+                                    <option value="UZ">Uzbekistan</option>
+                                    <option value="VU">Vanuatu</option>
+                                    <option value="VA">Vatican City Holy See</option>
+                                    <option value="VE">Venezuela</option>
+                                    <option value="VN">Vietnam</option>
+                                    <option value="VG">Virgin Islands, British</option>
+                                    <option value="VI">Virgin Islands, U.S</option>
+                                    <option value="WF">Wallis and Futuna</option>
+                                    <option value="EH">Western Sahara</option>
+                                    <option value="YE">Yemen</option>
+                                    <option value="ZM">Zambia</option>
+                                    <option value="ZW">Zimbabwe</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" name="city" id="city" placeholder="Enter City">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Sponsorship required to continue working in Canada?</label>
+                                <select class="form-select form-control" id="sponsorship" name="sponsorship" data-control="select2" data-placeholder="Select Yes/No" data-allow-clear="true" data-dropdown-parent="#modal-basic-details">
+                                    <option></option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Are you currently eligible to work in Canada?</label>
+                                <select class="form-select form-control" id="work-eligibility" name="work-eligibility" data-control="select2" data-placeholder="Select Yes/No" data-allow-clear="true" data-dropdown-parent="#modal-basic-details">
+                                    <option></option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Current Immigration Status</label>
+                                <input type="text" class="form-control" name="immigration-status" id="immigration-status" placeholder="Enter Immigration Status">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Other</label>
+                                <input type="text" class="form-control" name="other" id="other" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separator separator-dashed my-6"></div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">SIN No.</label>
+                                <input type="text" class="form-control" name="SIN-No" id="SIN-No" placeholder="Enter SIN No">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-12 mb-3 align-content-center">
+
+                            <div class="d-flex flex-wrap align-items-center">
+                                <!--begin::Label-->
+                                <div id="sin_doc_name_sec">
+                                    <div class="fw-semibold text-gray-600" id="sin-name"></div>
+                                </div>
+                                <!--end::Label-->
+                                <div class="ms-auto sin-doc-btns">
+                                    <a class="btn btn-secondary href-download-sin mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                    <button type="button" class="btn no-img btn-primary btn-upload-sin mt-10px">
+                                        <i class="fa fa-upload"></i> Upload SIN
+                                    </button>
+                                    <input type="file" class="hidden d-none upload-sin" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="cheque_doc_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Copy of Direct Deposit Form / VOID Cheque</div>
+                                <div class="fw-semibold text-gray-600" id="cheque-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto cheque-doc-btns">
+                                <a class="btn btn-secondary href-download-cheque mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-cheque mt-10px">
+                                    <i class="fa fa-upload"></i> Upload Form/ Cheque
+                                </button>
+                                <input type="file" class="hidden d-none upload-cheque" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="tax_form_federal_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Filled Tax Forms for both Federal (TD1) <a href="https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/td1/td1-25e.pdf" target="_blank">Download form from here</a></div>
+                                <div class="fw-semibold text-gray-600" id="tax-form-federal-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto tax-form-federal-doc-btns">
+                                <a class="btn btn-secondary href-download-tax-form-federal mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-tax-form-federal mt-10px">
+                                    <i class="fa fa-upload"></i> Upload Tax Form
+                                </button>
+                                <input type="file" class="hidden d-none upload-tax-form-federal" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="tax_form_alberta_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Filled Tax Forms for both Alberta (TD1AB) <a href="https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/td1ab/td1ab-25e.pdf" target="_blank">download form from here</a></div>
+                                <div class="fw-semibold text-gray-600" id="tax-form-alberta-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto tax-form-alberta-doc-btns">
+                                <a class="btn btn-secondary href-download-tax-form-alberta mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-tax-form-alberta mt-10px">
+                                    <i class="fa fa-upload"></i> Upload Tax Form
+                                </button>
+                                <input type="file" class="hidden d-none upload-tax-form-alberta" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-basic-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-employment-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Employment Details</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="employment-details-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Position</label>
+                                <select class="form-select form-control" id="position" name="position" data-control="select2" data-placeholder="Select Position" data-allow-clear="true" data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Date of Hire</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="hiring-date" name="hiring-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Site</label>
+                                <select class="form-select form-control" id="site" name="site" data-control="select2" data-placeholder="Select Site" data-allow-clear="true" data-dropdown-parent="#modal-employment-details" multiple>
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Department</label>
+                                <select class="form-select form-control" id="department" name="department" data-control="select2" data-placeholder="Select Department" data-allow-clear="true" multiple data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Department Sub-Category</label>
+                                <select class="form-select form-control" id="department-sub-category" name="department-sub-category" data-control="select2" data-placeholder="Select Sub-Category" multiple data-allow-clear="true" data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Employment Status</label>
+                                <select class="form-select form-control" id="employment-status" name="employment-status" data-control="select2" data-placeholder="Select Employment Status" data-allow-clear="true" data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Employment Level</label>
+                                <select class="form-select form-control" id="employment-level" name="employment-level" data-control="select2" data-placeholder="Select Employment Level" data-allow-clear="true" data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Direct Manager</label>
+                                <select class="form-select form-control" id="manager" name="manager" data-control="select2" data-placeholder="Select Manager" data-allow-clear="true" data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Probation Date From</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="probation-from" name="probation-from" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Probation Date To</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="probation-to" name="probation-to" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Date of Acceptance</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="acceptance-date" name="acceptance-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">User Role</label>
+                                <select class="form-select form-control" id="role" name="role" data-control="select2" data-placeholder="Select Role" data-allow-clear="true" data-dropdown-parent="#modal-employment-details">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-none" id="acupuncturist-fields">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Date of Initial Registration with the College</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="registration-date" name="registration-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Registration/ License number</label>
+                                <input type="text" class="form-control" name="registration-number" id="registration-number" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="liability-insurance_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Copy of Liability Insurance</div>
+                                <div class="fw-semibold text-gray-600" id="liability-insurance-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto liability-insurance-btns">
+                                <a class="btn btn-secondary href-download-liability-insurance mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-liability-insurance mt-10px">
+                                    <i class="fa fa-upload"></i> Upload
+                                </button>
+                                <input type="file" class="hidden d-none upload-liability-insurance" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="registration-number_sec">
+                                <div class="fs-6 fw-bold mb-1">Copy of Registration/ License Number</div>
+                                <div class="fw-semibold text-gray-600" id="registration-number-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto registration-number-btns">
+                                <a class="btn btn-secondary href-download-registration-number mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-registration-number mt-10px">
+                                    <i class="fa fa-upload"></i> Upload
+                                </button>
+                                <input type="file" class="hidden d-none upload-registration-number" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                    </div>
+                    <div class="row d-none" id="physiotherapist-fields">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Business Name</label>
+                                <input type="text" class="form-control" name="business-name" id="business-name" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Business Email</label>
+                                <input type="text" class="form-control" name="business-email" id="business-email" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Business Number</label>
+                                <input type="text" class="form-control" name="business-number" id="business-number" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="business_cheque_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Business Void Cheque</div>
+                                <div class="fw-semibold text-gray-600" id="business-cheque-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto business-cheque-btns">
+                                <a class="btn btn-secondary href-download-business-cheque mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-business-cheque mt-10px">
+                                    <i class="fa fa-upload"></i> Upload
+                                </button>
+                                <input type="file" class="hidden d-none upload-business-cheque" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                    </div>
+                    <div class="row d-none" id="contractor-fields">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Contractor Business Name</label>
+                                <input type="text" class="form-control" name="contractor-business-name" id="contractor-business-name" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Contractor Business Email</label>
+                                <input type="text" class="form-control" name="contractor-business-email" id="contractor-business-email" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Contractor Business Number</label>
+                                <input type="text" class="form-control" name="contractor-business-number" id="contractor-business-number" placeholder="">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!--begin::Label-->
+                            <div id="business_cheque_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Contractor Business Void Cheque</div>
+                                <div class="fw-semibold text-gray-600" id="contractor-business-cheque-name"></div>
+                            </div>
+                            <!--end::Label-->
+                            <div class="ms-auto contractor-business-cheque-btns">
+                                <a class="btn btn-secondary href-download-contractor-business-cheque mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-contractor-business-cheque mt-10px">
+                                    <i class="fa fa-upload"></i> Upload
+                                </button>
+                                <input type="file" class="hidden d-none upload-contractor-business-cheque" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-employment-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-emergency-contact-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>EEmergency Contact Details</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="emergency-contact-details-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">First Name</label>
+                                <input class="form-control" placeholder="Enter First Name" id="first-name" name="first-name" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Last Name</label>
+                                <input class="form-control" placeholder="Enter Last Name" id="last-name" name="last-name" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">RelationShip</label>
+                                <input class="form-control" placeholder="Enter RelationShip" id="relationship" name="relationship" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Office Phone</label>
+                                <input class="form-control" placeholder="Enter Office Phone" id="office-phone" name="office-phone" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Mobile Phone</label>
+                                <input class="form-control" placeholder="Enter Mobile Phone" id="mobile-phone" name="mobile-phone" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-emergency-contact-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-education-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>EEmergency Contact Details</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="education-details-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">College/ University</label>
+                                <input class="form-control" placeholder="Enter College/University Name" id="college-university" name="college-university" type="text" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Degree</label>
+                                <input class="form-control" placeholder="Enter Degree Name" id="degree" name="degree" type="text" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Major</label>
+                                <input class="form-control" placeholder="Enter Major" id="major" name="major" type="text" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Graduation Date</label>
+                                <input class="form-control date-picker" placeholder="Select Graduation Date" id="graduation-date" name="graduation-date" readonly="readonly" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-education-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-contact-info" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Contact Information</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="contact-details-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Office Phone Number</label>
+                                <input class="form-control" type="text" placeholder="" name="office-phone-number" id="office-phone-number" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Extension</label>
+                                <input class="form-control" type="text" placeholder="" name="extension" id="extension" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Mobile Phone Number</label>
+                                <input class="form-control" type="text" placeholder="" name="mobile-phone-number" id="mobile-phone-number" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Country</label>
+                                <select class="form-select form-control" id="country" name="country" data-control="select2" data-placeholder="Select Country" data-allow-clear="true" data-dropdown-parent="#modal-contact-info">
+                                    <option></option>
+                                    <option value="AF">Afghanistan</option>
+                                    <option value="AX">Åland Islands</option>
+                                    <option value="AL">Albania</option>
+                                    <option value="DZ">Algeria</option>
+                                    <option value="AS">American Samoa</option>
+                                    <option value="AD">Andorra</option>
+                                    <option value="AO">Angola</option>
+                                    <option value="AI">Anguilla</option>
+                                    <option value="AQ">Antarctica</option>
+                                    <option value="AG">Antigua and Barbuda</option>
+                                    <option value="AR">Argentina</option>
+                                    <option value="AM">Armenia</option>
+                                    <option value="AW">Aruba</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="AT">Austria</option>
+                                    <option value="AZ">Azerbaijan</option>
+                                    <option value="BS">Bahamas</option>
+                                    <option value="BH">Bahrain</option>
+                                    <option value="BD">Bangladesh</option>
+                                    <option value="BB">Barbados</option>
+                                    <option value="BY">Belarus</option>
+                                    <option value="BE">Belgium</option>
+                                    <option value="BZ">Belize</option>
+                                    <option value="BJ">Benin</option>
+                                    <option value="BM">Bermuda</option>
+                                    <option value="BT">Bhutan</option>
+                                    <option value="BO">Bolivia (Plurinational State of)</option>
+                                    <option value="BA">Bosnia and Herzegovina</option>
+                                    <option value="BW">Botswana</option>
+                                    <option value="BV">Bouvet Island</option>
+                                    <option value="BR">Brazil</option>
+                                    <option value="IO">British Indian Ocean Territory</option>
+                                    <option value="BN">Brunei Darussalam</option>
+                                    <option value="BG">Bulgaria</option>
+                                    <option value="BF">Burkina Faso</option>
+                                    <option value="BI">Burundi</option>
+                                    <option value="CV">Cabo Verde</option>
+                                    <option value="KH">Cambodia</option>
+                                    <option value="CM">Cameroon</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="BQ">Caribbean Netherlands</option>
+                                    <option value="KY">Cayman Islands</option>
+                                    <option value="CF">Central African Republic</option>
+                                    <option value="TD">Chad</option>
+                                    <option value="CL">Chile</option>
+                                    <option value="CN">China</option>
+                                    <option value="CX">Christmas Island</option>
+                                    <option value="CC">Cocos (Keeling) Islands</option>
+                                    <option value="CO">Colombia</option>
+                                    <option value="KM">Comoros</option>
+                                    <option value="CG">Congo</option>
+                                    <option value="CD">Congo, Democratic Republic of the</option>
+                                    <option value="CK">Cook Islands</option>
+                                    <option value="CR">Costa Rica</option>
+                                    <option value="HR">Croatia</option>
+                                    <option value="CU">Cuba</option>
+                                    <option value="CW">Curaçao</option>
+                                    <option value="CY">Cyprus</option>
+                                    <option value="CZ">Czech Republic</option>
+                                    <option value="CI">Côte d'Ivoire</option>
+                                    <option value="DK">Denmark</option>
+                                    <option value="DJ">Djibouti</option>
+                                    <option value="DM">Dominica</option>
+                                    <option value="DO">Dominican Republic</option>
+                                    <option value="EC">Ecuador</option>
+                                    <option value="EG">Egypt</option>
+                                    <option value="SV">El Salvador</option>
+                                    <option value="GQ">Equatorial Guinea</option>
+                                    <option value="ER">Eritrea</option>
+                                    <option value="EE">Estonia</option>
+                                    <option value="SZ">Eswatini (Swaziland)</option>
+                                    <option value="ET">Ethiopia</option>
+                                    <option value="FK">Falkland Islands (Malvinas)</option>
+                                    <option value="FO">Faroe Islands</option>
+                                    <option value="FJ">Fiji</option>
+                                    <option value="FI">Finland</option>
+                                    <option value="FR">France</option>
+                                    <option value="GF">French Guiana</option>
+                                    <option value="PF">French Polynesia</option>
+                                    <option value="TF">French Southern Territories</option>
+                                    <option value="GA">Gabon</option>
+                                    <option value="GM">Gambia</option>
+                                    <option value="GE">Georgia</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="GH">Ghana</option>
+                                    <option value="GI">Gibraltar</option>
+                                    <option value="GR">Greece</option>
+                                    <option value="GL">Greenland</option>
+                                    <option value="GD">Grenada</option>
+                                    <option value="GP">Guadeloupe</option>
+                                    <option value="GU">Guam</option>
+                                    <option value="GT">Guatemala</option>
+                                    <option value="GG">Guernsey</option>
+                                    <option value="GN">Guinea</option>
+                                    <option value="GW">Guinea-Bissau</option>
+                                    <option value="GY">Guyana</option>
+                                    <option value="HT">Haiti</option>
+                                    <option value="HM">Heard Island and Mcdonald Islands</option>
+                                    <option value="HN">Honduras</option>
+                                    <option value="HK">Hong Kong</option>
+                                    <option value="HU">Hungary</option>
+                                    <option value="IS">Iceland</option>
+                                    <option value="IN">India</option>
+                                    <option value="ID">Indonesia</option>
+                                    <option value="IR">Iran</option>
+                                    <option value="IQ">Iraq</option>
+                                    <option value="IE">Ireland</option>
+                                    <option value="IM">Isle of Man</option>
+                                    <option value="IL">Israel</option>
+                                    <option value="IT">Italy</option>
+                                    <option value="JM">Jamaica</option>
+                                    <option value="JP">Japan</option>
+                                    <option value="JE">Jersey</option>
+                                    <option value="JO">Jordan</option>
+                                    <option value="KZ">Kazakhstan</option>
+                                    <option value="KE">Kenya</option>
+                                    <option value="KI">Kiribati</option>
+                                    <option value="KP">Korea, North</option>
+                                    <option value="KR">Korea, South</option>
+                                    <option value="XK">Kosovo</option>
+                                    <option value="KW">Kuwait</option>
+                                    <option value="KG">Kyrgyzstan</option>
+                                    <option value="LA">Lao People's Democratic Republic</option>
+                                    <option value="LV">Latvia</option>
+                                    <option value="LB">Lebanon</option>
+                                    <option value="LS">Lesotho</option>
+                                    <option value="LR">Liberia</option>
+                                    <option value="LY">Libya</option>
+                                    <option value="LI">Liechtenstein</option>
+                                    <option value="LT">Lithuania</option>
+                                    <option value="LU">Luxembourg</option>
+                                    <option value="MO">Macao</option>
+                                    <option value="MK">Macedonia North</option>
+                                    <option value="MG">Madagascar</option>
+                                    <option value="MW">Malawi</option>
+                                    <option value="MY">Malaysia</option>
+                                    <option value="MV">Maldives</option>
+                                    <option value="ML">Mali</option>
+                                    <option value="MT">Malta</option>
+                                    <option value="MH">Marshall Islands</option>
+                                    <option value="MQ">Martinique</option>
+                                    <option value="MR">Mauritania</option>
+                                    <option value="MU">Mauritius</option>
+                                    <option value="YT">Mayotte</option>
+                                    <option value="MX">Mexico</option>
+                                    <option value="FM">Micronesia</option>
+                                    <option value="MD">Moldova</option>
+                                    <option value="MC">Monaco</option>
+                                    <option value="MN">Mongolia</option>
+                                    <option value="ME">Montenegro</option>
+                                    <option value="MS">Montserrat</option>
+                                    <option value="MA">Morocco</option>
+                                    <option value="MZ">Mozambique</option>
+                                    <option value="MM">Myanmar (Burma)</option>
+                                    <option value="NA">Namibia</option>
+                                    <option value="NR">Nauru</option>
+                                    <option value="NP">Nepal</option>
+                                    <option value="NL">Netherlands</option>
+                                    <option value="AN">Netherlands Antilles</option>
+                                    <option value="NC">New Caledonia</option>
+                                    <option value="NZ">New Zealand</option>
+                                    <option value="NI">Nicaragua</option>
+                                    <option value="NE">Niger</option>
+                                    <option value="NG">Nigeria</option>
+                                    <option value="NU">Niue</option>
+                                    <option value="NF">Norfolk Island</option>
+                                    <option value="MP">Northern Mariana Islands</option>
+                                    <option value="NO">Norway</option>
+                                    <option value="OM">Oman</option>
+                                    <option value="PK">Pakistan</option>
+                                    <option value="PW">Palau</option>
+                                    <option value="PS">Palestine</option>
+                                    <option value="PA">Panama</option>
+                                    <option value="PG">Papua New Guinea</option>
+                                    <option value="PY">Paraguay</option>
+                                    <option value="PE">Peru</option>
+                                    <option value="PH">Philippines</option>
+                                    <option value="PN">Pitcairn Islands</option>
+                                    <option value="PL">Poland</option>
+                                    <option value="PT">Portugal</option>
+                                    <option value="PR">Puerto Rico</option>
+                                    <option value="QA">Qatar</option>
+                                    <option value="RE">Reunion</option>
+                                    <option value="RO">Romania</option>
+                                    <option value="RU">Russian Federation</option>
+                                    <option value="RW">Rwanda</option>
+                                    <option value="BL">Saint Barthelemy</option>
+                                    <option value="SH">Saint Helena</option>
+                                    <option value="KN">Saint Kitts and Nevis</option>
+                                    <option value="LC">Saint Lucia</option>
+                                    <option value="MF">Saint Martin</option>
+                                    <option value="PM">Saint Pierre and Miquelon</option>
+                                    <option value="VC">Saint Vincent and the Grenadines</option>
+                                    <option value="WS">Samoa</option>
+                                    <option value="SM">San Marino</option>
+                                    <option value="ST">Sao Tome and Principe</option>
+                                    <option value="SA">Saudi Arabia</option>
+                                    <option value="SN">Senegal</option>
+                                    <option value="RS">Serbia</option>
+                                    <option value="CS">Serbia and Montenegro</option>
+                                    <option value="SC">Seychelles</option>
+                                    <option value="SL">Sierra Leone</option>
+                                    <option value="SG">Singapore</option>
+                                    <option value="SX">Sint Maarten</option>
+                                    <option value="SK">Slovakia</option>
+                                    <option value="SI">Slovenia</option>
+                                    <option value="SB">Solomon Islands</option>
+                                    <option value="SO">Somalia</option>
+                                    <option value="ZA">South Africa</option>
+                                    <option value="GS">South Georgia and the South Sandwich Islands</option>
+                                    <option value="SS">South Sudan</option>
+                                    <option value="ES">Spain</option>
+                                    <option value="LK">Sri Lanka</option>
+                                    <option value="SD">Sudan</option>
+                                    <option value="SR">Suriname</option>
+                                    <option value="SJ">Svalbard and Jan Mayen</option>
+                                    <option value="SE">Sweden</option>
+                                    <option value="CH">Switzerland</option>
+                                    <option value="SY">Syria</option>
+                                    <option value="TW">Taiwan</option>
+                                    <option value="TJ">Tajikistan</option>
+                                    <option value="TZ">Tanzania</option>
+                                    <option value="TH">Thailand</option>
+                                    <option value="TL">Timor-Leste</option>
+                                    <option value="TG">Togo</option>
+                                    <option value="TK">Tokelau</option>
+                                    <option value="TO">Tonga</option>
+                                    <option value="TT">Trinidad and Tobago</option>
+                                    <option value="TN">Tunisia</option>
+                                    <option value="TR">Turkey (Türkiye)</option>
+                                    <option value="TM">Turkmenistan</option>
+                                    <option value="TC">Turks and Caicos Islands</option>
+                                    <option value="TV">Tuvalu</option>
+                                    <option value="UM">U.S. Outlying Islands</option>
+                                    <option value="UG">Uganda</option>
+                                    <option value="UA">Ukraine</option>
+                                    <option value="AE">United Arab Emirates</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="US">United States</option>
+                                    <option value="UY">Uruguay</option>
+                                    <option value="UZ">Uzbekistan</option>
+                                    <option value="VU">Vanuatu</option>
+                                    <option value="VA">Vatican City Holy See</option>
+                                    <option value="VE">Venezuela</option>
+                                    <option value="VN">Vietnam</option>
+                                    <option value="VG">Virgin Islands, British</option>
+                                    <option value="VI">Virgin Islands, U.S</option>
+                                    <option value="WF">Wallis and Futuna</option>
+                                    <option value="EH">Western Sahara</option>
+                                    <option value="YE">Yemen</option>
+                                    <option value="ZM">Zambia</option>
+                                    <option value="ZW">Zimbabwe</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" name="city" id="city" placeholder="Enter City">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">State/Region</label>
+                                <input class="form-control" type="text" placeholder="" name="state-region" id="state-region" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Zip/Postal Code</label>
+                                <input class="form-control" type="text" placeholder="" name="zip-postal-code" id="zip-postal-code" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Address</label>
+                                <textarea type="text" class="form-control resize-none" name="address" id="address" placeholder="Enter Address" maxlength="200" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-contact-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-equipment-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Request Equipment & License</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="equipment-details-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Item Requested</label>
+                                <input class="form-control" placeholder="" id="item-requested" name="item-requested" type="text" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Note</label>
+                                <textarea type="text" class="form-control resize-none" name="request-note" id="request-note" placeholder="" maxlength="200" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-add-equipment-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-cert-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add License or Certification</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="cert-details-form" novalidate>
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <label data-i18n="Image/Photo" class="form-label">License/Certificate Photo</label>
+                            <div class="photo-ctrl">
+                                <div class="form-group mb-3" style="height: 130px; width: 100%;">
+                                    <img crossorigin="Anonymous" style="max-height: 100%;max-width:100%" class="cert-photo" id="cert-photo" name="cert-photo" data-id="cert-photo" src="/Images/no-image-1.svg">
+                                    <span class="col-sm-5 mt-2 messages"></span>
+                                </div>
+                                <div class="edit-cert-btns mt-5 text-center hidden" style="display:none">
+                                    <button type="button" class="btn has-img btn-danger btn-del-cert-image hidden">
+                                        <i class="fa fa-times"></i> Delete
+                                    </button>
+                                </div>
+                                <div class="image-cert-select-buttons" style="display:block">
+                                    <div class="mb-3 form-group ">
+                                        <input type="file" class="invisible certificate-photo" id="certificate-photo" name="certificate-photo" accept="image/*" hidden />
+                                        <span class="col-sm-5 mt-2 messages"></span>
+                                        <button type="button" class="btn no-img btn-primary btn-upload-cert mt-10px">
+                                            <i class="fa fa-upload"></i> Upload Photo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">License/Certificate Name</label>
+                                <input type="text" class="form-control" name="license-certificate-name" id="license-certificate-name">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Issuing Organization</label>
+                                <input class="form-control" type="text" placeholder="" name="issuing-organization" id="issuing-organization" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Credentials ID</label>
+                                <input class="form-control" type="text" placeholder="" name="credential-id" id="credential-id" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">URL</label>
+                                <input type="text" class="form-control" name="url" id="url">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Issue Date</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="issue-date" name="issue-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Expiration Date</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="expiration-date" name="expiration-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-add-cert">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-bio-details" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Bio</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="bio-details-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">About</label>
+                                <textarea type="text" class="form-control resize-none" name="about" id="about" placeholder="" maxlength="2000" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Hobbies</label>
+                                <textarea type="text" class="form-control resize-none mb-2" name="hobbies" id="hobbies" placeholder="" maxlength="500" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2"><i class="fa fa-info-circle fs-4 me-2"></i> Comma separated</span>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Favorite Books</label>
+                                <textarea type="text" class="form-control resize-none mb-2" name="favorite-books" id="favorite-books" placeholder="" maxlength="500" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2"><i class="fa fa-info-circle fs-4 me-2"></i> Comma separated</span>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Music Preference</label>
+                                <textarea type="text" class="form-control resize-none mb-2" name="music-preference" id="music-preference" placeholder="" maxlength="500" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2"><i class="fa fa-info-circle fs-4 me-2"></i> Comma separated</span>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Sports</label>
+                                <textarea type="text" class="form-control resize-none mb-2" name="sports" id="sports" placeholder="" maxlength="500" rows="2"></textarea>
+                                <span class="col-sm-5 mt-2"><i class="fa fa-info-circle fs-4 me-2"></i> Comma separated</span>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-bio-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-supporting-docs" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Supporting Documents</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="cert-details-form" novalidate>
+                    <div class="row mb-4">
+                        <div class="d-flex flex-wrap align-items-center">
+                            <div id="document_name_sec">
+                                <div class="fs-6 fw-bold mb-1">Supporting Document</div>
+                                <div class="fw-semibold text-gray-600" id="supporting-doc-name"></div>
+                            </div>
+                            <div class="ms-auto supporting-document-btns">
+                                <a class="btn btn-secondary href-download-supporting-document mt-10px d-none" target="_blank"><i class="fa fa-download"></i> Download</a>
+                                <button type="button" class="btn no-img btn-primary btn-upload-supporting-document mt-10px">
+                                    <i class="fa fa-upload"></i> Upload
+                                </button>
+                                <input type="file" class="hidden d-none upload-supporting-document" autocomplete="off" accept=".pdf,.doc,.docx,.xls,.xlsx,image/*">
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-6"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Document Name</label>
+                                <input type="text" class="form-control" name="supporting-document-name" id="supporting-document-name">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-add-supporting-doc">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="~/scripts/ellipsis.min.js"></script>
+    <script src="~/js/cbpfwtabs.js"></script>
+    <script src="~/js/modernizr.custom.js"></script>
+    <script src="~/scripts/EmployeeDetails/employmentdetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/profilebasicdetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/profileemployeedetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/employyeemergencycontacts.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/educationdetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/contact-info.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/equipmentdetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/certificatedetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/biodetails.js" asp-append-version="true"></script>
+    <script src="~/scripts/EmployeeDetails/supportingdocs.js" asp-append-version="true"></script>
+
+
+    <script>
+        var curPage = "EmployeeDetails";
+        var DropDownsData = {};
+        @if (ViewBag.DropDownData != null)
+        {
+            <text>
+                                           DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+            </text>
+        }
+    </script>
+}

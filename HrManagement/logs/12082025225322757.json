@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-12 22:53:22 757",
+  "Message": "Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.",
+  "StackTrace": "   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3966\r\n   at Deserialize17538779-0c2c-4009-b72e-1c7830e6ecbb(DbDataReader)\r\n   at Dapper.SqlMapper.<>c__DisplayClass169_0`8.<GenerateMapper>b__3(DbDataReader r)\r\n   at Dapper.SqlMapper.MultiMapImpl[TFirst,TSecond,TThird,TFourth,TFifth,TSixth,TSeventh,TReturn](IDbConnection cnn, CommandDefinition command, Delegate map, String splitOn, DbDataReader reader, Identity identity, Boolean finalize)+MoveNext()\r\n   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Dapper.SqlMapper.MultiMapAsync[TFirst,TSecond,TThird,TFourth,TFifth,TSixth,TSeventh,TReturn](IDbConnection cnn, CommandDefinition command, Delegate map, String splitOn)\r\n   at HrManagement.WebApi.TrainingsController.GetTrainingWithDetails(Int32 trainingId)",
+  "Source": "Dapper",
+  "InnerException": "Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding."
+}

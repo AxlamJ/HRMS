@@ -1,0 +1,325 @@
+﻿{
+  "FormGroups": {
+    "employee-management": {
+      "EnabledBySite": false,
+      "Title": "Employee Management",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "manage-employee": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-list",
+          "addClass": "mng-employees",
+          "Text": "Manage Employees",
+          "Link": "Employee/ManageEmployees",
+          "AllowedRoles": "1"
+        },
+        //"add-employee": {
+        //  //"Icon": "",
+        //  //"IconImg": "",
+        //  "IconFa": "fa-clipboard",
+        //  "addClass": "add-employees",
+        //  "Text": "Add Employee",
+        //  "Link": "Employee/AddUpdateEmployee",
+        //  "AllowedRoles": "1,2,3"
+        //},
+        "manage-site": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-edit",
+          "Text": "Manage Sites",
+          "addClass": "mng-sites",
+          "Link": "Home/ManageSites",
+          "AllowedRoles": "1,2,3"
+        },
+        "add-site": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-share",
+          "addClass": "add-sites",
+          "Text": "Add Site",
+          "Link": "Home/AddSite",
+          "AllowedRoles": "1,2,3"
+        }
+
+      }
+    },
+    "time-management": {
+      "EnabledBySite": false,
+      "Title": "Time Management",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "view-attendance": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-eye",
+          "addClass": "view-attendance",
+          "Text": "View Attendance",
+          "Link": "Home/ViewAttendance",
+          "AllowedRoles": "1,2,3,4"
+        }
+      }
+    },
+    "leaves-management": {
+      "EnabledBySite": false,
+      "Title": "Leaves Management",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "leaves-policy": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-shield",
+          "addClass": "leaves-policy-management",
+          "Text": "Leaves Policy Management",
+          "Link": "Home/LeavesPolicyManagement",
+          "AllowedRoles": "1,2,3,4"
+        },
+        "apply-leave": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-eye",
+          "addClass": "appply-leaves",
+          "Text": "Apply Leaves",
+          "Link": "Home/ApplyLeave",
+          "AllowedRoles": "1,2,3,4"
+        },
+        "search-leave": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-clipboard",
+          "addClass": "search-leaves",
+          "Text": "Search Leaves",
+          "Link": "Home/SearchLeaves",
+          "AllowedRoles": "1,2,3,4"
+        },
+        "approve-leave": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-edit",
+          "Text": "Approve/Reject Leaves",
+          "addClass": "approveleaves-sites",
+          "Link": "Home/ApproveLeaves",
+          "AllowedRoles": "1,2,3"
+        }
+      }
+    },
+    "schedule-management": {
+      "EnabledBySite": false,
+      "Title": "Schedule Management",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "my-schedule": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-eye",
+          "addClass": "my-schedule",
+          "Text": "My Schedule",
+          "Link": "Home/MySchedule",
+          "AllowedRoles": "1,2,3,4"
+        },
+        "manage-schedule": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-calendar",
+          "addClass": "manage-schedule",
+          "Text": "Manage Schedule",
+          "Link": "ScheduleManagement/Index",
+          "AllowedRoles": "1,2"
+        }
+      }
+    },
+    "administration": {
+      "EnabledBySite": false,
+      "Title": "Administration",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        //"manage-users": {
+        //  //"Icon": "",
+        //  //"IconImg": "",
+        //  "IconFa": "fa-eye",
+        //  "addClass": "mng-users",
+        //  "Text": "Manage Users",
+        //  "Link": "UserManagement/ManageUsers",
+        //  "AllowedRoles": "1"
+        //},
+        //"create-users": {
+        //  //"Icon": "",
+        //  //"IconImg": "",
+        //  "IconFa": "fa-eye",
+        //  "addClass": "cerate-user",
+        //  "Text": "Create User",
+        //  "Link": "UserManagement/AddUpdateUser",
+        //  "AllowedRoles": "1"
+        //},
+        "manage-departments": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-eye",
+          "addClass": "mng-departments",
+          "Text": "Manage Departments",
+          "Link": "Home/ManageDepartments",
+          "AllowedRoles": "1"
+        },
+        "manage-positions": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-eye",
+          "addClass": "mng-positions",
+          "Text": "Manage Positions",
+          "Link": "Home/ManagePositions",
+          "AllowedRoles": "1"
+        }
+        //,
+        //"create-department": {
+        //  //"Icon": "",
+        //  //"IconImg": "",
+        //  "IconFa": "fa-eye",
+        //  "addClass": "cerate-user",
+        //  "Text": "Add Department",
+        //  "Link": "Home/AddDepartment",
+        //  "AllowedRoles": "1"
+        //}
+      }
+    },
+    "news-feed": {
+      "EnabledBySite": false,
+      "Title": "News Feed",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "manage-news-feed": {
+          "IconFa": "fa-newspaper",
+          "addClass": "manage-news-feed",
+          "Text": "Manage News Feed",
+          "Link": "NewsFeed/NewsFeedManagement",
+          "AllowedRoles": "1"
+        },
+        "view-news-feed": {
+          "IconFa": "fa-eye",
+          "addClass": "news-feed",
+          "Text": "View News Feed",
+          "Link": "NewsFeed/Index",
+          "AllowedRoles": "1"
+        }
+      }
+    },
+    "survey-management": {
+      "EnabledBySite": false,
+      "Title": "Survey Management",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "manage-survey": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-clipboard",
+          "addClass": "manage-survey",
+          "Text": "Manage Surveys",
+          "Link": "Survey/ManageSurveys",
+          "AllowedRoles": "1,2"
+        },
+        "my-survey": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-clipboard",
+          "addClass": "my-survey",
+          "Text": "My Surveys",
+          "Link": "Survey/MySurveys",
+          "AllowedRoles": "1,2,3,4"
+        }
+      }
+    },
+    "settings": {
+      "EnabledBySite": false,
+      "Title": "Settings",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "permissions": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-clipboard",
+          "addClass": "manage-survey",
+          "Text": "Permissions",
+          "Link": "Settings/Permissions",
+          "AllowedRoles": "1,2,3,4"
+        }
+      }
+    },
+    "reports": {
+      "EnabledBySite": false,
+      "Title": "Reports",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {
+
+      },
+      "DashboardLinks": {
+        "company-reports": {
+          //"Icon": "",
+          //"IconImg": "",
+          "IconFa": "fa-chart-simple",
+          "addClass": "company-reports",
+          "Text": "Company Reports",
+          "Link": "Reports/Index",
+          "AllowedRoles": "1,2,3,4"
+        }
+      }
+    },
+
+    "training-material": {
+      "EnabledBySite": false,
+      "Title": "Training Material",
+      "BgColor": "#00A7E1",
+      "Forms": [],
+      "FormLink": {},
+      "DashboardLinks": {
+        "view-training-material": {
+          "IconFa": "fas fa-graduation-cap",
+          "addClass": "view-training-material",
+          "Text": "Trainings",
+          "Link": "Products/Index",
+          "AllowedRoles": "1,2,3,4"
+        },
+        "view-training-report": {
+          "IconFa": "fas fa-graduation-cap",
+          "addClass": "view-training-report",
+          "Text": "Training Reports",
+          "Link": "Training/TrainingReport",
+          "AllowedRoles": "1,2,3,4"
+        }
+      }
+    }
+
+
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-07-30 22:20:25 670",
+  "Message": "Nullable object must have a value.",
+  "StackTrace": "   at System.Nullable`1.get_Value()\r\n   at HrManagement.WebApi.TrainingsController.UpsertTraining(Training training)",
+  "Source": "System.Private.CoreLib",
+  "InnerException": null
+}

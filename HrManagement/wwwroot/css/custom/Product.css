@@ -1,0 +1,108 @@
+﻿.card-advanced {
+    width: 470px;
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgb(0 0 0 / 0.15);
+    background: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+    .card-advanced:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 16px 40px rgb(0 0 0 / 0.25);
+    }
+
+    .card-advanced .card-header {
+        background: #1f4293 100%;
+        padding: 1rem;
+        color: white;
+        font-weight: 700;
+        font-size: 1.25rem;
+        text-align: center;
+        user-select: none;
+    }
+
+    .card-advanced .image-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 220px;
+    }
+
+        .card-advanced .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+            display: block;
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+        }
+
+    .card-advanced:hover .image-wrapper img {
+        transform: scale(1.05);
+    }
+
+    .card-advanced .overlay-buttons {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 10;
+        
+    }
+
+.overlay-buttons .overlay-buttons-a {
+    background:  rgba(255 255 255 / 0.85);
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    color: #2575fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    font-size: 1.25rem;
+    
+}
+
+    .overlay-buttons .overlay-buttons-a:hover {
+        background: #2575fc;
+        color: white;
+        box-shadow: 0 4px 15px rgb(37 117 252 / 0.6);
+    }
+
+.card-advanced .card-body {
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.card-advanced .card-text {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.card-advanced .btn-learn-more {
+    background: #2575fc;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+    .card-advanced .btn-learn-more:hover {
+        background: #1a54c4;
+    }

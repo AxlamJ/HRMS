@@ -1,0 +1,707 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    Layout = "/Views/Shared/_LayoutBase.cshtml";
+
+    var userName = HttpContextAccessor.HttpContext?.Session?.GetString("UserName");
+    var ProfilePhoto = (HttpContextAccessor.HttpContext?.Session?.GetString("ProfilePhoto") == "" || HttpContextAccessor.HttpContext?.Session?.GetString("ProfilePhoto") == null) ? "/Images/userimage.png" : HttpContextAccessor.HttpContext?.Session?.GetString("ProfilePhoto");
+    var UserRoles = HttpContextAccessor.HttpContext?.Session?.GetString("UserRoles");
+    var UserRoleName = HttpContextAccessor.HttpContext?.Session?.GetString("UserRoleName");
+    var UserSites = HttpContextAccessor.HttpContext?.Session?.GetString("UserSites");
+    var UserId = HttpContextAccessor.HttpContext?.Session?.GetString("UserId").Trim();
+    var FirstName = HttpContextAccessor.HttpContext?.Session?.GetString("FirstName");
+    var LastName = HttpContextAccessor.HttpContext?.Session?.GetString("LastName");
+    var PhoneNumber = HttpContextAccessor.HttpContext?.Session?.GetString("PhoneNumber");
+    var EmployeeCode = HttpContextAccessor.HttpContext?.Session?.GetInt32("EmployeeCode");
+    var Department = HttpContextAccessor.HttpContext?.Session?.GetString("Department");
+    var DepartmentSubCategories = HttpContextAccessor.HttpContext?.Session?.GetString("DepartmentSubCategoryName");
+    // var Site = HttpContextAccessor.HttpContext?.Session?.GetString("Site");
+    //var RoleResources = HttpContextAccessor.HttpContext?.Session.GetString("RoleResources");
+    var RoleResources = "";
+    if (HttpContextAccessor.HttpContext?.Session?.GetString("RoleResources") != null)
+    {
+        RoleResources = (HttpContextAccessor.HttpContext?.Session?.GetString("RoleResources") as string);
+    }
+    var FullName = FirstName + " " + LastName;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@ViewData["Title"] - My HR</title>
+
+    <link href="@Url.Content("/assets/fonts/css/fonts.css")" rel="stylesheet" />
+    <link href="@Url.Content("/css/customstyles.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/plugins/global/plugins.bundle.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/css/style.bundle.css")" rel="stylesheet" />
+    <link href="@Url.Content("/css/multiselect/multiple-select.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("/assets/plugins/custom/datatables/datatables.bundle.css")" rel="stylesheet" />
+    <link href="@Url.Content("/dist/css/prism.css")" rel="stylesheet" />
+    <link href="@Url.Content("/lib/country-picker/css/bootstrap-select-country.min.css")" rel="stylesheet" />
+    
+    <script src="@Url.Content("/js/spin.js")"></script>
+    <script src="@Url.Content("/js/common.js")"></script>
+    <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script>
+
+    @* <script src="@Url.Content("/lib/echarts/echarts.common.min.js")"></script> *@
+    <script src="@Url.Content("/lib/echarts/echarts.min.js")"></script>
+
+    @await RenderSectionAsync("PageCSS", required: false)
+
+    <style>
+
+        .error {
+            color:red;
+        }
+        .clickable-row {
+            cursor: pointer;
+            font-size: 13px !important;
+            font-weight: 600;
+            color: #676767 !important;
+        }
+
+            .clickable-row:hover {
+                background: #f7f7f7 !important;
+            }
+            .Primary-color{
+            background-color: #3978ea;
+            }
+
+        .Primary-font-color {
+            color:#3978ea;
+        }
+    </style>
+
+    <style>
+        .help-block.error {
+            margin-bottom: 5px;
+        }
+
+        .has-error {
+            color: red;
+        }
+
+            .has-error .form-control {
+                border-color: red;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            }
+    </style>
+</head>
+<body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
+    <script type="text/javascript">
+        var curPage;
+        // var txtWait = "SDP.Resources.Strings.txtPleaseWait";
+        var txtWait = "Please wait..";
+        spin();
+    </script>
+    <!-- In case of Disabled Javascript, Show this message -->
+    <noscript>
+        <div style="padding:100px 20px; position: fixed;text-align:center; width: 100%; height:100%; z-index:999999999999999" class="alert alert-danger">
+            <h1>
+                <i style="font-size:100px" class="fa fa-exclamation-circle fa-5x"></i>
+            </h1>
+            <h1>OOPSS...</h1>
+            @* <h3 style="text-transform:uppercase">@Resources.Strings.txtJavascriptDisabledError</h3> *@
+            <h3 style="text-transform:uppercase">Error</h3>
+        </div>
+    </noscript>
+    <div id="spin">
+    </div>
+    <!-- id to get the root path of application -->
+    @* <link rel="home" id="ApplicationRoot" href='@string.Format("{0}://{1}{2}", @Url.Scheme, Request.Url.Authority, Url.Content("~"))' /> *@
+
+
+
+    @*<!--begin::Theme mode setup on page load--> *@
+    @* <script>var defaultThemeMode = "light"; var themeMode; if ( document.documentElement ) { if ( document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if ( localStorage.getItem("data-bs-theme") !== null ) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }</script> *@
+    @*<!--end::Theme mode setup on page load--> *@
+
+    @*<!--begin::App--> *@
+    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+        @*<!--begin::Page--> *@
+        <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+            @*<!--begin::Header--> *@
+            <div id="kt_app_header" class="app-header" data-kt-sticky="true" data-kt-sticky-activate="{default: true, lg: true}" data-kt-sticky-name="app-header-minimize" data-kt-sticky-offset="{default: '200px', lg: '0'}" data-kt-sticky-animation="false">
+                <div class="app-container container-fluid d-flex align-items-stretch justify-content-between" id="kt_app_header_container">
+                    @*<!--begin::Sidebar mobile toggle--> *@
+                    <div class="d-flex align-items-center d-lg-none ms-n3 me-1 me-md-2" title="Show sidebar menu">
+                        <div class="btn btn-icon btn-active-color-primary w-35px h-35px" id="kt_app_sidebar_mobile_toggle">
+                            <i class="ki-duotone ki-abstract-14 fs-2 fs-md-1">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </div>
+                    </div>
+                    @*<!--end::Sidebar mobile toggle--> *@
+                    @*<!--begin::Mobile logo--> *@
+                    <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
+                        <a href="~/Home/Index" class="d-lg-none">
+                            <img alt="Logo" src="/images/Revital-Health-mini.png" class="h-36px" />
+                        </a>
+                    </div>
+                    @*<!--end::Mobile logo--> *@
+                    @*<!--begin::Header wrapper--> *@
+                    <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1" id="kt_app_header_wrapper">
+                        @*<!--begin::Menu wrapper--> *@
+                        <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="{default: 'append', lg: 'prepend'}" data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_wrapper'}">
+                        </div>
+                        @*<!--end::Menu wrapper--> *@
+                        @*<!--begin::Navbar--> *@
+                        <div class="app-navbar flex-shrink-0">
+                            <div class="btn btn-icon btn-custom w-35px" id="header_inbox_bar" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                <a href="javascript:;" class="" style="color:white !important">
+                                    <span class="username">
+                                        <i class="fa fa-bell menu-icon" style="font-size: 20px;vertical-align: middle;color:white !important"></i>
+                                    </span>
+                                </a>
+                                <span class="bullet bullet-dot bg-primary h-15px w-15px translate-middle fs-12px" style="align-content: center;"><span class="text-white" style="align-items: baseline;" id="message-badge-count">0</span></span>
+                            </div>
+                            <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true" id="kt_menu_notifications">
+                                <div class="d-flex flex-column bgi-no-repeat rounded-top" style="background-image: url('/images/menu-header-bg.jpg');">
+                                    <h3 class="text-white fw-semibold px-9 mt-10 mb-6">
+                                        Notifications
+                                    </h3>
+                                    <h5 class="opacity-75 ps-3 text-white">You have <i class="message-count text-white fw-bolder">0</i> new Notifications.</h5>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="kt_topbar_notifications_1" role="tabpanel">
+                                        <div class="scroll-y mh-325px my-5 px-2 message-items">
+                                        </div>
+                                        <div class="py-3 text-center border-top d-none">
+                                            <a href="" class="btn btn-color-gray-600 btn-active-color-primary view-all">
+                                                View All
+                                                <i class="ki-duotone ki-arrow-right fs-5">
+                                                    <span class="path1"></span>
+                                                    <span class="path2"></span>
+                                                </i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<!--begin::User Menu--> *@
+                            <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
+                                <!--begin::Menu wrapper-->
+                                <div class="cursor-pointer symbol symbol-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                    <img src="@ProfilePhoto" class="rounded-3" alt="user"> <span class="text-white bold">@FullName</span>
+                                </div>
+                                <!--begin::User account menu-->
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true" style="">
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <div class="menu-content d-flex align-items-center px-3">
+                                            <!--begin::Avatar-->
+                                            <div class="symbol symbol-50px me-5">
+                                                <img alt="Logo" src="@ProfilePhoto">
+                                            </div>
+                                            <!--end::Avatar-->
+                                            <!--begin::Username-->
+                                            <div class="d-flex flex-column">
+                                                <div class="fw-bold d-flex align-items-center fs-5">
+                                                    @FullName
+                                                </div>
+                                            </div>
+                                            <!--end::Username-->
+                                        </div>
+                                    </div>
+                                    <!--end::Menu item-->
+                                    <!--begin::Menu separator-->
+                                    <div class="separator my-2 "></div>
+                                    <!--end::Menu separator-->
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-5">
+                                        <a href="/Employee/MyProfile" class="menu-link px-5">My Profile</a>
+                                    </div>
+                                    <!--end::Menu item-->
+                                    <!--begin::Menu separator-->
+                                    <div class="separator my-2"></div>
+                                    <!--end::Menu separator-->
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-5 my-1">
+                                        <span class="menu-link px-5" data-bs-toggle="modal" data-bs-target="#modal-change-password">Change Password</span>
+                                    </div>
+                                    <!--end::Menu item-->
+                                    <!--begin::Menu separator-->
+                                    <div class="separator my-2"></div>
+                                    <!--end::Menu separator-->
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-5">
+                                        <a href="~/Home/Logout" class="menu-link btn-logout px-5">Sign Out</a>
+                                    </div>
+                                    <!--end::Menu item-->
+                                </div>
+                                <!--end::User account menu-->
+                                <!--end::Menu wrapper-->
+                            </div>
+                        </div>
+                        @*<!--end::Navbar--> *@
+                    </div>
+                    @*<!--end::Header wrapper--> *@
+                </div>
+            </div>
+            @*<!--end::Header--> *@
+            @*<!--begin::Wrapper--> *@
+            <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+                @*<!--begin::Sidebar--> *@
+                <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
+                    @*<!--begin::Logo--> *@
+                    <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+                        @*<!--begin::Logo image--> *@
+                        <a href="~/Home/Index">
+                            <img alt="Logo" src="/images/revital-health-1.png" class="h-36px app-sidebar-logo-default" />
+                            <img alt="Logo" src="/images/Revital-Health-mini.png" class="h-36px app-sidebar-logo-minimize" />
+                        </a>
+                        @*<!--end::Logo image--> *@
+                        @*<!--begin::Sidebar toggle--> *@
+                        @*<!--begin::Minimized sidebar setup:--> *@
+                        @*<!-- if isset_COOKIE["sidebar_minimize_state"] _COOKIE["sidebar_minimize_state"] === "on" { -->*@
+                        @*<!--  1. "src/js/layout/sidebar.js" adds "sidebar_minimize_state" cookie value to save the sidebar minimize state. -->*@
+                        @*<!--  2. Set data-kt-app-sidebar-minimize="on" attribute for body tag. *@
+                        @*<!--  3. Set data-kt-toggle-state="active" attribute to the toggle element with "kt_app_sidebar_toggle" id. *@
+                        @*<!--  4. Add "active" class to to sidebar toggle element with "kt_app_sidebar_toggle" id.} *@
+                        <div id="kt_app_sidebar_toggle" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+                            <i class="ki-duotone ki-black-left-line fs-3 rotate-180">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </div>
+                        @*<!--end::Sidebar toggle--> *@
+                    </div>
+                    @*<!--end::Logo--> *@
+                    @*<!--begin::sidebar menu--> *@
+                    <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+                        @*<!--begin::Menu wrapper--> *@
+                        <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper">
+                            @*<!--begin::Scroll wrapper--> *@
+                            <div id="kt_app_sidebar_menu_scroll" class="scroll-y my-5 mx-3" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer" data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
+                                @*<!--begin::Menu--> *@
+                                <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6 page-sidebar-menu" id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
+                                    <!--begin:Menu item-->
+                                    <div class="menu-item menu-item-core">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link nav-click" href="~/Home/Index">
+                                            <span class="menu-icon">
+                                                <i class="fa fa-home"></i>
+                                            </span>
+                                            <span class="menu-title">DashBoard</span>
+                                        </a>
+                                        <!--end:Menu link-->
+                                    </div>
+                                    <!--end:Menu item-->
+
+                                </div>
+                                @*<!--end::Menu--> *@
+                            </div>
+                            @*<!--end::Scroll wrapper--> *@
+                        </div>
+                        @*<!--end::Menu wrapper--> *@
+                    </div>
+                    @*<!--end::sidebar menu--> *@
+                </div>
+                @*<!--end::Sidebar--> *@
+
+                @RenderBody()
+
+                @*<!--begin::Footer--> *@
+                <div id="kt_app_footer" class="app-footer">
+                    @*<!--begin::Footer container--> *@
+                    <div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+                        @*<!--begin::Copyright--> *@
+                        <div class="text-gray-900 order-2 order-md-1">
+                        </div>
+                        @*<!--end::Copyright--> *@
+                        @*<!--begin::Menu--> *@
+                        <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+                            <img id="footerlogo" src="/images/Revital-Health-1.png" height="30px">
+                        </ul>
+                        @*<!--end::Menu--> *@
+                    </div>
+                    @*<!--end::Footer container--> *@
+                </div>
+                @*<!--end::Footer--> *@
+            </div>
+            @*<!--end::Wrapper--> *@
+        </div>
+        @*<!--end::Page--> *@
+    </div>
+    @*<!--end::App--> *@
+    <!--begin::Scrolltop-->
+    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true"><i class="fa fa-chevron-up text-white"></i></div>
+
+
+    <div class="modal fade" id="modal-change-password" tabindex="-1" aria-modal="true" role="dialog">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Change Password</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <i class="fa fa-times">
+                        </i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-10 px-lg-10">
+                    <form id="update-password-form" novalidate>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <div class="mb-3 form-group">
+                                    <label class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="password" placeholder="" name="password" id="password" autocomplete="off" />
+                                        <button class="btn border border-gray-300" type="button" id="togglePassword">
+                                            <i class="fa fa-eye" id="eyeIcon"></i>
+                                        </button>
+                                    </div>
+                                    <span class="col-sm-5 mt-2 messages"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <div class="mb-3 form-group">
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="password" placeholder="" name="confirm_password" id="confirm_password" autocomplete="off" />
+                                        <button class="btn border border-gray-300" type="button" id="toggleConfirmPassword">
+                                            <i class="fa fa-eye" id="confirmeyeIcon"></i>
+                                        </button>
+                                    </div>
+                                    <span class="col-sm-5 mt-2 messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--end::Modal body-->
+                <!--start :Modal footer-->
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="justify-content-end text-end">
+                            <span href="#" class="btn btn-primary float-end" id="btn-update-password">
+                                <i class="fa fa-save fs-4 me-2"></i>
+                                Update
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!--end :Modal footer-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+
+
+    <script type="text/html" id="tempSpSection">
+        <!--begin:Menu item-->
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion show" id="root3">
+            <!--begin:Menu link-->
+            <span class="menu-link dynamic-sec active">
+                <span class="menu-icon">
+                     <i class="fa-solid fa-gear" alt="logo"></i>
+                </span>
+                <span class="menu-title sec-title"></span>
+                <span class="menu-arrow fs-2" id="root3arrow"></span>
+            </span>
+            <!--end:Menu link-->
+            <!--begin:Menu sub-->
+            <div class="menu-sub menu-sub-accordion sec-links show">
+            </div>
+        </div>
+    </script>
+
+    <script type="text/html" id="tempSpLink">
+        <!--begin:Menu item-->
+        <div class="menu-item menu-item-core dynamic-link" id="root3-3">
+            <!--begin:Menu link-->
+            <a class="menu-link stopRedirect dynamic-link">
+                <span class="menu-icon">
+                    <i class="link-icon-fa fa" style="display:none" alt="logo"></i>
+                    <img class="link-icon-img" width="18px" height="14px" style="display:none" alt="logo" />
+                </span>
+                <span class="menu-title link-text"></span>
+            </a>
+            <!--end:Menu link-->
+        </div>
+        <!--end:Menu item-->
+    </script>
+    <!-- Load jQuery (only once, full version) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+
+    <!-- Other core libraries -->
+    <script src="~/lib/moment.js/moment.min.js"></script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/src/js/components/blockui.js"></script>
+    <script src="~/src/js/components/menu.js"></script>
+    <script src="~/scripts/common-theme.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="~/scripts/ellipsis.min.js"></script>
+    <script src="~/scripts/multiselect/multiple-select.min.js"></script>
+    <script src="~/js/bread-crumbs.js"></script>
+    <script src="@Url.Content("/js/util.js")"></script>
+    <script src="@Url.Content("/dist/js/prism.js")"></script>
+    <script src="@Url.Content("/js/common-ajax.js")" asp-append-version="true"></script>
+    <script src="@Url.Content("/scripts/image-compression.js")"></script>
+    <script src="@Url.Content("/js/validate.min.js")"></script>
+    <script src="@Url.Content("/scripts/sitelayout.js")" asp-append-version="true"></script>
+ 
+
+    <script>
+
+        // var globalRoles = @Html.Raw(UserRoles);
+        var UserId = "@UserId";
+        var FullName = "@FullName";
+        var Phone = "@PhoneNumber";
+        var EmployeeCode = "@EmployeeCode";
+        var UserRoleName = "@UserRoleName";
+        // var Department = "Department";
+        var UserSites = JSON.parse( @(Html.Raw(JsonConvert.SerializeObject(UserSites))));
+        var UserDepartments = JSON.parse( @(Html.Raw(JsonConvert.SerializeObject(Department))));
+        var UserDepartmentSubCategories = JSON.parse( @(Html.Raw(JsonConvert.SerializeObject(DepartmentSubCategories))));
+        var _RoleResources = @(Html.Raw(JsonConvert.SerializeObject(RoleResources)))
+        var UserControls = JSON.parse(_RoleResources);
+        console.log(UserControls);
+        // function hasRole(role) {
+        //     var roleIDs = globalRoles.map(Number);
+        //     return roleIDs.indexOf(role) > -1;
+        // }
+
+        // function CheckRoles(rolesAllowed) {
+        //     if (rolesAllowed.length == 0)
+        //         return true;
+        //     var allowed = false;
+        //     var roles = rolesAllowed.split(',');
+        //     for (let i = 0; i < roles.length; i++) {
+        //         if (globalRoles.indexOf(roles[i]) > -1) {
+        //             allowed = true;
+        //             break;
+        //         }
+
+        //     }
+        //     return allowed;
+        // }
+
+        localStorage.setItem("UserId", UserId);
+        localStorage.setItem("FullName", FullName);
+
+    </script>
+
+    <script>
+        var sitePath = getVirtualDirectory();
+
+        function showSpinner() {
+            //Metronic.blockUI({
+            //    boxed: true
+            //});
+            spin();
+        }
+
+        function hideSpinner() {
+            //window.setTimeout(function () {
+            //    Metronic.unblockUI();
+            //}, 1000);
+            unspin();
+        }
+
+        $(document).on("click",".btn-logout", function(){
+           localStorage.removeItem("jwtToken");
+        });
+
+        $(document).ready(function () {
+            addSidepanelSections();
+        });
+
+        function CheckIfHasControl(option){
+            
+            console.log(option);
+            for (var i = 0; i < UserControls.length; i++) {
+                if (UserControls[i].hasOwnProperty(option)) {
+                    return  true;
+                    break; // No need to check further once found
+                }
+            }
+        }
+
+        function GetControl(option){
+            for (var i = 0; i < UserControls.length; i++) {
+                if (UserControls[i].hasOwnProperty(option)) {
+                    return  UserControls[i][option];
+                    break; // No need to check further once found
+                }
+            }
+        }
+
+
+        function addSidepanelSections() {
+            
+            if (window.LayoutConfigs) {
+              
+                console.log(window.LayoutConfigs);
+                var $dashboardItems = $('.page-sidebar-menu');
+                console.log($dashboardItems);
+
+                var keys = Object.keys(LayoutConfigs.FormGroups)
+                keys.forEach(function (opt) {
+
+                    if(CheckIfHasControl(opt)){
+                        var formgroup = LayoutConfigs.FormGroups[opt];
+                     
+
+                        if (formgroup.EnabledByBranch && UserBranchOptions.indexOf(opt) < 0) {
+                            return;
+                        }
+                        if (formgroup.HiddenOnDashboard == true) return;
+                        //if (formgroup.ShowOnDashboardforPDI == true && sitePath.indexOf('pdischeduling') <= -1) return;
+                        var $sec = $($("#tempSpSection").html());
+                        $sec.find('.sec-title').text((formgroup.Title));
+                        // $sec.find('.sec-title').text($.i18n(formgroup.Title));
+
+                        //$sec.find('.list-toggle-container').attr("href", "#" + opt);
+                        //$sec.find('.panel-collapse').attr("id", opt);
+                        var linkKeys = Object.keys(formgroup.DashboardLinks);
+
+                        console.log("LinkKeys",linkKeys);
+
+                        let section = GetControl(opt);
+
+                        var linkcount = 0;
+                        linkKeys.forEach(function (linkKey) {
+                            if(section && section.includes(linkKey)){
+                            var link = formgroup.DashboardLinks[linkKey];
+                            var allowedRoles = typeof (link.AllowedRoles) != 'undefined' ? link.AllowedRoles : "";
+                            // var allowed = CheckRoles(allowedRoles);
+                            var allowed = true;
+                            if (allowed == true) {
+                                var $link = $($("#tempSpLink").html());
+                                if (link.IconImg) {
+                                    $link.find('.link-icon-img').attr('src', sitePath + link.IconImg).show();
+                                }
+                                else if (link.IconFa) {
+                                    $link.find('.link-icon-fa').addClass(link.IconFa).show();
+                                }
+
+                                link.Text && $link.find('.link-text').text((link.Text));
+                                // link.Text && $link.find('.link-text').text($.i18n(link.Text));
+                                link.Link && $link.find('a').attr('href', sitePath + link.Link);
+                                link.addClass && $link.find('a').attr('href', sitePath + link.Link).addClass(link.addClass);
+                                $link.addClass(linkKey);
+                                $link.attr("id", linkKey);
+
+                                if (link.FormLink) {
+                                    //var prefix = FormsConfigs.Configurations[linkKey].Label ? FormsConfigs.Configurations[linkKey].Prefix + " " : "";
+                                    //$link.find('.link-text').text(prefix + FormsConfigs.Configurations[linkKey].Name);
+                                    $link.find('.link-text').text(link.Text);
+
+                                        $link.find('a').attr('href', sitePath + "form?ft=" + linkKey);
+
+                                }
+
+                                $sec.find('.sec-links').append($link);
+                                linkcount++;
+
+
+                            }
+
+                            }
+                        });
+
+                        if (linkcount == 0) {
+                            $($sec).remove();
+                        }
+                        else{
+
+                            $dashboardItems.append($sec);
+                        }
+                    }
+                });
+                $dashboardItems.append($dashboardItems.find('.admin-sec'));
+            }
+        }
+    </script>
+    <script>
+        var Notifications = {};
+         HRMSUtil.onDOMContentLoaded(function () {
+            updateMessageNotification(function(){
+                updateMessageNotificationCount();
+            });
+        });
+         function updateMessageNotificationCount() {
+                var count = 0;
+                count = parseInt($('.message-count').html()) || 0;
+                count = Notifications.length;
+                $('.message-count').html(count);
+                $('#message-badge-count').html(count);
+         }
+         function updateMessageNotification(cb) {
+                var url = sitePath + 'api/EmployeeAPI/GetEmployeeNotifications?EmployeeCode='+"@EmployeeCode";
+                Ajax.getNotifications(url, function (response) {
+                    if (response.StatusCode == 200) {
+                        $('.message-items').html('')
+                        Notifications = response.Notifications;
+                         for(var i = 0; i < Notifications.length; i++){
+                             var html = Notifications[i].NotificationDescription;
+                             var div = document.createElement("div");
+                             div.innerHTML = html;
+                             var messageText = div.textContent || div.innerText || "";
+                             var message = messageText.length >= 60 ? messageText.substring(0, 59) + "..." : messageText;
+                             $('.message-items').append($('<div class="separator separator-dashed my-1"></div><a href="' + sitePath +''+Notifications[i].NotificationUrl +'" class="d-flex flex-stack py-4 bg-active-secondary bg-hover-gray-100 mark-as-read" data-id="'+Notifications[i].Id+'"><div class="d-flex align-items-center"><div class="mb-0 me-2"><div class="text-gray-500 fs-7">' + message + '</div></div></div></a><div class="separator separator-dashed my-1"></div>'));
+                         }
+                         if(cb){cb()}
+                    }
+                });
+         }
+
+         // Also update notifications when the page is shown (including when coming back from another tab)
+         document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                updateMessageNotification(function(){
+                    updateMessageNotificationCount();
+                });
+            }
+         });
+
+         // Update notifications periodically (every 5 minutes)
+         setInterval(function() {
+            updateMessageNotification(function(){
+                updateMessageNotificationCount();
+            });
+         }, 3 * 60 * 1000);
+
+         $(document).on('click','.mark-as-read', function(){
+              var $self = $(this);
+              var notificationid = parseInt($self.data('id'));
+              $self.remove();
+                var count = 0;
+                count = parseInt($('.message-count').html()) || 0;
+                $('.message-count').html(count-1);
+                $('#message-badge-count').html(count-1);
+
+              var url = sitePath + 'api/EmployeeAPI/MarkNotificationAsRead?Id='+notificationid;
+                Ajax.post(url, function (response) {
+                    //hideSpinner();
+                });
+         });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

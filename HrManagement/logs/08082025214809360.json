@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-08 21:48:09 360",
+  "Message": "Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.",
+  "StackTrace": "   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n--- End of stack trace from previous location ---\r\n   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)\r\n   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)\r\n--- End of stack trace from previous location ---\r\n   at Dapper.SqlMapper.MultiMapAsync[TFirst,TSecond,TThird,TFourth,TFifth,TSixth,TSeventh,TReturn](IDbConnection cnn, CommandDefinition command, Delegate map, String splitOn) in /_/Dapper/SqlMapper.Async.cs:line 940\r\n   at HrManagement.WebApi.TrainingsController.GetTrainingWithDetails(Int32 trainingId)",
+  "Source": "Core Microsoft SqlClient Data Provider",
+  "InnerException": "The wait operation timed out."
+}

@@ -1,0 +1,817 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Manage Departments";
+    var UserRoleNames = HttpContextAccessor.HttpContext?.Session?.GetString("UserRoleName");
+}
+
+@section PageCSS {
+  
+    <link href="~/css/accordion-style.css" rel="stylesheet" />
+    <link href="~/css/custom/courses.css" rel="stylesheet" />
+}
+
+<style>
+    .dropArea {
+        cursor: pointer;
+        border: 2px dashed #0d6efd;
+        padding: 40px 20px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        text-align: center;
+        user-select: none;
+    }
+
+        .dropArea.dragover {
+            background-color: #e9f7fe;
+            border-color: #0a58ca;
+        }
+
+    .container-item {
+        max-width: 960px;
+        margin-top: 40px;
+    }
+
+
+    .structure-item {
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .item-title {
+        flex: 1;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #222;
+    }
+
+        .item-title.indented {
+            padding-left: 20px;
+        }
+
+    .right-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        min-width: 240px;
+        justify-content: flex-end;
+    }
+
+    .comments-label {
+        cursor: pointer;
+        color: #0d6efd;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        user-select: none;
+        transition: color 0.2s ease-in-out;
+    }
+
+        .comments-label:hover {
+            color: #084298;
+            text-decoration: underline;
+        }
+
+    select.form-select {
+        min-width: 120px;
+        font-weight: 600;
+    }
+
+    #chatMessages {
+        scrollbar-width: thin;
+    }
+
+        #chatMessages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chatMessages::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 3px;
+        }
+
+    .structure-item .item-title {
+        font-size: 0.95rem;
+    }
+
+        .structure-item .item-title.ms-4 {
+            padding-left: 1rem;
+        }
+</style>
+
+
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    <div class="d-flex flex-column flex-column-fluid">
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                        <li class="breadcrumb-item">
+                            <a href="/Products/Index"
+                               class="fw-bold fs-14px" style="color:#1F4293 !important">
+                                <i class="fa fa-home"
+                                   style="color:#1F4293 !important"></i> &nbsp;Trainings
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <i class="fa fa-chevron-right fs-11px"
+                               style="color:#1F4293 !important"></i>
+                        </li>
+                        <li class="breadcrumb-item fs-14px fw-bold" style="color:#1F4293 !important"
+                            data-i18n="Training Outline">Training Details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+
+                    <div class="m-3 p-1 bg-light  min-vh-100 d-flex flex-column">
+                        <div class="m-8">
+                            <nav class="nav-container" role="navigation" aria-label="Product sub navigation">
+                                <div class="nav-links">
+                                    <a href="#" class="tab-link active" data-target="outline-section">
+                                        <i class="bi bi-layout-text-sidebar-reverse"></i>Outline
+                                    </a>
+                                    @if (UserRoleNames.ToLower() == "super admin" || UserRoleNames.ToLower() == "admin")
+                                    {
+                                        <a href="#" class="tab-link" data-target="details-section">
+                                            <i class="bi bi-pencil"></i>Details
+                                        </a>
+
+                                        <a href="#" class="tab-link" data-target="comments-section">
+                                            <i class="bi bi-chat-left-text"></i>Comments
+                                        </a>
+
+
+                                    }
+                                    <a href="@Url.Action("Certificate", "Training")" target="_blank">
+                                        <i class="bi bi-award"></i> Credentials
+                                    </a>
+
+
+                                </div>
+                            </nav>
+
+
+                        </div>
+
+
+                        <div id="outline-section" class="tab-content mx-7" style="display: block;">
+                            <form id="training_outline_form">
+                                <input type="hidden" id="outline_trainingId" name="outline_trainingId" value="@ViewBag.TrainingId" />
+                                <input type="hidden" id="ProductThumbnailId" name="ProductThumbnailId" />
+
+
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <h4 class="fw-bold mb-1">📦 Training Structure</h4>
+                                        <small class="text-muted">Manage categories and lessons below</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        @if (UserRoleNames.ToLower() == "super admin" || UserRoleNames.ToLower() == "admin")
+                                        {
+                                            <div class="dropdown me-2">
+                                                <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="bi bi-plus-circle me-1"></i> Add Category
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#outline-trainingstructurecategory" href="#">Create Category</a></li>
+                                                    <li><a class="dropdown-item" href="#">Add Credentials</a></li>
+                                                </ul>
+                                            </div>
+                                            <!-- Preview -->
+                                            <a asp-controller="TrainingSession" asp-action="WatchLesson" asp-route-id="@ViewBag.TrainingId"
+                                               class="btn btn-secondary me-2" target="_blank" role="button">
+                                                <i class="bi bi-eye me-1"></i> Preview
+                                            </a>
+                                            <!-- Manage Dropdown -->
+                                            <div class="dropdown me-2">
+                                                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
+                                                    <i class="bi bi-gear me-1"></i> Manage
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a onclick="cloneTraining(@ViewBag.TrainingId)" class="dropdown-item" href="#">Clone</a></li>
+                                                    <li><hr class="dropdown-divider" /></li>
+                                                    <li><a onclick="deleteTraining(@ViewBag.TrainingId)" class="dropdown-item text-danger" href="#">Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="TrainingSession" asp-action="WatchLesson" asp-route-id="@ViewBag.TrainingId"
+                                               class="btn btn-secondary me-2" target="_blank" role="button">
+                                                <i class="bi bi-eye me-1"></i> Preview
+                                            </a>
+                                        }
+
+
+                                    </div>
+                                </div>
+                                <div class="container" id="training-outline-container">
+                                </div>
+                            </form>
+
+                        </div>
+
+
+                        <div id="details-section" class="tab-content" style="display: none;">
+                            <div class="container">
+                                <form id="frmProductEditor" name="frmProductEditor">
+                                    <div class="card shadow">
+                                        <div class="card-body">
+                                            <div class="row g-4">
+                                                <div class="text-end">
+                                                    <button type="button" id="btn-AssignTrainingModal" class="btn btn-md btn-primary" data-bs-toggle="modal">
+                                                        <i class="bi-person-plus-fill"></i> Assign
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <!-- Title -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="txtTitle">Title</label>
+                                                        <input type="hidden" id="detail_trainingId" name="detail_trainingId" value="@ViewBag.TrainingId" />
+                                                        <input type="hidden" id="TrainingsDetailId" name="TrainingsDetailId" />
+                                                        <input type="text" class="form-control" id="txtTitle" name="txtTitle" maxlength="140" placeholder="Enter title">
+
+                                                    </div>
+
+                                                    <!-- Description -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="txtDescription">Description</label>
+                                                        <textarea class="form-control" id="txtDescription" name="txtDescription" rows="4" placeholder="Enter Description"></textarea>
+
+                                                    </div>
+
+                                                    <!-- Customization Section -->
+                                                    <h4 class="mt-4 mb-3">Instructor</h4>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="txtInstructorHeading">Heading</label>
+                                                        <input type="text" class="form-control" id="txtInstructorHeading" name="txtInstructorHeading" placeholder="Instructor Heading">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="txtInstructorName">Name</label>
+                                                        <input type="text" class="form-control" id="txtInstructorName" name="txtInstructorName" placeholder="Instructor Name">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="txtInstructorTitle">Title</label>
+                                                        <input type="text" class="form-control" id="txtInstructorTitle" name="txtInstructorTitle" placeholder="Instructor Title">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="txtInstructorBio">Bio</label>
+                                                        <textarea class="form-control" id="txtInstructorBio" name="txtInstructorBio" rows="2" maxlength="1000" placeholder="Instructor Bio"></textarea>
+
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right Column -->
+                                                <div class="col-md-6">
+
+                                                    <!-- Thumbnail -->
+                                                    <!-- Thumbnail -->
+                                                    <div class="Product-Thumbnail">
+                                                        <div class="mb-3">
+                                                            <label class="form-label form-text text-center">Product Thumbnail</label>
+                                                            <div class="border border-2 border-secondary p-3 text-center w-100" style="height: 400px;">
+                                                                <img id="Image-Product-Thumbnail"
+                                                                     src="https://staging.cdn.apisystem.tech/assets/membership/image-placeholder.svg"
+                                                                     alt="Thumbnail"
+                                                                     class="img-fluid"
+                                                                     style="width: 100%; height: 100%; object-fit: cover;">
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- Image Upload Buttons -->
+                                                        <div class="mb-3 d-flex justify-content-center gap-2 flex-wrap">
+
+                                                            <button type="button" class="btn btn-primary btn-sm" id="btnSelectImage" data-bs-toggle="modal" data-bs-target="#ProductThumbnailModal">
+                                                                <i class="bi bi-upload me-1"></i>Upload
+                                                            </button>
+                                                            <button type="button" class="btn btn-primary btn-sm d-none" id="btnReplaceImage" data-bs-toggle="modal" data-bs-target="#ProductThumbnailModal">Replace</button>
+                                                            <button type="button" class="btn btn-danger btn-sm d-none" id="btnRemoveImage">Remove</button>
+                                                        </div>
+                                                        <div class="form-text text-center">Recommended dimensions of 1280x720</div>
+                                                    </div>
+
+
+                                                    <div class="row">
+                                                        <!-- Instructor Headshot -->
+                                                        <div class="col-md-6 mb-3 text-center">
+
+                                                            <div class="d-flex flex-column align-items-center gap-1">
+                                                                <label class="form-label form-text">Headshot</label>
+                                                                <div class="border p-2" style="width: 100px; height: 100px;">
+                                                                    <img id="Image-ProductHeadshot" src="https://staging.cdn.apisystem.tech/assets/membership/image-placeholder.svg" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" />
+                                                                </div>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="btnUploadProductHeadshot" data-bs-toggle="modal" data-bs-target="#ProductHeadshotModal">
+                                                                    <i class="bi bi-upload me-1"></i>Upload
+                                                                </button>
+                                                                <button type="button" class="btn btn-primary btn-sm d-none" id="btnReplaceProductHeadshot" data-bs-toggle="modal" data-bs-target="#ProductHeadshotModal">Replace</button>
+                                                                <button type="button" class="btn btn-danger btn-sm d-none" id="btnRemoveProductHeadshot">Remove</button>
+                                                            </div>
+                                                            <div class="form-text text-center">Recommended: 300x300</div>
+                                                        </div>
+
+
+                                                        <!-- Logo Image -->
+                                                        <div class="col-md-6 mb-3 text-center">
+                                                            <div class="d-flex flex-column align-items-center gap-1">
+                                                                <label class="form-label form-text">Product Logo</label>
+
+                                                                <div class="border p-2" style="width: 100px; height: 100px;">
+                                                                    <img id="Image-ProductLogoImage"
+                                                                         src="https://staging.cdn.apisystem.tech/assets/membership/image-placeholder.svg"
+                                                                         class="img-fluid"
+                                                                         style="width: 100%; height: 100%; object-fit: cover;" />
+                                                                </div>
+
+
+                                                                <button type="button"
+                                                                        class="btn btn-primary btn-sm"
+                                                                        id="btnUploadProductLogoImage"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#ProductLogoImageModal">
+                                                                    <i class="bi bi-upload me-1"></i>Upload
+                                                                </button>
+
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-primary d-none"
+                                                                        id="btnReplaceProductLogoImage"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#ProductLogoImageModal">
+                                                                    Replace
+                                                                </button>
+
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-danger d-none"
+                                                                        id="btnRemoveProductLogoImage">
+                                                                    Remove
+                                                                </button>
+                                                            </div>
+
+                                                            <div class="form-text text-center">Recommended: 300x300</div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Action Buttons -->
+                                                    <div class="text-end mt-4">
+                                                        <button type="button" class="btn btn-secondary">
+                                                            <i class="bi bi-x-lg me-1"></i> Cancel
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary" id="btnSaveChanges" name="btnSaveChanges">
+                                                            <i class="bi bi-arrow-repeat me-1"></i> Update
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <!-- Additional Sections (optional) -->
+                                <div id="customize-section" class="tab-content" style="display: none;">
+                                    <h2>Customize Content</h2>
+                                </div>
+
+                                <div id="offers-section" class="tab-content" style="display: none;">
+                                    <h2>Offers Content</h2>
+                                </div>
+
+
+
+                                <div id="credentials-section" class="tab-content" style="display: none;">
+                                    <h2>Credentials Content</h2>
+                                </div>
+
+                                <div id="community-section" class="tab-content" style="display: none;">
+                                    <h2>Community Groups Content</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="comments-section" class="tab-content" style="display: none;">
+                            <div class="container">
+                                <div class="modal-header">
+
+                                    <div class="mb-3">
+                                        <h5 class="modal-title mx-3">Trainings:</h5>
+                                        <select id="ddTrainings" name="ddTrainings" class="form-select mb-3">
+                                            @foreach (var item in ViewBag.DropDownData.Trainings)
+                                            {
+                                                <option value="@item.TrainingId">@item.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div id="structureList"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tarining Structure Create Category modal -->
+
+                        <div class="modal fade" id="outline-trainingstructurecategory" tabindex="-1" aria-labelledby="singleInputModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="singleInputModalLabel">Create New Training</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form id="add-training-structure-category-form" novalidate>
+                                        <div class="modal-body">
+
+                                            <div class="mb-3">
+                                                <label for="training-title" class="form-label">Title</label>
+                                                <input type="text" class="form-control" name="training_structure_category_title" id="training_structure_category_title" placeholder="Enter Title...">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary" id="add-outline-training-Category">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarining Structure Create Credential modal -->
+
+                    <div class="modal fade" id="trainingstructureCredential" tabindex="-1" aria-labelledby="singleInputModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="singleInputModalLabel">Create Course Completion Credential</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="add-training-structure-category-form" novalidate>
+                                        <div class="mb-3">
+                                            <label for="training-title" class="form-label">Add Credential</label>
+                                            <input type="text" class="form-control" name="training-structure-category-title" id="training-structure-category-title" placeholder="Enter Title...">
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="add-update-training">Add</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarining Structure Create AddLesson modal -->
+
+                    <div class="modal fade" id="AddLessonModel" tabindex="-1" aria-labelledby="singleInputModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="AddTrainingStrutureLesson">Add Lesson</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="add-training-lesson-category-form" novalidate>
+                                        <div class="mb-3">
+                                            <label for="training-title" class="form-label">Title</label>
+                                            <input type="hidden" id="trainingtyep_Id" name="trainingtyep_Id" />
+                                            <input type="hidden" id="training_structureId" name="training_structureId" />
+                                            <input type="hidden" id="subCategoryId" name="subCategoryId" />
+
+                                            <input type="text" class="form-control" name="txt_AddLesson" id="txt_AddLesson" placeholder="Enter Title...">
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="btn-AddLesson-add-training">Add</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <!-- Modal Image Upload Product Thumbnail -->
+                    <div class="modal fade" id="ProductThumbnailModal" tabindex="-1" aria-labelledby="imageUploadModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <!-- medium size -->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="imageUploadModalLabel">Upload Product Thumbnail</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <form id="imageUploadForm" novalidate>
+                                        <div id="dropArea" class="dropArea" tabindex="0">
+                                            <p class="mb-2">Drag & Drop an image here or click to select</p>
+                                            <p class="mb-2">Recommended: 1280x720</p>
+                                            <i class="bi bi-cloud-arrow-up fs-1 text-primary"></i>
+                                            <input type="file" name="Product-Thumbnail-Image" id="Product-Thumbnail-Image" accept="image/*" style="display:none" />
+                                            <div id="previewContainer-Product-Thumbnail" class="mt-3" style="display:none;">
+                                                <img id="ImagePreview-Product-Thumbnail" src="" alt="Image Preview" class="img-fluid rounded" style="max-height: 200px;" />
+                                                <button type="button" class="btn btn-sm btn-danger mt-2" id="Product-Thumbnail-RemoveBtn">Remove</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="Product-Thumbnail-UploadBtn" disabled>Upload</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal for Product Headshot -->
+                    <div class="modal fade" id="ProductHeadshotModal" tabindex="-1" aria-labelledby="productHeadshotModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Upload Product Headshot</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="productHeadshotForm" novalidate>
+                                        <div id="dropArea-ProductHeadshot" class="dropArea" tabindex="0">
+                                            <p class="mb-2">Drag & Drop an image here or click to select</p>
+                                            <p class="mb-2">Recommended: 300x300</p>
+                                            <i class="bi bi-cloud-arrow-up fs-1 text-primary"></i>
+                                            <input type="file" name="ProductHeadshotImage" id="ProductHeadshotImage" accept="image/*" style="display:none" />
+                                            <div id="previewContainer-ProductHeadshot" class="mt-3" style="display:none;">
+                                                <img id="ImagePreview-ProductHeadshot" src="" alt="Image Preview" class="img-fluid rounded" style="height:88px!important;min-width:83px!important" />
+                                                <button type="button" class="btn btn-sm btn-danger mt-2" id="ProductHeadshotRemoveBtn">Remove</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="ProductHeadshotUploadBtn" disabled>Upload</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Modal for Product Logo Upload -->
+                    <div class="modal fade" id="ProductLogoImageModal" tabindex="-1" aria-labelledby="productLogoImageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Upload Product Logo</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="productLogoImageForm" novalidate>
+                                        <div id="dropArea-ProductLogoImage" class="dropArea" tabindex="0">
+                                            <p class="mb-2">Drag & Drop an image here or click to select</p>
+                                            <p class="mb-2">Recommended: 300x300</p>
+                                            <i class="bi bi-cloud-arrow-up fs-1 text-primary"></i>
+                                            <input type="file" name="ProductLogoImageFile" id="ProductLogoImageFile" accept="image/*" style="display:none" />
+                                            <div id="previewContainer-ProductLogoImage" class="mt-3" style="display:none;">
+                                                <img id="ImagePreview-ProductLogoImage" src="" alt="Image Preview" class="img-fluid rounded" style="height:88px!important;min-width:83px!important" />
+                                                <button type="button" class="btn btn-sm btn-danger mt-2" id="ProductLogoImageRemoveBtn">Remove</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="ProductLogoImageUploadBtn" disabled>Upload</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chat Modal -->
+                    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+                            <div class="modal-content" style="max-height: 500px;">
+                                <div class="modal-header">
+                                    <input type="hidden" id="commentsId" name="commentsId" />
+                                    <h5 class="modal-title" id="chatModalLabel">
+                                        <i class="bi bi-chat-dots me-2"></i>Comments
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body d-flex flex-column p-3">
+
+                                    <!-- Comments Display Area -->
+                                    <div id="chatMessages" class="flex-grow-1 overflow-auto mb-3" style="max-height: 300px;">
+                                        <!-- Chat messages dynamically appended here -->
+                                    </div>
+
+                                    <!-- Input -->
+                                    <div class="input-group">
+                                        <input type="text" id="chatInput" class="form-control" placeholder="Write a comment..." />
+                                        <button class="btn btn-primary" onclick="sendComment()">
+                                            <i class="bi bi-send-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Assign to Modal-->
+
+
+
+<div class="modal fade" id="AssignTrainingModal" tabindex="-1" aria-labelledby="trainingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <p class="modal-title" id="trainingModalLabel"><strong>Assign Training</strong></p>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="trainingForm" class="row g-3">
+                    <!-- Visible To -->
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label class="form-label">Visible To</label>
+                        <select class="form-select form-control" id="visible-to" name="visible-to" data-control="select2" data-close-on-select="false" data-placeholder="Select Visible To" data-allow-clear="true">
+                            <option></option>
+                            <option value="all">All</option>
+                            <option value="departments">Departments</option>
+                            <option value="employees">Employees</option>
+                            <option value="sites">Sites</option>
+                        </select>
+                    </div>
+
+
+                    <!-- Departments -->
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-none" id="departments-dd">
+                        <label class="form-label">Departments</label>
+                        <select class="form-select form-control" id="departments" name="departments" data-close-on-select="false" data-placeholder="Select Departments" multiple data-allow-clear="true">
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <!-- Department Sub-Category -->
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-none" id="department-sub-category-dd">
+                        <label class="form-label">Department Sub-Category</label>
+                        <select class="form-select form-control" id="department-sub-category" name="department-sub-category" data-control="select2" data-placeholder="Select Sub-Category" multiple data-allow-clear="true">
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <!-- Employees -->
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-none" id="employees-dd">
+                        <label class="form-label">Employees</label>
+                        <select class="form-select form-control" id="employees" name="employees" data-control="select2" data-close-on-select="false" data-placeholder="Select Employees" data-allow-clear="true" multiple>
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <!-- Sites -->
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-none" id="sites-dd">
+                        <label class="form-label">Sites</label>
+                        <select class="form-select form-control" id="sites" name="sites" data-control="select2" data-close-on-select="false" data-placeholder="Select Sites" data-allow-clear="true" multiple>
+                            <option></option>
+                        </select>
+                    </div>
+               
+                
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" id="SubmitAssignForm" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+  
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+    <script src="~/lib/summernote/summernote-lite.min.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="@Url.Content("/scripts/tariningDetails/create.js")"></script>
+    <script src="@Url.Content("/scripts/tariningDetails/index.js")"></script>
+    <script src="@Url.Content("/scripts/TrainingAssignUser/training_assign.js")"></script>
+    <script src="@Url.Content("/scripts/AdminComments/index.js")"></script>
+ 
+
+    @* <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/scripts/tariningDetails/create.js" asp-append-version="true"></script>
+    <script src="~/scripts/tariningDetails/index.js" asp-append-version="true"></script>
+    <script src="~/scripts/AdminComments/index.js" asp-append-version="true"></script> *@
+
+}
+
+<script>
+
+       document.addEventListener('DOMContentLoaded', function () {
+      const tabLinks = document.querySelectorAll('.tab-link');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          // Remove active class from all links
+          tabLinks.forEach(link => link.classList.remove('active'));
+
+          // Hide all tab content
+          tabContents.forEach(content => content.style.display = 'none');
+
+          // Add active class to the clicked tab
+          this.classList.add('active');
+
+          // Show corresponding content
+          const targetId = this.getAttribute('data-target');
+          document.getElementById(targetId).style.display = 'block';
+        });
+      });
+    });
+
+
+      document.querySelectorAll('.status-dropdown .dropdown-item').forEach(item => {
+      item.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const btn = this.closest('.dropdown').querySelector('button');
+        const iconClass = this.getAttribute('data-icon');
+        const statusText = this.getAttribute('data-status');
+        const color = this.getAttribute('data-color');
+
+        // Replace inner HTML of button
+        btn.innerHTML = `<i class="bi ${iconClass} me-1"></i> ${statusText}`;
+
+        // Remove existing color classes
+        const colorClasses = ['btn-outline-success', 'btn-outline-primary', 'btn-outline-danger', 'btn-outline-secondary', 'btn-outline-light'];
+        btn.classList.remove(...colorClasses);
+
+        // Apply new color class
+        btn.classList.add(`btn-outline-${color}`);
+      });
+    });
+
+
+    var DropDownsData = {};
+    @if (ViewBag.DropDownData != null)
+    {
+                <text>
+                     DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+
+               </text>
+    }
+
+</script>
+
+
+
+
+
+

@@ -1,0 +1,673 @@
+﻿@{
+    ViewData["Title"] = "Manage Permissions";
+}
+
+@section PageCSS {
+    <link href="~/css/tabs.css" rel="stylesheet" />
+    <link href="~/css/tabstyles.css" rel="stylesheet" />
+
+    <style>
+        .toggle-btn {
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px 10px;
+            user-select: none;
+        }
+
+        .child-container {
+            margin-left: 20px;
+            display: block;
+        }
+
+        .form-check-label {
+            color: black !important;
+        }
+
+        .centerCheckbox {
+            text-align: center;
+        }
+
+    </style>
+}
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+                <!--begin::Actions-->
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <span type="button" id="btn-add-new-role" class="btn btn-sm fw-bold btn-primary float-end">
+                        <i class="fas fa-plus fs-4 me-2"></i>Add New Role
+                    </span>
+                </div>
+                <!--end::Actions-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="tabs tabs-style-linebox">
+                                <nav>
+                                    <ul>
+                                        <li class="tab-current"><a href="#nav-roles-sec" id="nav-roles-tab"><span>Roles</span></a></li>
+                                        <li class=""><a href="#nav-users-sec" id="nav-users-tab"><span>Users</span></a></li>
+                                    </ul>
+                                </nav>
+                                <div class="content-wrap">
+                                    <section id="nav-roles-sec" class="content-current">
+                                        <div class="row mt-5">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-6 col-sm-12">
+                                                            <div class="mb-3 form-group">
+                                                                <label class="form-label">Role Title</label>
+                                                                <input type="text" class="form-control" name="role-name" id="role-name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="row">
+                                                        <div class="d-flex justify-content-end text-end gap-5">
+                                                            <span class="btn btn-secondary float-end" id="btnClear">
+                                                                <i class="fa fa-times fs-4 me-2"></i>
+                                                                Clear
+                                                            </span>
+                                                            <span class="btn btn-primary float-end" id="btnSearch">
+                                                                <i class="fa fa-search  fs-4 me-2"></i>
+                                                                Search
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="btn-list justify-content-end">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div id="table-default" class="table-responsive">
+                                                            <table class="table table-striped table-bordered gy-5 gs-7 rounded" id="tbl_manageroles">
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section id="nav-users-sec" class="">
+                                        <div class="row mt-5">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="card card-flush min-h-325px">
+                                                    <div class="card-header pt-5 d-flex justify-content-between" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                                        <div class="justify-content-start">
+                                                            <div class="mb-3 form-group">
+                                                                <label class="form-label">Change Role</label>
+                                                                <div class="input-group flex-nowrap w-100">
+                                                                    <div class="overflow-hidden flex-grow-4">
+                                                                        <select class="form-select form-control rounded-end-0 w-250px" id="role-ids" name="role-ids" data-control="select2" data-placeholder="Select Role" data-allow-clear="true" aria-label="role-ids" aria-describedby="assign-role-btn">
+                                                                            <option></option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <span class="input-group-text btn btn-primary" id="assign-role-btn">Apply</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div id="table-default" class="table-responsive">
+                                                                <table class="table table-striped table-bordered gy-5 gs-7 rounded" id="tbl_users">
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modal-edit-role" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Role</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <div class="tabs tabs-style-linebox">
+                    <nav>
+                        <ul>
+                            <li class="tab-current"><a href="#nav-roles-info-sec" id="nav-role-info-tab"><span>Role Information</span></a></li>
+                            <li class=""><a href="#nav-role-resources-sec" id="nav-role-resources-tab"><span>Role Resources</span></a></li>
+                            @* <li class=""><a href="#nav-role-users-sec" id="nav-role-users-tab"><span>Role Users</span></a></li> *@
+                        </ul>
+                    </nav>
+                    <div class="content-wrap">
+                        <section id="nav-roles-info-sec" class="content-current">
+                            <div class="row mt-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <form id="role-info-form" novalidate>
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3 d-none">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Id</label>
+                                                            <input class="form-control" id="role-id" name="role-id" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Name</label>
+                                                            <input class="form-control" id="role-name" name="role-name" />
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Description</label>
+                                                            <textarea class="form-control resize-none" id="role-description" name="role-description" rows="2" maxlength="200"></textarea>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="nav-role-resources-sec" class="">
+                            <div class="row mt-5">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card card-flush">
+                                        <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                            <h3 class="card-title align-items-start flex-column">
+                                                <span class="card-label fw-bold">
+                                                    Resource Access
+                                                </span>
+                                            </h3>
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                <form id="resources-form">
+                                                    <div class="row mt-5" id="resources-container">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="employee-management" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Employee Management
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn float-end" type="button" data-section-id="employee-management"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="child-container" id="employee-management">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="employee-management" value="manage-employee" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Employees
+                                                                        </label>
+                                                                    </div>
+                                                                    @* <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="employee-management" value="add-employee" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Add Employees
+                                                                        </label>
+                                                                    </div> *@
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="employee-management" value="manage-site" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Sites
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="employee-management" value="add-site" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Add Sites
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="time-management" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Time Management
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn float-end" type="button" data-section-id="time-management"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="time-management">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="time-management" value="view-attendance" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            View Attendance
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="leaves-management" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Leaves Management
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="leaves-management"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="leaves-management">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="leaves-management" value="leaves-policy" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Leaves Policy Management
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="leaves-management" value="apply-leave" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Apply Leaves
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="leaves-management" value="search-leave" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Search Leaves
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="leaves-management" value="approve-leave" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Approve Leaves
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="schedule-management" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Schedule Management
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="schedule-management"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="schedule-management">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="schedule-management" value="my-schedule" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            My Schedule
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="schedule-management" value="manage-schedule" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Schedule
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="administration" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Administration
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="administration"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="administration">
+                                                                    @* <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="administration" value="manage-users" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Users
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="administration" value="create-users" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Create User
+                                                                        </label>
+                                                                    </div> *@
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="administration" value="manage-departments" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Department
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="administration" value="manage-positions" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Positions
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="survey-management" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Survey Management
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="survey-management"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="survey-management">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="survey-management" value="manage-survey" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage Survey
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="survey-management" value="my-survey" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            My Survey
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>   
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="news-feed" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            News Feed
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="news-feed"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="news-feed">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="news-feed" value="manage-news-feed" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Manage News Feed
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="news-feed" value="view-news-feed" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            View News Feed
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="settings" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Settings
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="settings"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="settings">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="settings" value="permissions" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Permissions
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                        
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="reports" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="flexCheckDefault">
+                                                                            Reports
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="reports"><i class="fa fa-chevron-down fs-15px"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="reports">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="reports" value="company-reports" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Company Reports
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            <div class="section">
+                                                                <div class="header d-flex justify-content-between">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm justify-content-start">
+                                                                        <input class="form-check-input parentCheckbox" type="checkbox" value="" id="parentCheckbox" data-section="training-material" />
+                                                                        <label class="form-check-label fs-15px fw-bolder" for="parentCheckbox">
+                                                                            Training Material
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="justify-content-end">
+                                                                        <span class="btn toggle-btn" type="button" data-section-id="training-material">
+                                                                            <i class="fa fa-chevron-down fs-15px"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="child-container" id="training-material">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="training-material" value="view-assign-training" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                           Assign training
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container d-none" id="training-material">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2 d-none">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="training-material" value="view-assign-training-dep" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                           Assign By
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="child-container" id="training-material">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="training-material" value="view-training-material" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Trainings
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="child-container" id="training-material">
+                                                                    <div class="form-check form-check-custom form-check-solid form-check-sm mb-2">
+                                                                        <input class="form-check-input child" type="checkbox" id="child" data-section="training-material" value="view-training-report" />
+                                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                                            Training Reports
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                       
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="nav-role-users-sec d-none" class="">
+                            <div class="row mt-5">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card card-flush min-h-325px">
+                                        <div class="card-header pt-2" style="border-bottom: 1px solid #f1f1f4 !important;">
+                                            <div class="card-toolbar justify-content-end w-100">
+                                                <span class="btn btn-sm btn-icon btn-primary btn-emergency-contact-new"><i class="fa fa-plus"></i></span>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <div class="d-flex flex-column content-justify-center flex-row-fluid">
+                                                <div class="row mt-5" id="tableContainer">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">View employees only from site</label>
+                                                            <select class="form-select form-control" id="site-id" name="site-id" data-control="select2" data-placeholder="Select Site" data-allow-clear="true" data-dropdown-parent="#modal-edit-role">
+                                                                <option></option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">View employees only from department</label>
+                                                            <select class="form-select form-control" id="dept-id" name="dept-id" data-control="select2" data-placeholder="Select Department" data-allow-clear="true" data-dropdown-parent="#modal-edit-role">
+                                                                <option></option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-update-role-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Save & Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="~/scripts/ellipsis.min.js"></script>
+    <script src="~/js/cbpfwtabs.js"></script>
+    <script src="~/js/modernizr.custom.js"></script>
+    <script src="~/scripts/permissions/permissions-main.js" asp-append-version="true"></script>
+    <script src="~/scripts/permissions/manage-roles.js" asp-append-version="true"></script>
+    <script>
+        var curPage = "ManagePermissions";
+
+
+        var DropDownsData = {};
+        @if (ViewBag.DropDownData != null)
+        {
+            <text>
+                      DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+            </text>
+        }
+    </script>
+}

@@ -1,0 +1,477 @@
+﻿@{
+    ViewData["Title"] = "Manage Employees";
+}
+
+@section PageCSS {
+    <link href="~/css/accordion-style.css" rel="stylesheet" />
+}
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+                    <div class="card mb-3" id="filters">
+                        <div id="st-accordion" class="st-accordion">
+                            <ul>
+                                <li>
+                                    <a href="#" class="fw-bold chevron-toggle" style="color:#1F4293">Filters<span class="st-arrow"></span></a>
+                                    <div class="st-content" style="display: none;">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">First Name</label>
+                                                            <input type="text" class="form-control" name="filter-firstname" id="filter-firstname" placeholder="Enter First Name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)">
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Last Name</label>
+                                                            <input type="text" class="form-control" name="filter-lastname" id="filter-lastname" placeholder="Enter Last Name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)">
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Department</label>
+                                                            <select class="form-select form-control" id="filter-department" name="filter-department" data-control="select2" data-placeholder="Select Department" data-allow-clear="true">
+                                                                <option></option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Site</label>
+                                                            <select class="form-select form-control" id="filter-site" name="filter-site" data-control="select2" data-placeholder="Select Site" data-allow-clear="true" data-dropdown-parent="#filters" multiple>
+                                                                <option></option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Position</label>
+                                                            <select class="form-select form-control" id="position" name="position" data-control="select2" data-placeholder="Select Position" data-allow-clear="true">
+                                                                <option></option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">Employment Status</label>
+                                                            <select class="form-select form-control" id="employment-status" name="employment-status" data-control="select2" data-placeholder="Select Employment Status" data-allow-clear="true">
+                                                                <option></option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                                        <div class="mb-3 form-group">
+                                                            <label class="form-label">View Former Employees</label>
+                                                            <select class="form-select form-control" id="former-employees" name="former-employees" data-control="select2" data-placeholder="Select Yes/No">
+                                                                <option value="1">Yes</option>
+                                                                <option value="2" selected>No</option>
+                                                            </select>
+                                                            <span class="col-sm-5 mt-2 messages"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="row">
+                                                    <div class="d-flex justify-content-end text-end gap-5">
+                                                        <span class="btn btn-secondary float-end" id="btnClear">
+                                                            <i class="fa fa-times fs-4 me-2"></i>
+                                                            Clear
+                                                        </span>
+                                                        <span class="btn btn-primary float-end" id="btnSearch">
+                                                            <i class="fa fa-search  fs-4 me-2"></i>
+                                                            Search
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="text-end">
+                                    <span class="btn btn-secondary float-end mt-2 me-2" id="btn-export-former" onClick="ExportFormerEmployees()">
+                                        <i class="fa fa-download fs-4 me-2"></i>
+                                        Export Former Employees
+                                    </span>
+                                    <input type="file" class="invisible import-file" id="import-file" name="import-file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
+                                    <span class="btn btn-primary float-end mt-2 me-2" id="btn-import">
+                                        <i class="fa fa-upload fs-4 me-2"></i>
+                                        Import
+                                    </span>
+                                    <span class="btn btn-primary float-end mt-2 me-2" id="btn-export" onClick="ExportActiveEmployees()">
+                                        <i class="fa fa-download fs-4 me-2"></i>
+                                        Export
+                                    </span>
+                                    <span id="btn-createuser" class="btn btn-primary float-end mt-2 me-2">
+                                        <i class="fas fa-plus fs-4 me-2"></i>Add Employee
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-end">
+                                    <span class="btn btn-secondary mt-2 me-2" disabled>
+                                        Active Employees <span class="badge badge-circle badge-success me-2 active-employees"></span>
+                                    </span>
+                                    <span class="btn btn-secondary mt-2 me-2" disabled>
+                                        Total Employees <span class="badge badge-circle badge-primary me-2 all-employees"></span>
+                                    </span>
+                                    <span class="btn btn-secondary mt-2 me-2" disabled>
+                                        Active Contractors <span class="badge badge-circle badge-success me-2 active-contractor"></span>
+                                    </span>
+                                    <span class="btn btn-secondary mt-2 me-2" disabled>
+                                        Total Contractors <span class="badge badge-circle badge-primary me-2 all-contractor"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row mt-5" id="employeelist">
+                            </div>
+                            <!-- Pagination -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center mt-3" id="pagination"></ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modal-terminate-details" tabindex="-1" data-bs-backdrop="static" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-600px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    Terminate Employee
+                </h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <div class="alert alert-warning bg-warning-subtle">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-black">
+                            <i class="fa fa-circle-info fs-2 text-black"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-black">
+                                You are going to terminate employee.
+                                <span class="text-danger">Are you sure?</span>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <form id="terminate-details-form" novalidate>
+                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <div class="mb-4 form-group">
+                            <label class="form-label">Employee will be terminated from this date <span class="text-danger">*</span></label>
+                            <input class="form-control date-picker" placeholder="Pick a date" id="termination-date" name="termination-date" tabindex="-1" readonly />
+                            <span class="col-sm-5 mt-2 messages"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <div class="mb-4 form-group">
+                            <label class="flex-stack cursor-pointer me-3">
+                                <input class="form-check-input" type="radio" name="dismissaltype" id="dismissaltype" value="Dismissal" checked /> Dismissal
+                            </label>
+                            <label class="flex-stack cursor-pointer me-3">
+                                <input class="form-check-input" type="radio" name="dismissaltype" id="dismissaltype" value="Termination" /> Termination
+                            </label>
+                            <span class="col-sm-5 mt-2 messages"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <div class="mb-4 form-group">
+                            <label class="form-label">Choose a reason <span class="text-danger">*</span></label>
+                            <select class="form-select form-control" id="reason" name="reason" data-control="select2" data-placeholder="Select Reason" data-allow-clear="true" data-dropdown-parent="#modal-terminate-details">
+                                <option></option>
+                            </select>
+                            <span class="col-sm-5 mt-2 messages"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <div class="mb-4 form-group">
+                            <label class="form-label">Comment <span class="text-danger">*</span></label>
+                            <textarea type="text" class="form-control resize-none mb-2" name="comment" id="comment" placeholder="" maxlength="500" rows="2"></textarea>
+                            <span class="col-sm-5 mt-2 messages"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-submit-terminate-details">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="add-new-employee-modal" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Details</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="new-employee-form" novalidate>
+                    <div class="row">
+                        @* <div class="col-lg-4 col-md-4 col-sm-12 mb-6">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Employee Code</label>
+                                <input type="text" class="form-control" name="employee-code" id="employee-code" placeholder="" disabled="disabled">
+                                <span class="col-sm-5 mt-2 text-warning"><i class="fa fa-info-circle fs-4 me-2 text-warning"></i>Will be autogenerated in system.</span>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div> *@
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-6">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">First Name</label>
+                                <input class="form-control" type="text" placeholder="" name="first-name" id="first-name" autocomplete="off" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Last Name</label>
+                                <input class="form-control" type="text" placeholder="" name="last-name" id="last-name" autocomplete="off" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">DOB</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="dob" name="dob" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">On-boarding Date</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="on-boarding-date" name="on-boarding-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Phone No.</label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter Phone" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email">
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Gender</label>
+                                <select class="form-select form-control" id="gender" name="gender" data-control="select2" data-placeholder="Select Gender" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal">
+                                    <option></option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Marital Status</label>
+                                <select class="form-select form-control" id="marital-status" name="marital-status" data-control="select2" data-placeholder="Select Marital Status" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal">
+                                    <option></option>
+                                    <option value="Married">Married</option>
+                                    <option value="NA">N/A</option>
+                                    <option value="Single">Single</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Date of Hire</label>
+                                <input class="form-control date-picker" placeholder="Pick a date" id="hiring-date" name="hiring-date" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Direct Manager</label>
+                                <select class="form-select form-control" id="user-manager" name="user-manager" data-control="select2" data-placeholder="Select Direct Manager" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Site</label>
+                                <select class="form-select form-control" id="user-site" name="user-site" data-control="select2" data-placeholder="Select Site" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal" multiple>
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Department</label>
+                                <select class="form-select form-control" id="user-department" name="user-department" data-control="select2" data-placeholder="Select Department" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal" multiple>
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Department Sub-Category</label>
+                                <select class="form-select form-control" id="department-sub-category" name="department-sub-category" data-control="select2" data-placeholder="Select Sub-Category" multiple data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Employment Status</label>
+                                <select class="form-select form-control" id="employment-status-type" name="employment-status-type" data-control="select2" data-placeholder="Select Employment Status" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+                            <div class="mb-3 form-group mt-11">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="add-user-in-system" name="add-user-in-system" onclick="AddUserInSystem()" />
+                                    <label class="form-check-label" for="add-user-in-system">
+                                        Add a User in the System?
+                                    </label>
+                                </div>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-3 d-none" id="role-div">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Role</label>
+                                <select class="form-select form-control" id="user-role" name="user-role" data-control="select2" data-placeholder="Select Role" data-allow-clear="true" data-dropdown-parent="#add-new-employee-modal">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-add-new-employee">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="~/js/jquery.accordion.js"></script>
+    <script src="~/js/jquery.easing.1.3.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="~/scripts/ellipsis.min.js"></script>
+    <script src="~/scripts/employeedetails/ManageEmployees.js" asp-append-version="true"></script>
+
+
+    <script>
+        var curPage = "ManageEmployees";
+        var DropDownsData = {};
+        @if (ViewBag.DropDownData != null)
+        {
+            <text>
+                      DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+
+                   
+            </text>
+        }
+   
+    </script>
+}

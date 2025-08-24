@@ -1,0 +1,315 @@
+﻿@{
+    ViewData["Title"] = "Leaves Policy Management";
+}
+<style>
+    .help-block.error {
+        margin-bottom: 5px;
+    }
+
+    .has-error {
+        color: red;
+    }
+
+        .has-error .form-control {
+            border-color: red;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        }
+</style>
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+
+                    <div class="row">
+                        <div class="col-lg-5 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Leave Types</h3>
+                                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                                        <span type="button" class="btn fw-bold btn-primary float-end btn-new-type">
+                                            <i class="fas fa-plus fs-4 me-2"></i>Add New Type
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Leave Type Name</label>
+                                                <input class="form-control" placeholder="Leave Type Name" id="leavetypename" name="leavetypename" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Auto Approve</label>
+                                                <select class="form-select form-control" id="auto-approve" name="auto-approve" data-control="select2" data-placeholder="Select Yes/No" data-allow-clear="true">
+                                                    <option></option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="d-flex justify-content-end text-end gap-5">
+                                            <span class="btn btn-secondary float-end" id="btnClear">
+                                                <i class="fa fa-times fs-4 me-2"></i>
+                                                Clear
+                                            </span>
+                                            <span class="btn btn-primary float-end" id="btnSearchTypes">
+                                                <i class="fa fa-search  fs-4 me-2"></i>
+                                                Search
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div id="table-default" class="table-responsive">
+                                        <table class="table table-striped table-bordered gy-5 gs-7 rounded" id="tbl_leavetypes">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Leave Policies</h3>
+                                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                                        <span type="button" class="btn fw-bold btn-primary float-end btn-new-policy">
+                                            <i class="fas fa-plus fs-4 me-2"></i>Add New Policy
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Policy Name</label>
+                                                <input class="form-control" placeholder="Policy Name" id="leavepolicyname" name="leavepolicyname" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Leave Type</label>
+                                                <select class="form-select form-control" id="leave-type-id" name="leave-type-id" data-control="select2" data-placeholder="Select Leave Type" data-allow-clear="true">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="d-flex justify-content-end text-end gap-5">
+                                            <span class="btn btn-secondary float-end" id="btnClearPolicy">
+                                                <i class="fa fa-times fs-4 me-2"></i>
+                                                Clear
+                                            </span>
+                                            <span class="btn btn-primary float-end" id="btnSearchPolicy">
+                                                <i class="fa fa-search  fs-4 me-2"></i>
+                                                Search
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div id="table-default" class="table-responsive">
+                                        <table class="table table-striped table-bordered gy-5 gs-7 rounded" id="tbl_leavespolicy">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="add-new-leave-type-modal" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Leave Type</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="leave-type-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Leave Type Name</label>
+                                <input class="form-control" type="text" placeholder="" name="leave-type-name" id="leave-type-name" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="approve-automatically" name="approve-automatically" />
+                                    <label class="form-check-label" for="approve-automatically">
+                                        Approve Automatically?
+                                    </label>
+                                </div>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-add-new-leave-type">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="add-new-leave-policy-modal" tabindex="-1" aria-modal="true" data-bs-backdrop="static" data-bs-focus="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered mw-600px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Leave Type</h2>
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <i class="fa fa-times">
+                    </i>
+                </div>
+            </div>
+            <div class="modal-body py-lg-10 px-lg-10">
+                <form id="leave-policy-form" novalidate>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Policy Type</label>
+                                <select class="form-select form-control" id="policy-type" name="policy-type" data-control="select2" data-placeholder="Select Policy Type" data-allow-clear="true" data-dropdown-parent="#add-new-leave-policy-modal">
+                                    <option></option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Policy Name</label>
+                                <input class="form-control" type="text" placeholder="" name="policy-name" id="policy-name" autocomplete="off" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Policy Days</label>
+                                <input class="form-control" type="number" placeholder="" name="policy-days" id="policy-days" autocomplete="off" min="1" />
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">Policy Period</label>
+                                <select class="form-select form-control" id="policy-period" name="policy-period" data-control="select2" data-placeholder="Select Policy Period" data-allow-clear="true" data-dropdown-parent="#add-new-leave-policy-modal">
+                                    <option></option>
+                                    <option value="Yearly">Yearly</option>
+                                    <option value="Half-Yearly">Half-Yearly</option>
+                                    <option value="Quarterly">Quarterly</option>
+                                    <option value="Monthly">Monthly</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                            <div class="mb-3 form-group">
+                                <label class="form-label">What to do with unused days?</label>
+                                <select class="form-select form-control" id="unused-days" name="unused-days" data-control="select2" data-placeholder="Select" data-allow-clear="true" data-dropdown-parent="#add-new-leave-policy-modal">
+                                    <option></option>
+                                    <option value="1">Move to next Period</option>
+                                    <option value="0">Lose it</option>
+                                </select>
+                                <span class="col-sm-5 mt-2 messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="justify-content-end d-flex text-end gap-5">
+                        <button type="button" class="btn btn-secondary float-end" id="btn-dismiss-modal" data-bs-dismiss="modal">
+                            <i class="fa fa-times fs-4 me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary float-end" id="btn-add-new-leave-policy">
+                            <i class="fa fa-save fs-4 me-2"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="~/scripts/ellipsis.min.js"></script>
+    <script src="@Url.Content("/js/validate.min.js")"></script>
+    <script src="~/scripts/leaves/leaves-policy-management.js" asp-append-version="true"></script>
+    <script>
+        var curPage = "LeavesPolicyManagement";
+    </script>
+}

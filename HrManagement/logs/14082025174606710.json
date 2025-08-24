@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-14 17:46:06 713",
+  "Message": "Object reference not set to an instance of an object.",
+  "StackTrace": "   at HrManagement.WebApi.TrainingSessionsController.WatchLesson(Int32 id) in D:\\Projects\\Dotnet Project\\Revital\\revital\\HrManagement\\WebApi\\TrainingSessionsController.cs:line 178",
+  "Source": "HrManagement",
+  "InnerException": null
+}

@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-09 17:54:30 495",
+  "Message": "A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: TCP Provider, error: 0 - An existing connection was forcibly closed by the remote host.)",
+  "StackTrace": "   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()\r\n--- End of stack trace from previous location ---\r\n   at Dapper.SqlMapper.MultiMapAsync[TFirst,TSecond,TThird,TFourth,TFifth,TSixth,TSeventh,TReturn](IDbConnection cnn, CommandDefinition command, Delegate map, String splitOn) in /_/Dapper/SqlMapper.Async.cs:line 938\r\n   at HrManagement.WebApi.TrainingsController.GetCategoryWithPosts(Nullable`1 id)",
+  "Source": "Core Microsoft SqlClient Data Provider",
+  "InnerException": "An existing connection was forcibly closed by the remote host."
+}

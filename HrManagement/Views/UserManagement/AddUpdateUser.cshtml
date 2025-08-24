@@ -1,0 +1,188 @@
+﻿@{
+    ViewData["Title"] = "Add/Update User";
+}
+
+<style>
+    .help-block.error {
+        margin-bottom: 5px;
+    }
+
+    .has-error {
+        color: red;
+    }
+
+        .has-error .form-control {
+            border-color: red;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        }
+</style>
+
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+                    <div class="card mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="add-update-site-form" novalidate>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Employee Code</label>
+                                                <input type="text" class="form-control" name="employee-code" id="employee-code" placeholder="Enter Employee Code">
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">User Name</label>
+                                                <input type="text" class="form-control" name="username" id="username" placeholder="Enter User Name">
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter First Name">
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter Last Name">
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Gender</label>
+                                                <select class="form-select form-control" id="gender" name="gender" data-control="select2" data-placeholder="Select Gender" data-allow-clear="true">
+                                                    <option></option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Email</label>
+                                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email">
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Phone Number</label>
+                                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter Phone Number">
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Roles</label>
+                                                <select class="form-select form-control" id="roles" name="roles" data-control="select2" data-close-on-select="true" data-placeholder="Select Roles" data-allow-clear="true">
+                                                    <option></option>
+                                                </select>
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Sites</label>
+                                                <select class="form-select form-control" id="sites" name="sites" data-control="select2" data-close-on-select="false" data-placeholder="Select Sites" data-allow-clear="true" multiple="multiple">
+                                                    <option></option>
+                                                </select>
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+                                                <label class="form-label">Password</label>
+                                                <input class="form-control" type="password" placeholder="" name="password" id="password" autocomplete="off" />
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                            <div class="mb-3 form-group">
+
+                                                <label class="form-label">Confirm Password</label>
+                                                <input class="form-control" type="password" placeholder="" name="confirm_password" id="confirm_password" autocomplete="off" />
+                                                <span class="col-sm-5 mt-2 messages"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="justify-content-end text-end">
+                                        <span href="#" class="btn btn-primary float-end" id="add-update-user">
+                                            <i class="fa fa-save fs-4 me-2"></i>
+                                            Create/Update User
+                                        </span>
+                                    </div>
+                                </div>
+                                @*                                 <div class="btn-list justify-content-right">
+                                    <span href="#" class="btn btn-primary btn-list" id="add-update-site">
+                                        <i class="fa fa-save"></i>
+                                        Save
+                                    </span>
+                                </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @* <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script> *@
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="@Url.Content("/scripts/UserManagement/AddUpdateUser.js")" asp-append-version="true"></script>
+    <script src="@Url.Content("/js/validate.min.js")"></script>
+
+
+
+    <script>
+        var curPage = "CreateUsers";
+
+        var DropDownsData = {};
+        @if (ViewBag.DropDownData != null)
+        {
+            <text>
+                     DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+            </text>
+        }
+    </script>
+}

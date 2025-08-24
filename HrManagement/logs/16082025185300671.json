@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-16 18:53:00 672",
+  "Message": "A TOP or FETCH clause contains an invalid value.",
+  "StackTrace": "   at HrManagement.WebApi.PermissionsAPIController.FilterAllUsersData(UsersFilter search)\r\n   at HrManagement.WebApi.PermissionsAPIController.GetAllUsers(UsersFilter filters)",
+  "Source": "Core Microsoft SqlClient Data Provider",
+  "InnerException": null
+}

@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewData["Title"] = "TrainingReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageCSS {
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <link href="~/css/custom/trainingreport.css" rel="stylesheet" />
+
+}
+<style>
+    a {
+        text-decoration: none!important;
+    }
+
+    #deptChartCenter {
+        padding-bottom: 70px!important;
+    }
+
+    #siteChartCenter {
+        padding-bottom: 50px!important;
+    }
+
+</style>
+
+
+
+
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    <div class="d-flex flex-column flex-column-fluid">
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                        <li class="breadcrumb-item">
+                            <a href="/Home/Index" class="fw-bold fs-14px" style="color:#1F4293 !important">
+                                <i class="fa fa-home" style="color:#1F4293 !important"></i> &nbsp;Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <i class="fa fa-chevron-right fs-11px" style="color:#1F4293 !important"></i>
+                        </li>
+                        <li class="breadcrumb-item fs-14px fw-bold" style="color:#1F4293 !important" data-i18n="">
+                            Training Reports
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="kt_app_content" class="app-content flex-column-fluid mt-4">
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Filters Sidebar -->
+                            <div class="col-lg-3">
+                                <div class="sidebar">
+                                    <h5 class="mb-2">Filters</h5>
+                                    <label class="form-label">Departments</label>
+                                    <select id="deptFilter" multiple style="width:100%"></select>
+                                    <label class="form-label mt-2">Sub-Departments</label>
+                                    <select id="subDeptFilter" multiple style="width:100%"></select>
+                                    <label class="form-label mt-2">Sites</label>
+                                    <select id="siteFilter" multiple style="width:100%"></select>
+                                    <label class="form-label mt-2">Employees</label>
+                                    <select id="empFilter" multiple style="width:100%"></select>
+                                    <label class="form-label mt-2">Trainings</label>
+                                    <select id="trainFilter" multiple style="width:100%"></select>
+                                    <div class="mt-2 d-grid gap-1">
+                                        <button id="applyFilter" class="btn btn-primary btn-custom">Apply</button>
+                                        <button id="clearFilter" class="btn btn-outline-secondary btn-custom">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Charts Area -->
+                            <div class="col-lg-9">
+                                <div class="row g-2">
+                                    <div class="col-6 col-md-6">
+                                        <div class="card-soft position-relative">
+                                            <h6 class="card-title text-center">Employees / Dept</h6>
+                                            <div class="chart-container">
+                                                <canvas id="deptChart"></canvas>
+                                                <div id="deptChartCenter" class="chart-center-text"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-6">
+                                        <div class="card-soft position-relative">
+                                            <h6 class="card-title text-center">Employees / Site</h6>
+                                            <canvas id="siteChart"></canvas>
+                                            <div id="siteChartCenter" class="chart-center-text"></div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-6 col-md-6">
+                                        <div class="card-soft">
+                                            <h6 class="card-title text-center">Training Participation</h6>
+                                            <canvas id="trainingChart"></canvas>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-6">
+                                        <div class="card-soft">
+                                            <h6 class="card-title text-center">Training Progress</h6>
+                                            <canvas id="progressChart"></canvas>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-12">
+                                        <div class="card-soft">
+                                            <h6 class="card-title text-center">Course Completion</h6>
+                                            <canvas id="courseCompletionChart"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <div class="card-soft">
+                                            <h6 class="card-title text-center">Quiz Report</h6>
+                                            <canvas id="quizChart"></canvas>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               
+                  
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    @section scripts{
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <script src="@Url.Content("/scripts/TrainingReport/index.js")" asp-append-version="true"></script>
+    
+   
+
+}
+<script>
+     var DropDownsData = {};
+      @if (ViewBag.DropDownData != null)
+      {
+                            <text>
+                                 DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+
+                            </text>
+
+    }
+</script>

@@ -1,0 +1,117 @@
+﻿@{
+    ViewData["Title"] = "My Time";
+}
+@*<!--start:::Main--> *@
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    @*<!--begin::Content wrapper--> *@
+    <div class="d-flex flex-column flex-column-fluid">
+        @* <!--begin::Toolbar--> *@
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    @* <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0"></h1> *@
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        @* <!--end::Toolbar--> *@
+        @*<!--begin::Content--> *@
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            @*<!--begin::Content container--> *@
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <div class="container-fluid" id="app-content-container-fluid">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            @* <label class="form-label">Select Month</label> *@
+                            <div class="row col-12">
+                                <div class="col-4">
+                                    <select name="" class="form-select">
+                                        <option value="" selected>Select Month</option>
+                                        <option value="">Month</option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select name="" class="form-select">
+                                        <option value="" selected>Select Employee</option>
+                                        <option value="">Employee 1</option>
+                                        <option value="">Employee 2</option>
+                                        <option value="">Employee 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="table-default" class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%">Name</th>
+                                            <th width="20%">Date</th>
+                                            <th width="15%">Day</th>
+                                            <th width="15%">Clock In</th>
+                                            <th width="10%">Clock Out</th>
+                                            <th width="20%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>Employee 1</td><td>2024-09-01</td><td>Monday</td><td>09:00 AM</td><td>05:00 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-02</td><td>Tuesday</td><td>09:05 AM</td><td>05:10 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-03</td><td>Wednesday</td><td>09:10 AM</td><td>05:20 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-04</td><td>Thursday</td><td>09:00 AM</td><td>05:00 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 2</td><td>2024-09-05</td><td>Friday</td><td>08:55 AM</td><td>04:50 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-06</td><td>Saturday</td><td>09:15 AM</td><td>05:30 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 2</td><td>2024-09-07</td><td>Sunday</td><td>09:00 AM</td><td>05:00 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-08</td><td>Monday</td><td>09:05 AM</td><td>05:15 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-09</td><td>Tuesday</td><td>09:00 AM</td><td>05:00 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 3</td><td>2024-09-10</td><td>Wednesday</td><td>09:07 AM</td><td>05:22 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-11</td><td>Thursday</td><td>08:50 AM</td><td>04:45 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 3</td><td>2024-09-12</td><td>Friday</td><td>09:00 AM</td><td>05:10 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-13</td><td>Saturday</td><td>09:00 AM</td><td>05:00 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 4</td><td>2024-09-14</td><td>Sunday</td><td>09:10 AM</td><td>05:30 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                        <tr><td>Employee 1</td><td>2024-09-15</td><td>Monday</td><td>09:05 AM</td><td>05:00 PM</td><td><button class="btn btn-primary btn-sm mx-1">Approve</button><button class="btn btn-danger btn-sm">Disapprove</button></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script src="~/dist/libs/calendar/index.global.min.js" defer></script>
+    @* <script src="@Url.Content("/lib/jquery/jquery.min.js")" type="text/javascript"></script> *@
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script>
+    <script src="~/assets/js/custom/widgets.js"></script>
+    <script>
+        HRMSUtil.onDOMContentLoaded(function () {
+            unspin();
+        });
+    </script>
+}

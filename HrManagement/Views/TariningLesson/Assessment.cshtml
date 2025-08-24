@@ -1,0 +1,617 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tutorial Player — Professional Layout</title>
+
+    <!-- Bootstrap 5.1 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #ff4444; /* red accent like YouTube */
+            --muted-bg: #f5f7fa;
+            --card-shadow: 0 6px 18px rgba(18, 38, 63, 0.07);
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        #chatSidebar {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #chatMessages {
+            flex-grow: 1;
+            overflow-y: auto;
+            min-height: 0; /* allows flex container to constrain properly */
+            padding: 1rem;
+        }
+
+            #chatMessages .message {
+                margin-bottom: 1rem;
+                padding: 0.5rem 1rem;
+                background: #f1f1f1;
+                border-radius: 10px;
+                max-width: 80%;
+            }
+
+                #chatMessages .message.user {
+                    background: #dcf8c6;
+                    align-self: flex-end;
+                }
+
+        /* Glassmorphism Navbar */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            background: white;
+            padding-top: 1rem;
+        }
+
+            .sidebar .nav-link {
+                color: #333;
+            }
+
+                .sidebar .nav-link:hover {
+                    background-color: #f1f1f1;
+                }
+
+        .video-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem;
+        }
+
+        .instructor {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+            .instructor img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                margin-right: 1rem;
+            }
+
+            .instructor .btn-subscribe {
+                margin-left: auto;
+                background-color: red;
+                color: white;
+            }
+
+        .tree-toggle {
+            cursor: pointer;
+        }
+
+        .tree-sub {
+            padding-left: 1.5rem;
+        }
+
+        /* Layout */
+        .app-row {
+            height: calc(100vh - 72px);
+            overflow: hidden;
+            display: flex; /* add flex to ensure children can stretch */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #ffffff;
+            border-right: 1px solid #eef2f7;
+            box-shadow: 0 2px 12px rgba(18,38,63,0.03);
+            padding: 14px;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+
+            .sidebar .section-title {
+                font-size: .78rem;
+                color: #6b7280;
+                font-weight: 600;
+                margin: 8px 6px;
+                text-transform: uppercase;
+                letter-spacing: .06em;
+            }
+
+        .cat-btn {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 10px 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+            .cat-btn:hover {
+                background: #f8fafc;
+            }
+
+        .video-item {
+            display: flex;
+            gap: 10px;
+            padding: 8px;
+            align-items: center;
+            border-radius: 8px;
+            margin: 6px 6px;
+            cursor: pointer;
+            transition: background .15s, transform .08s;
+        }
+
+            .video-item:hover {
+                background: #fbfbfd;
+                transform: translateY(-1px);
+            }
+
+            .video-item.active {
+                background: linear-gradient(90deg, rgba(255,68,68,0.06), rgba(255,68,68,0.02));
+                border-left: 3px solid var(--accent);
+            }
+
+        .video-thumb {
+            width: 90px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(12,36,70,0.06);
+        }
+
+        .video-meta {
+            font-size: .9rem;
+            color: #0f172a;
+        }
+
+        .video-duration {
+            font-size: .75rem;
+            color: #475569;
+        }
+
+        /* Center */
+        .player-column {
+            flex: 1;
+            padding: 22px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .video-container {
+            width: 100%;
+            aspect-ratio: 60/9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        .video-desc {
+            color: #6b7280;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* Related list */
+        .related-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background .12s;
+        }
+
+            .related-item:hover {
+                background: #fbfbfd;
+                cursor: pointer;
+            }
+
+
+
+        .content-area {
+            padding-left: 0;
+        }
+
+        .app-row {
+            height: auto;
+        }
+
+        .search-input {
+            max-width: 320px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar topbar navbar-expand-lg py-3">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center gap-3">
+                <!-- Offcanvas toggle for small screens -->
+                <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" aria-label="Open menu">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <!-- Brand -->
+                <a class="navbar-brand brand d-flex align-items-center gap-2" href="#">
+                    <img src="https://cdn.courses.apisystem.tech/memberships/hqso2DcoE5nrxoLOqZ3I/product/6dd769fb-41cf-4369-8d9e-005f7cff0a27-tc7c" alt="avatar" class="rounded-circle me-2" width="38" height="38">
+                    <span>Revital Health</span>
+                </a>
+            </div>
+
+            <!-- Center search -->
+            <div class="mx-auto d-none d-lg-flex w-75 justify-content-center">
+                <form class="w-100">
+                    <div class="input-group search-input mx-auto">
+                        <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
+                        <input id="globalSearch" type="search" class="form-control" placeholder="Search tutorials, chapters, keywords..." aria-label="Search tutorials">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Profile on right -->
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light d-none d-lg-inline" type="button"></i></button>
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-decoration-none" href="#" id="profileMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://cdn.courses.apisystem.tech/memberships/hqso2DcoE5nrxoLOqZ3I/product/6dd769fb-41cf-4369-8d9e-005f7cff0a27-tc7c" alt="avatar" class="rounded-circle me-2" width="38" height="38">
+                        <div class="d-none d-md-block text-start">
+                            <div style="font-weight:600">Jane Doe</div>
+                            <div style="font-size:12px;color:#6b7280">Instructor</div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Offcanvas sidebar for mobile -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasSidebarLabel">Video List</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <!-- Duplicate of sidebar content for mobile (kept simple) -->
+            <div class="p-3">
+                <div class="section-title">Chapters</div>
+                <div class="list-group list-group-flush" id="mobileList">
+                    <!-- JS will populate mobile list -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main layout row -->
+    <div class="container-fluid px-3">
+        <div class="row app-row g-0">
+            <!-- Left Sidebar (desktop) -->
+            <aside class="mt-4 col-auto sidebar d-none d-lg-block">
+                <div class="section-title">Contents</div>
+
+                <!-- Category 1 -->
+                <div class="mb-2">
+                    <button class="cat-btn" data-bs-toggle="collapse" data-bs-target="#cat1" aria-expanded="true" aria-controls="cat1">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-folder2-open" style="color:#f97373;font-size:1.1rem"></i>
+                            <span>1. Revital Health Introduction</span>
+                        </div>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+
+                    <div class="collapse show" id="cat1">
+                        <div class="ps-2">
+                            <div class="video-item" data-src="https://www.w3schools.com/html/mov_bbb.mp4" data-title="1.1 Introduction to Revital Health" data-desc="Introductory overview of Revital Health." data-id="v1">
+                                <img class="video-thumb" src="https://picsum.photos/seed/intro/320/180" alt="thumb">
+                                <div>
+                                    <div class="video-meta">1.1 Introduction to Revital Health</div>
+                                    <div class="video-duration">4:22</div>
+                                </div>
+                            </div>
+
+                            <div class="video-item" data-src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" data-title="1.2 Clinic Locations Overview" data-desc="Where to find our clinics." data-id="v2">
+                                <img class="video-thumb" src="https://picsum.photos/seed/loc/320/180" alt="thumb">
+                                <div>
+                                    <div class="video-meta">1.2 Clinic Locations Overview</div>
+                                    <div class="video-duration">3:10</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="mb-2">
+                    <button class="cat-btn" data-bs-toggle="collapse" data-bs-target="#cat2" aria-expanded="false" aria-controls="cat2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-folder2" style="color:#fb7185;font-size:1.1rem"></i>
+                            <span>2. Streamlining Operations with Jane</span>
+                        </div>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+
+                    <div class="collapse" id="cat2">
+                        <div class="ps-2">
+                            <div class="video-item" data-src="https://www.w3schools.com/html/movie.mp4" data-title="2.1 Overview of Jane Clinic Management Software" data-desc="Jane app basics & features." data-id="v3">
+                                <img class="video-thumb" src="https://picsum.photos/seed/jane1/320/180" alt="thumb">
+                                <div>
+                                    <div class="video-meta">2.1 Overview of Jane Clinic Management Software</div>
+                                    <div class="video-duration">6:05</div>
+                                </div>
+                            </div>
+
+                            <div class="video-item" data-src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" data-title="2.2 Advanced Billing" data-desc="Advanced billing flows & tips." data-id="v4">
+                                <img class="video-thumb" src="https://picsum.photos/seed/jane2/320/180" alt="thumb">
+                                <div>
+                                    <div class="video-meta">2.2 Advanced Billing</div>
+                                    <div class="video-duration">8:12</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="mb-2">
+                    <button class="cat-btn" data-bs-toggle="collapse" data-bs-target="#cat3" aria-expanded="false" aria-controls="cat3">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-folder2" style="color:#60a5fa;font-size:1.1rem"></i>
+                            <span>3. In-depth: Physiotherapy</span>
+                        </div>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+
+                    <div class="collapse" id="cat3">
+                        <div class="ps-2">
+                            <div class="video-item" data-src="https://www.w3schools.com/html/mov_bbb.mp4" data-title="3.1 Service Overview" data-desc="Who we serve & service overview" data-id="v5">
+                                <img class="video-thumb" src="https://picsum.photos/seed/physio1/320/180" alt="thumb">
+                                <div>
+                                    <div class="video-meta">3.1 Service Overview</div>
+                                    <div class="video-duration">5:42</div>
+                                </div>
+                            </div>
+
+                            <div class="video-item" data-src="https://www.w3schools.com/html/movie.mp4" data-title="3.2 Booking Private Patients" data-desc="Booking private physio patients." data-id="v6">
+                                <img class="video-thumb" src="https://picsum.photos/seed/physio2/320/180" alt="thumb">
+                                <div>
+                                    <div class="video-meta">3.2 Booking Private Patients</div>
+                                    <div class="video-duration">7:21</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- spacer -->
+                <div style="height: 24px;"></div>
+            </aside>
+
+            <!-- Center content (player + details) -->
+            <main class="col player-column content-area">
+                <div class="player-card">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="video-container d-flex justify-content-center" id="videoContainer">
+                                <button id="btnQuiz" type="button" class="btn btn-primary btn-lg" style="height: 52px;">Start Quiz</button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div id="videoTitle" class="video-title">1.1 Introduction to Revital Health</div>
+                                    <div id="videoDesc" class="video-desc">Introductory overview of Revital Health.</div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-success"><i class="bi bi-check-circle-fill"></i> Mark it Complete</button>
+                                    <button class="btn btn-outline-danger d-none"><i class="bi bi-heart-fill"></i> Favorite</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <!-- Long description card -->
+                                    <div class="mt-3 p-3 bg-white rounded-3" style="box-shadow: var(--card-shadow);">
+                                        <h6 class="mb-2">About this video</h6>
+                                        <p class="mb-0 text-muted">This short video explains the Revital Health service, our mission, and what learners can expect from this course. Use the sidebar to navigate chapters. Click any item to load the video above.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Chat Sidebar -->
+                                <!-- Add classes and style for chat sidebar -->
+                                <div id="chatSidebar" class="col-lg-4 d-flex flex-column" style="height: 100%;">
+                                    <h6 class="mt-3 px-3">Live Chat</h6>
+                                    <div id="chatMessages" class="d-flex flex-column flex-grow-1 overflow-auto px-3">
+                                        <!-- messages here -->
+                                    </div>
+                                    <form class="p-3 border-top" id="chatForm">
+                                        <div class="input-group">
+                                            <input type="text" id="chatInput" class="form-control" placeholder="Type your message..." autocomplete="off" />
+                                            <button class="btn btn-primary" type="submit"><i class="bi bi-send-fill"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div> <!-- row -->
+                </div> <!-- player-card -->
+            </main>
+
+        </div> <!-- app-row -->
+    </div><!-- container -->
+    <!-- Bootstrap 5.1 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+
+
+
+        // Grab all video items
+        const videoItems = Array.from(document.querySelectorAll('.video-item'));
+        const mainVideo = document.getElementById('mainVideo');
+        const videoTitle = document.getElementById('videoTitle');
+        const videoDesc = document.getElementById('videoDesc');
+        const relatedList = document.getElementById('relatedList');
+        const mobileList = document.getElementById('mobileList');
+        const quiz = document.getElementById('btnQuiz');
+
+
+        ////
+         quiz.addEventListener('click', () => {
+           window.location = '/TariningLesson/Quiz';
+         });
+
+        // Helper to set active class
+        function setActive(item) {
+          videoItems.forEach(v => v.classList.remove('active'));
+          item.classList.add('active');
+        }
+
+        // Populate related list (simple: all other videos)
+        function populateRelated(currentId) {
+          relatedList.innerHTML = '';
+          videoItems.forEach(item => {
+            const id = item.dataset.id;
+            if (id === currentId) return;
+            const thumb = item.querySelector('.video-thumb').src;
+            const title = item.dataset.title;
+            const dur = item.querySelector('.video-duration').textContent;
+            const div = document.createElement('div');
+            div.className = 'related-item mb-2 p-2 rounded';
+            div.innerHTML = `
+              <img src="${thumb}" style="width:96px;height:56px;object-fit:cover;border-radius:6px;">
+              <div style="flex:1">
+                <div style="font-weight:600">${title}</div>
+                <div style="font-size:.8rem;color:#6b7280">${dur}</div>
+              </div>
+            `;
+            div.addEventListener('click', () => {
+              // find and trigger the original item click
+              const source = videoItems.find(v => v.dataset.title === title);
+              if (source) source.click();
+            });
+            relatedList.appendChild(div);
+          });
+        }
+
+        // Populate mobile offcanvas list (simple list)
+        function populateMobileList() {
+          mobileList.innerHTML = '';
+          videoItems.forEach(v => {
+            const a = document.createElement('a');
+            a.className = 'list-group-item list-group-item-action';
+            a.href = '#';
+            a.textContent = v.dataset.title;
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              v.click();
+              // hide offcanvas
+              const off = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasSidebar'));
+              if (off) off.hide();
+            });
+            mobileList.appendChild(a);
+          });
+        }
+
+        // Click handler for video items
+        videoItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const src = item.dataset.src;
+            const title = item.dataset.title;
+            const desc = item.dataset.desc;
+
+            // Swap source and load
+            if (mainVideo.querySelector('source')) {
+              mainVideo.querySelector('source').src = src;
+            } else {
+              mainVideo.src = src;
+            }
+            mainVideo.pause();
+            mainVideo.load();
+            mainVideo.play().catch(()=>{ /* autoplay may be blocked */ });
+
+            videoTitle.textContent = title;
+            videoDesc.textContent = desc;
+
+            setActive(item);
+            populateRelated(item.dataset.id);
+          });
+        });
+
+        // Initialize first active video
+        if (videoItems.length) {
+          videoItems[0].click();
+          populateMobileList();
+        }
+
+        // Optional: keyboard navigation (j/k next prev)
+        document.addEventListener('keydown', (e) => {
+          if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+          const idx = videoItems.findIndex(v => v.classList.contains('active'));
+          if (e.key === 'k') {
+            // previous
+            const prev = videoItems[idx-1] || videoItems[0];
+            prev.click();
+          } else if (e.key === 'j') {
+            // next
+            const next = videoItems[idx+1] || videoItems[videoItems.length-1];
+            next.click();
+          }
+        });
+    </script>
+</body>
+</html>

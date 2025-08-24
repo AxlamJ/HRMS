@@ -1,0 +1,12 @@
+{
+  "Timestamp": "2025-07-31 23:36:11 556",
+  "Message": "The request matched multiple endpoints. Matches: \r\n\r\nHrManagement.WebApi.TrainingsController.GetTrainingWithDetails (HrManagement)\r\nHrManagement.WebApi.TrainingsController.GetTrainingWithDetails (HrManagement)",
+  "StackTrace": "   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ReportAmbiguity(Span\u00601 candidateState)\r\n   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.ProcessFinalCandidates(HttpContext httpContext, Span\u00601 candidateState)\r\n   at Microsoft.AspNetCore.Routing.Matching.DefaultEndpointSelector.Select(HttpContext httpContext, Span\u00601 candidateState)\r\n   at Microsoft.AspNetCore.Routing.Matching.DfaMatcher.MatchAsync(HttpContext httpContext)\r\n   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.Invoke(HttpContext httpContext)\r\n   at Program.\u003C\u003Ec.\u003C\u003C\u003CMain\u003E$\u003Eb__0_6\u003Ed.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at HrManagement.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context)",
+  "Source": "Microsoft.AspNetCore.Routing",
+  "InnerException": null,
+  "Path": {
+    "Value": "/api/Trainings/GetTrainingWithDetails",
+    "HasValue": true
+  },
+  "Method": "POST"
+}
