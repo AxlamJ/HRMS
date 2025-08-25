@@ -1,5 +1,13 @@
 ﻿$(document).ready(function () {
 
+    $('input[name="paymentType"]').change(function () {
+        if ($('#paymentPaid').is(':checked')) {
+            $('#paymentAmountContainer').removeClass('d-none');
+        } else {
+            $('#paymentAmountContainer').addClass('d-none');
+            $('#paymentAmount').val('');
+        }
+    });
 
     hideSpinner();
 
@@ -34,6 +42,8 @@
                 instructorBio: $("#txtInstructorBio").val(),
                 trainingId: $("#detail_trainingId").val(),
                 trainingsDetailId: $("#TrainingsDetailId").val(),
+                paymentType: $('#paymentPaid').is(':checked'), // true if Paid, false if Free
+                amount: $('#paymentPaid').is(':checked') ? parseFloat($('#paymentAmount').val()) || 0 : 0
             };
             var url = sitePath + 'api/Trainings/UpsertTrainingsDetail';
             Ajax.post(url, trainingdetail, function (response) { // ✅ Corrected this line

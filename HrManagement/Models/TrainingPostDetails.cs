@@ -49,6 +49,13 @@
 
         [JsonPropertyName("type")]
         public string? Type { get; set; }    
+
+        [JsonPropertyName("amount")]
+
+        public decimal? Amount { get; set; }
+
+        [JsonPropertyName("paymentType")]
+        public bool? paymentType { get; set; } = false;  
         
     }
 

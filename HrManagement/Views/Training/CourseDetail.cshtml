@@ -238,6 +238,27 @@
                                                     </button>
                                                 </div>
                                                 <div class="col-md-6">
+
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Payment Type</label>
+                                                        <div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="paymentType" id="paymentFree" value="free" checked>
+                                                                <label class="form-check-label" for="paymentFree">Free</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="paymentType" id="paymentPaid" value="paid">
+                                                                <label class="form-check-label" for="paymentPaid">Paid</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3 d-none" id="paymentAmountContainer">
+                                                        <label for="paymentAmount" class="form-label">Amount</label>
+                                                        <input type="number" class="form-control" id="paymentAmount" name="paymentAmount" placeholder="Enter amount" min="0" step="0.01">
+                                                    </div>
+
                                                     <!-- Title -->
                                                     <div class="mb-3">
                                                         <label class="form-label" for="txtTitle">Title</label>

@@ -41,6 +41,10 @@ namespace HrManagement.Dto
         public string? DepartmentsSubCategories { get; set; }
         public string? Employees { get; set; }
         public string? Sites { get; set; }
+        public bool? IsExternal { get; set; }
+        public string? Url { get; set; }
+        public bool? PaymentType { get; set; }
+        public decimal? Amount { get; set; }
     }
 
     public class TrainingsDetailFilter : FilterBase

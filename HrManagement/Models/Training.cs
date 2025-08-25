@@ -32,6 +32,10 @@ namespace HrManagement.Models
         public int? Duration { get; set; }
         [JsonProperty("IsApproved")]
         public bool? IsApproved { get; set; }= false;
+        [JsonProperty("IsExternal")]
+        public bool? IsExternal { get; set; }= false;
+        [JsonProperty("Url")]
+        public string? Url { get; set; }
     }
 
 }

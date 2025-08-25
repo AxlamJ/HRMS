@@ -201,6 +201,8 @@ namespace HrManagement.Repository
             SELECT
             t.TrainingId,
             t.ItemType,
+            t.Url,
+            t.IsExternal,
             t.ApprovedBy,
             t.IsActive,
             td.TrainingsDetailId,
@@ -214,6 +216,8 @@ namespace HrManagement.Repository
             td.InstructorBio,
             td.LogoImage,
             td.CreatedById,
+            td.Amount,
+            td.PaymentType,
             td.CreatedBy,
             td.CreatedDate,
             td.ModifiedById,
@@ -251,10 +255,14 @@ namespace HrManagement.Repository
             t.TrainingId,
             t.IsApproved,
             t.ItemType,
+            t.Url,
+            t.IsExternal,
             t.ApprovedBy,
             t.IsActive,
             td.TrainingsDetailId,
             td.Title,
+            td.Amount,
+            td.PaymentType,
             td.Description,
             td.ProductThumbnail,
             td.InstructorHeading,
@@ -315,6 +323,7 @@ namespace HrManagement.Repository
                 Status,
                 Description,
                 Type
+              
             )
             OUTPUT INSERTED.Id
             VALUES (
@@ -332,6 +341,7 @@ namespace HrManagement.Repository
                 @Status,
                 @Description,
                 @Type
+               
             );";
 
                 var insertedId = await connection.ExecuteScalarAsync<int>(insertQuery, model);
@@ -369,7 +379,8 @@ namespace HrManagement.Repository
                             ModifiedDate = @ModifiedDate,
                             IsActive = @IsActive,
                             Status = @Status,
-                            Description = @Description,
+                            Description = @Description
+                           
                             Type = @Type
                             WHERE Id = @Id";
                 int UpdatedId = await connection.ExecuteAsync(updateQuery, model);

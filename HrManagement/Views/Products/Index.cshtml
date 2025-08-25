@@ -178,35 +178,65 @@
     </div>
 </div>
 
+                    <div class="modal fade" id="singleInputModal" tabindex="-1" aria-labelledby="singleInputModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form id="add-update-training-form" novalidate>
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="singleInputModalLabel">Create New Training</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
 
-<div class="modal fade" id="singleInputModal" tabindex="-1" aria-labelledby="singleInputModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+                                <div class="modal-body">
+                                   
+                                        <div class="mb-3">
+                                            <label for="training-title" class="form-label">Title</label>
+                                            <input type="text" class="form-control" name="training-title" id="training-title" placeholder="Enter Training Title...">
+                                        </div>
 
-            <div class="modal-header">
-                <h5 class="modal-title" id="singleInputModalLabel">Create New Training</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+                                        <!-- Radio Buttons -->
+                                        <div class="mb-3">
+                                            <label class="form-label d-block">Training Type</label>
 
-            <div class="modal-body">
-                <form id="add-update-training-form" novalidate>
-                    <div class="mb-3">
-                        <label for="training-title" class="form-label">Title</label>
-                        <input type="text" class="form-control" name="training-title" id="training-title" placeholder="Enter Training Title...">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="training-type" id="typeOffline" value="0" checked>
+                                                <label class="form-check-label" for="typeOffline">Internal</label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="training-type" id="typeOnline" value="1">
+                                                <label class="form-check-label" for="typeOnline">External</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- URL Textbox -->
+                                        <div class="mb-3 d-none" id="url-container">
+                                            <label for="training-url" class="form-label">URL</label>
+                                            <input type="url" class="form-control" name="training-url" id="training-url" placeholder="Enter URL...">
+
+                                        </div>
+
+                                        <!-- Upload Image Button and filename display -->
+                                        <div class="mb-3 d-none" id="upload-container">
+                                            <label for="training-image" class="form-label">Upload Image</label>
+                                            <input type="file" class="form-control" id="training-image" accept="image/*">
+
+                                            <!-- File name display -->
+                                            <input type="text" class="form-control mt-2" id="image-name" readonly placeholder="No file chosen">
+                                        </div>
+
+                                   
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="add-update-training">Add</button>
+                                        <button type="button" class="btn btn-primary d-none" id="add-online-training">Add</button>
+                                </div>
+                              </form>
+                            </div>
+                        </div>
                     </div>
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="add-update-training">Add</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
 
                 </div>
             </div>

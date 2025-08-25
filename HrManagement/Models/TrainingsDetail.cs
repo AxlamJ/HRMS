@@ -56,6 +56,9 @@
 
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }
+        [JsonProperty("paymentType")]
+        public bool PaymentType { get; set; } = false;
+        [JsonProperty("amount")]
+        public decimal? Amount { get; set; }
     }
-
 }

@@ -72,7 +72,9 @@ namespace HrManagement.WebApi
              IsActive,
              Status,
              Duration,
-             IsApproved
+             IsApproved,
+             IsExternal,
+             Url
          ) 
         OUTPUT INSERTED.TrainingId
         VALUES (
@@ -88,7 +90,9 @@ namespace HrManagement.WebApi
              @IsActive,
              @Status,
              @Duration,
-            @IsApproved
+            @IsApproved,
+            @IsExternal,
+            @Url
          );
 
          SELECT SCOPE_IDENTITY();";
@@ -432,7 +436,9 @@ namespace HrManagement.WebApi
                         ModifiedById,
                         ModifiedBy,
                         ModifiedDate,
-                        IsActive
+                        IsActive,
+                        PaymentType,
+                        Amount
                     ) VALUES (
                         @Title,
                         @TrainingId,
@@ -447,7 +453,9 @@ namespace HrManagement.WebApi
                         @ModifiedById,
                         @ModifiedBy,
                         @ModifiedDate,
-                        @IsActive
+                        @IsActive,
+                        @PaymentType,
+                        @Amount
                     );
 
                     SELECT SCOPE_IDENTITY();";
@@ -484,7 +492,9 @@ namespace HrManagement.WebApi
                         ModifiedById = @ModifiedById,
                         ModifiedBy = @ModifiedBy,
                         ModifiedDate = @ModifiedDate,
-                        IsActive = @IsActive
+                        IsActive = @IsActive,
+                        PaymentType = @PaymentType,
+                        Amount = @Amount
                         WHERE TrainingsDetailId = @TrainingsDetailId";
 
                         trainingsDetail.ModifiedById = loggedInUserId;
