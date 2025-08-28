@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using HrManagement.Data;
 using HrManagement.Helpers;
+using HrManagement.IRepository;
 using HrManagement.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,16 +20,20 @@ namespace HrManagement.WebApi
 
         private readonly DataContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private ITrainingNotifactionRepository _trainingNotifactionRepository;
 
-        public AssignTrainingAPIController(DataContext context, IWebHostEnvironment webHostEnvironment)
+        public AssignTrainingAPIController(DataContext context, IWebHostEnvironment webHostEnvironment,
+            ITrainingNotifactionRepository trainingNotifactionRepository
+            )
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _trainingNotifactionRepository = trainingNotifactionRepository;
         }
 
 
-        [HttpPost("UpsertAssignTraining")]
-        public async Task<IActionResult> UpsertNewsFeed(AssignTraining news)
+        [HttpPost("AssignTraining")]
+        public async Task<IActionResult> UpsertAssignTraining(AssignTraining assignTraining)
         {
             try
             {
@@ -36,39 +41,38 @@ namespace HrManagement.WebApi
                 var loggedinUserFirstName = HttpContext.Session.GetString("FirstName");
                 var loggedinUserLastName = HttpContext.Session.GetString("LastName");
 
-                if (news != null)
+                if (assignTraining != null)
                 {
-                   
-                        var UpdateQuery = @"UPDATE Trainings SET 
+
+                    var UpdateQuery = @"UPDATE Trainings SET 
                                                  VisibleTo = @VisibleTo
                                                 ,Departments = @Departments
                                                 ,DepartmentsSubCategories = @DepartmentsSubCategories
                                                 ,Employees = @Employees
-                                                ,Sites = @Sites
+                                                ,Sites = @Sites,
+                                                ,AssigneDate = @AssigneDate
                                                  WHERE TrainingId = @RefID;";
+                    assignTraining.IsActive = true;
+                    assignTraining.AssigneDate = DateTime.UtcNow;
+                    using var connection = _context.CreateConnection();
+                    connection.Open();
+                    await connection.ExecuteAsync(UpdateQuery, assignTraining);
+                    connection.Close();
 
-
-                      
-                        news.IsActive = true;
-                        using var connection = _context.CreateConnection();
-                        connection.Open();
-                        await connection.ExecuteAsync(UpdateQuery, news);
-                        connection.Close();
-                        return StatusCode(200, new
-                        {
-                            StatusCode = 200,
-                            //Message = "Site created successfully!",
-                            //Data = new { Id = productId }
-                        });
-                    }
-         
+                    
+                    return StatusCode(200, new
+                    {
+                        StatusCode = 200,
+                        //Message = "Site created successfully!",
+                        //Data = new { Id = productId }
+                    });
+                }
                 else
                 {
                     return StatusCode(500, new
                     {
                         StatusCode = 500
                     });
-
                 }
             }
             catch (Exception ex)

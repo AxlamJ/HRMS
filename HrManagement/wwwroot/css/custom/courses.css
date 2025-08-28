@@ -10,7 +10,6 @@ body {
 .nav-container {
     position: sticky;
     top: 0;
-    z-index: 1030;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: saturate(180%) blur(12px);
     padding: 16px 32px;

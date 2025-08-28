@@ -29,15 +29,17 @@ namespace HrManagement.WebApi
         private readonly Email _email;
         private readonly ITrainingRepository _trainingRepository;
         private readonly IFileUploadService _IfileUploadService;
+        private readonly ITrainingNotifactionRepository _trainingNotifactionRepository;
 
         private readonly IPermissionRepository _permissionRepository;
-        public TrainingsController(DataContext context, Email email, ITrainingRepository trainingRepository, IFileUploadService IfileUploadService, IPermissionRepository permissionRepository)
+        public TrainingsController(DataContext context, Email email, ITrainingRepository trainingRepository, IFileUploadService IfileUploadService, IPermissionRepository permissionRepository, ITrainingNotifactionRepository trainingNotifactionRepository)
         {
             _context = context;
             _email = email;
             _trainingRepository = trainingRepository;
             _IfileUploadService = IfileUploadService;
             _permissionRepository = permissionRepository;
+            _trainingNotifactionRepository = trainingNotifactionRepository;
         }
 
 

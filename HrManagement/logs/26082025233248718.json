@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-26 23:32:48 720",
+  "Message": "String '' was not recognized as a valid DateTime.",
+  "StackTrace": "   at System.DateTime.ParseExact(String s, String format, IFormatProvider provider)\r\n   at HrManagement.WebApi.EmployeeAPIController.AddNewEmployee(Employee employee) in D:\\Projects\\Dotnet Project\\Revital 19-08-2025\\Revital\\revital\\HrManagement\\WebApi\\EmployeeAPIController.cs:line 309",
+  "Source": "System.Private.CoreLib",
+  "InnerException": null
+}

@@ -1,0 +1,7 @@
+{
+  "Timestamp": "2025-08-26 23:43:08 006",
+  "Message": "Value cannot be null. (Parameter 's')",
+  "StackTrace": "   at System.DateTime.ParseExact(String s, String format, IFormatProvider provider)\r\n   at HrManagement.WebApi.EmployeeAPIController.AddNewEmployee(Employee employee) in D:\\Projects\\Dotnet Project\\Revital 19-08-2025\\Revital\\revital\\HrManagement\\WebApi\\EmployeeAPIController.cs:line 309",
+  "Source": "System.Private.CoreLib",
+  "InnerException": null
+}

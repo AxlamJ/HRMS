@@ -26,6 +26,38 @@
         padding-bottom: 50px!important;
     }
 
+    body {
+        background: #f8f9fa;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(15,23,42,0.06);
+    }
+
+    .accordion-button {
+        font-weight: 500;
+    }
+
+    canvas {
+        max-height: 350px;
+        width: 100% !important;
+    }
+
+    table th, table td {
+        font-size: 0.9rem;
+    }
+    .chart-card {
+        min-height: 200px; /* smaller height */
+        max-height: 250px; /* optional max height */
+        padding: 15px;
+    }
+
+    canvas {
+        max-height: 200px; /* limit canvas height */
+        width: 100% !important;
+    }
 </style>
 
 
@@ -54,87 +86,120 @@
         </div>
         <div id="kt_app_content" class="app-content flex-column-fluid mt-4">
             <div id="kt_app_content_container" class="app-container container-fluid">
-                <div class="container-fluid" id="app-content-container-fluid">
+                <div class="container-fluid">
+                    <h2 class="mb-4 text-center">📊 Training Reports Dashboard</h2>
 
-                    <div class="container-fluid">
-                        <div class="row g-3">
-                            <!-- Filters Sidebar -->
-                            <div class="col-lg-3">
-                                <div class="sidebar">
-                                    <h5 class="mb-2">Filters</h5>
-                                    <label class="form-label">Departments</label>
-                                    <select id="deptFilter" multiple style="width:100%"></select>
-                                    <label class="form-label mt-2">Sub-Departments</label>
-                                    <select id="subDeptFilter" multiple style="width:100%"></select>
-                                    <label class="form-label mt-2">Sites</label>
-                                    <select id="siteFilter" multiple style="width:100%"></select>
-                                    <label class="form-label mt-2">Employees</label>
-                                    <select id="empFilter" multiple style="width:100%"></select>
-                                    <label class="form-label mt-2">Trainings</label>
-                                    <select id="trainFilter" multiple style="width:100%"></select>
-                                    <div class="mt-2 d-grid gap-1">
-                                        <button id="applyFilter" class="btn btn-primary btn-custom">Apply</button>
-                                        <button id="clearFilter" class="btn btn-outline-secondary btn-custom">Clear</button>
-                                    </div>
-                                </div>
+                    <!-- Filters -->
+                    <div class="card p-3 mb-4">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-2">
+                                <label class="form-label">Department</label>
+                                <select id="filterDepartment" class="form-select"><option value="">All</option></select>
                             </div>
-
-                            <!-- Charts Area -->
-                            <div class="col-lg-9">
-                                <div class="row g-2">
-                                    <div class="col-6 col-md-6">
-                                        <div class="card-soft position-relative">
-                                            <h6 class="card-title text-center">Employees / Dept</h6>
-                                            <div class="chart-container">
-                                                <canvas id="deptChart"></canvas>
-                                                <div id="deptChartCenter" class="chart-center-text"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-6 col-md-6">
-                                        <div class="card-soft position-relative">
-                                            <h6 class="card-title text-center">Employees / Site</h6>
-                                            <canvas id="siteChart"></canvas>
-                                            <div id="siteChartCenter" class="chart-center-text"></div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-6 col-md-6">
-                                        <div class="card-soft">
-                                            <h6 class="card-title text-center">Training Participation</h6>
-                                            <canvas id="trainingChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-6 col-md-6">
-                                        <div class="card-soft">
-                                            <h6 class="card-title text-center">Training Progress</h6>
-                                            <canvas id="progressChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-12">
-                                        <div class="card-soft">
-                                            <h6 class="card-title text-center">Course Completion</h6>
-                                            <canvas id="courseCompletionChart"></canvas>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-12">
-                                        <div class="card-soft">
-                                            <h6 class="card-title text-center">Quiz Report</h6>
-                                            <canvas id="quizChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                </div>
+                            <div class="col-md-2">
+                                <label class="form-label">SubDepartment</label>
+                                <select id="filterSubDept" class="form-select"><option value="">All</option></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Site</label>
+                                <select id="filterSite" class="form-select"><option value="">All</option></select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Training</label>
+                                <select id="filterTraining" class="form-select"><option value="">All</option></select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Employee</label>
+                                <select id="filterEmployee" class="form-select"><option value="">All</option></select>
                             </div>
                         </div>
                     </div>
-               
-                  
-                
+                    <!-- Top Charts -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="card p-3 chart-card">
+                                <h6 class="mb-2">Training Completion % by Employee</h6>
+                                <canvas id="chartCompletion"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-3 chart-card">
+                                <h6 class="mb-2">Quiz Pass vs Fail per Training</h6>
+                                <canvas id="chartPassFail"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Grouped Charts -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="card p-3 chart-card">
+                                <h6 class="mb-2">Registered Employees by Department</h6>
+                                <canvas id="chartDept"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-3 chart-card">
+                                <h6 class="mb-2">Registered Employees by SubDepartment</h6>
+                                <canvas id="chartSubDept"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="card p-3 chart-card">
+                                <h6 class="mb-2">Registered Employees by Site</h6>
+                                <canvas id="chartSite"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="card p-3 chart-card">
+                                <h6 class="mb-2">Registered Employees by Training</h6>
+                                <canvas id="chartTraining"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ==========================
+                       Detailed Training Report
+                     ========================== -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-primary text-white py-2">
+                            <h6 class="mb-0">📋 Detailed Training Report</h6>
+                        </div>
+                        <div class="card-body p-2">
+                            <div class="table-responsive" style="max-height:400px; overflow-y:auto;">
+                                <table class="table table-striped table-hover table-sm mb-0" id="flatTable">
+                                    <thead class="table-light sticky-top">
+                                        <tr>
+                                            <th>Employee</th>
+                                            <th>Department</th>
+                                            <th>SubDept</th>
+                                            <th>Site</th>
+                                            <th>Training</th>
+                                            <th>Course</th>
+                                       
+                                            <th>Completed</th>
+                                            <th>Quiz Score</th>
+                                            <th>Pass/Fail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detailedTrainingReport">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ==========================
+                         Employee Registration Summary
+                       ========================== -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-success text-white py-2">
+                            <h6 class="mb-0">👥 Employee Registration Summary</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="accordion" id="trainingSummaryAccordion"
+                                 style="max-height:400px; overflow-y:auto; padding-right:10px;">
+                                <!-- Dynamic content goes here -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,10 +224,10 @@
      var DropDownsData = {};
       @if (ViewBag.DropDownData != null)
       {
-                            <text>
-                                 DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
+         <text>
+              DropDownsData = @(Html.Raw(Json.Serialize(ViewBag.DropDownData)))
 
-                            </text>
+         </text>
 
     }
 </script>

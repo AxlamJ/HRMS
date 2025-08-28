@@ -53,16 +53,26 @@ namespace HrManagement.Helpers
             }
             if (queryname == "TrainingStructure")
             {
-                return @"   Select 
-         
-                          t.TrainingId AS TrainingId , 
-                          c.Title AS CourseTitle,
-                          c.Id AS CourseId,
-                          c.Type CourseType
-                          from TrainingStructure t
-                          Inner Join TrainingStructureCategory c on t.TrainingStructureId = c.TrainingStructureId                         
-                          Inner Join Trainings tr on tr.TrainingId = t.TrainingId                         
-                          Where t.Status='1' AND c.Status='1' AND t.IsActive=1 AND c.IsActive=1 AND tr.IsActive=1";
+                return @"Select 
+                t.TrainingStructureId AS SemesterId , 
+                t.Title AS SemesterTitle,
+                tr.TrainingId AS TrainingId,
+                t.Type SemesterType
+                from TrainingStructure t                       
+                Inner Join Trainings tr on tr.TrainingId = t.TrainingId                         
+                Where t.Status='1' AND t.IsActive=1 AND tr.IsActive=1";
+            }
+            if (queryname == "TrainingCategory")
+            {
+                return @"Select 
+                t.TrainingStructureId AS SemesterId, 
+                c.Title AS CourseTitle,
+                c.Id AS CourseId,
+                c.Type CourseType
+                from TrainingStructure t
+                Inner Join TrainingStructureCategory c on t.TrainingStructureId = c.TrainingStructureId                         
+                Inner Join Trainings tr on tr.TrainingId = t.TrainingId                         
+                Where c.Status='1' AND t.Status='1' AND t.IsActive=1 AND c.IsActive=1 AND tr.IsActive=1";
             }
             if (queryname == "UserQuizAttempt")
             {

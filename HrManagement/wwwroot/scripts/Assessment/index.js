@@ -362,16 +362,29 @@ function getTrainingDetail(id) {
             let detail = resp.Data.details[0];
             $("#TrainingInstructorDetails").empty();
             $("#TrainingInstructorDetails").append(`
-                      <div class="col-md-4 bg-light d-flex justify-content-center align-items-center p-4">
+                      <div class="col-md-4 d-flex justify-content-center align-items-center p-4">
                           <img id="ProductLogoImage" src="https://via.placeholder.com/120" class="img-fluid rounded-circle border border-3" alt="Instructor Logo" style="width:120px;height:120px; object-fit:cover;">
                       </div>
                       <div class="col-md-8">
-                          <div class="card-body py-4 px-3">
-                              <h5 class="card-title text-primary fw-bold mb-2">${detail.instructorHeading}</h5>
-                              <p class="mb-1"><i class="bi bi-person-fill text-muted me-2"></i><strong>Name:</strong>${detail.instructorName}</p>
-                              <p class="mb-1"><i class="bi bi-briefcase-fill text-muted me-2"></i><strong>Title:</strong> ${detail.instructorTitle}</p>
-                              <p class="mb-0"><i class="bi bi-journal-text text-muted me-2"></i><strong>Bio:</strong> ${detail.instructorBio}.</p>
-                          </div>
+                         <div class="card-body py-4 px-3" style="font-size: 18px;">
+    <h6 class="card-title text-primary fw-bold mb-2 pb-3" style="font-size: 1.5rem;">
+        ${detail.instructorHeading}
+    </h6>
+    <p class="mb-1 p-2" style="font-size: 1.2rem;">
+        <i class="bi bi-person-fill text-muted"></i>
+        <strong class="m-1">Name:</strong>
+        <span class="m-1">${detail.instructorName}</span>
+    </p>
+    <p class="mb-1 p-2" style="font-size: 1.2rem;">
+        <i class="bi bi-briefcase-fill text-muted me-2"></i>
+        <strong>Title:</strong> ${detail.instructorTitle}
+    </p>
+    <p class="mb-0 p-2" style="font-size: 1.2rem;">
+        <i class="bi bi-journal-text text-muted me-2"></i>
+        <strong>Bio:</strong> ${detail.instructorBio}.
+    </p>
+</div>
+
                       </div>
 
             `)

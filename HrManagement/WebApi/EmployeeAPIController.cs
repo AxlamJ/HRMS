@@ -306,9 +306,12 @@ namespace HrManagement.WebApi
                         //var _employeedata = await connection.QueryFirstOrDefaultAsync<Employee>(_employeequery, _params);
 
                         var ___employeequery = "Select * from Employee Where DOB = @DOB OR EmployeeCode = @EmployeeCode";
-                        var DOB = DateTime.ParseExact(employee.DOB, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
-                        var ___params = new { EmployeeCode = employee.EmployeeCode, DOB = DOB };
-                        var ___employeedata = await connection.QueryFirstOrDefaultAsync<Employee>(___employeequery, ___params);
+                       // var DOB = DateTime.ParseExact(employee.DOB, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                       
+                       // var ___params = new { EmployeeCode = employee.EmployeeCode, DOB = DOB };
+                       
+                        //var ___employeedata = await connection.QueryFirstOrDefaultAsync<Employee>(___employeequery, ___params);
+                       
                         connection.Close();
 
                         if (employeedata != null)
@@ -333,17 +336,17 @@ namespace HrManagement.WebApi
                         //    });
 
                         //}
-                        else if (___employeedata != null)
-                        {
-                            return StatusCode(409, new
-                            {
-                                StatusCode = 409,
-                                Message = "Employee with same details already exists in the system."
-                                //Message = "Site created successfully!",
-                                //Data = new { Id = productId }
-                            });
+                        //else if (___employeedata != null)
+                        //{
+                        //    return StatusCode(409, new
+                        //    {
+                        //        StatusCode = 409,
+                        //        Message = "Employee with same details already exists in the system."
+                        //        //Message = "Site created successfully!",
+                        //        //Data = new { Id = productId }
+                        //    });
 
-                        }
+                        //}
                         else
                         {
                             var InsertQuery = @"
@@ -409,8 +412,26 @@ namespace HrManagement.WebApi
 
                                             SELECT EmployeeCode FROM Employee Where Id = (SELECT CAST(SCOPE_IDENTITY() as int))";
 
-                            employee.DOB = DateTime.ParseExact(employee.DOB, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
-
+                            if (!string.IsNullOrWhiteSpace(employee.DOB))
+                            {
+                                if (DateTime.TryParseExact(
+                                    employee.DOB,
+                                    "dd/MM/yyyy",
+                                    CultureInfo.InvariantCulture,
+                                    DateTimeStyles.None,
+                                    out DateTime parsedDOB))
+                                {
+                                    employee.DOB = parsedDOB.ToString("yyyy-MM-dd");
+                                }
+                                else
+                                {
+                                    employee.DOB = null;
+                                }
+                            }
+                            else
+                            {
+                                employee.DOB = null;
+                            }
                             if (!string.IsNullOrEmpty(employee.HiringDate))
                             {
                                 employee.HiringDate = DateTime.ParseExact(employee.HiringDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
@@ -921,6 +942,24 @@ namespace HrManagement.WebApi
                     using var connection = _context.CreateConnection();
                     connection.Open();
                     await connection.ExecuteAsync(UpdateQuery, employee);
+                    connection.Close();
+
+                    string query = "SELECT EmployeeCode FROM Employee WHERE Id = @Id";
+
+                    var employeeCode = await connection.QuerySingleAsync<int>(query, new { Id = employee.Id });
+                    employee.EmployeeCode = employeeCode;
+
+
+                    var UserUpdateUserQuery = @"
+                                UPDATE Users SET
+                                    UserRoles = @UserRoles,       
+                                    ModifiedById = @ModifiedById,
+                                    ModifiedBy = @ModifiedBy,
+                                    ModifiedDate = @ModifiedDate
+                                WHERE EmployeeCode = @EmployeeCode;
+                            ";
+
+                    int rowsAffected= await connection.ExecuteAsync(UserUpdateUserQuery, employee);
                     connection.Close();
 
                     await SendProfileUpdateEmail(employee.EmployeeCode.ToString());
@@ -2720,7 +2759,7 @@ namespace HrManagement.WebApi
             List<Notifications> notif = new List<Notifications>();
             try
             {
-                var Query = @"Select * from Notifications Where EmployeeCode = @EmployeeCode and IsActive = 1";
+                var Query = @"Select * from Notifications Where EmployeeCode = @EmployeeCode and IsActive = 1 ORDER BY CreatedDate DESC";
 
                 var user = new { EmployeeCode = EmployeeCode };
                 using var connection = _context.CreateConnection();

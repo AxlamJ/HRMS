@@ -1,1589 +1,481 @@
-﻿const reportData = DropDownsData;
+﻿
+function getRegisteredEmployeesByTraining(flatRows) {
+    const result = {};
 
+    flatRows.forEach(r => {
+        const key = `${r.Training} (ID: ${r.TrainingId})`;
+        if (!result[key]) result[key] = new Set();
+        result[key].add(r.EmployeeId); // EmployeeId is unique per employee
+    });
 
-
-console.log(reportData);
-
-function getEmployeeCountByDept(employees, departments) {
-
-
-
-    console.log(employees);
-
-    const counts = departments.map(d => {
-
-        const depId = d.DepartmentId;
-
-        const count = employees.filter(emp => {
-
-            try {
-
-                console.log(emp);
-
-                const deps = JSON.parse(emp.DepartmentName);
-
-                return deps.some(dp => dp.id === depId);
-
-            } catch (err) {
-
-                console.error("Error occurred:", err);
-
-                return false;
-
-            }
-
-        }).length;
-
-        return { label: d.DepartmentName, count };
-
-    }).filter(c => c.count > 0);
-
-    return counts;
-
-}
-
-function getEmployeeCountBySite(employees, sites) {
-
-    const counts = sites.map(s => {
-
-        const siteId = s.Id;
-
-        const count = employees.filter(emp => {
-
-            try {
-
-                const sitesEmp = JSON.parse(emp.SiteName);
-
-                return sitesEmp.some(st => st.id === siteId);
-
-            } catch (err) {
-
-                console.error("Error occurred:", err);
-
-                return false;
-
-            }
-
-        }).length;
-
-        return { label: s.SiteName, count };
-
-    }).filter(c => c.count > 0);
-
-    return counts;
-
+    return Object.entries(result).map(([trainingLabel, empSet]) => ({
+        Training: trainingLabel,
+        RegisteredEmployees: empSet.size
+    }));
 }
 
 
-
-// 1. Prepare the data
-
-function getTrainingParticipation(trainings, courses, employees, courseProgress) {
-
-
-
-    console.log(trainings);
-
-    console.log(courses);
-
-    console.log(employees);
-
-    console.log(courseProgress);
-
-
-
-    try {
-
-        return trainings.map(training => {
-
-            let assignedEmpIds = new Set();
-
-
-
-            // Parse Employees array if exists
-
-            try {
-
-                if (training.Employees) {
-
-
-
-                    console.log(training.Employees);
-
-
-
-                    const empIds = JSON.parse(training.Employees);
-
-                    empIds.forEach(id => assignedEmpIds.add(parseInt(id)));
-
-
-
-                    console.log(empIds);
-
-                }
-
-            } catch (err) {
-
-                console.error("Error parsing Employees for training:", training.TrainingTitle, err);
-
-            }
-
-
-
-            // Parse Departments if exists and assign employees accordingly
-
-            try {
-
-                if (training.Departments) {
-
-                    const deps = JSON.parse(training.Departments);
-
-                    const depIds = deps.map(d => d.DepartmentId);
-
-
-
-                    employees.forEach(emp => {
-
-                        try {
-
-                            if (emp.DepartmentName) {
-
-                                const empDeps = JSON.parse(emp.DepartmentName);
-
-                                if (empDeps.some(dep => depIds.includes(dep.DepartmentId))) {
-
-                                    assignedEmpIds.add(emp.Id);
-
-                                }
-
-                            }
-
-                        } catch (err) {
-
-                            console.error("Error parsing Employee.DepartmentName for empId:", emp.Id, err);
-
-                        }
-
-                    });
-
-                }
-
-            } catch (err) {
-
-                console.error("Error parsing Departments for training:", training.TrainingTitle, err);
-
-            }
-
-
-
-            // Parse Sites if exists and assign employees accordingly
-
-            try {
-
-                if (training.Sites) {
-
-                    const sites = JSON.parse(training.Sites);
-
-                    const siteIds = sites.map(s => s.Id);
-
-
-
-                    employees.forEach(emp => {
-
-                        try {
-
-                            if (emp.SiteName) {
-
-                                const empSites = JSON.parse(emp.SiteName);
-
-                                if (empSites.some(site => siteIds.includes(site.Id))) {
-
-                                    assignedEmpIds.add(emp.Id);
-
-                                }
-
-                            }
-
-                        } catch (err) {
-
-                            console.error("Error parsing Employee.SiteName for empId:", emp.Id, err);
-
-                        }
-
-                    });
-
-                }
-
-            } catch (err) {
-
-                console.error("Error parsing Sites for training:", training.TrainingTitle, err);
-
-            }
-
-
-
-            // Filter courses belonging to this training
-
-            let trainingCourses = [];
-
-            try {
-
-                trainingCourses = courses.filter(c => c.TrainingId === training.TrainingId);
-
-            } catch (err) {
-
-                console.error("Error filtering courses for training:", training.TrainingTitle, err);
-
-            }
-
-
-
-            // Extract course IDs
-
-            let courseIds = [];
-
-            try {
-
-                courseIds = trainingCourses.map(c => c.CourseId);
-
-            } catch (err) {
-
-                console.error("Error mapping courseIds for training:", training.TrainingTitle, err);
-
-            }
-
-
-
-            // Find relevant progress entries matching courses and assigned employees
-
-            let relevantProgress = [];
-
-            try {
-
-                relevantProgress = courseProgress.filter(p =>
-
-                    courseIds.includes(p.CourseId) && assignedEmpIds.has(p.EmployeeId)
-
+function isEmployeeEligibleForTraining(emp, training) {
+    // Parse Employees array from training, map to numbers
+    const empCodes = parseJsonArraySafe(training.Employees).map(Number);
+
+    if (empCodes.length > 0) {
+        // Check if employee's EmployeeCode matches any in training employees list
+        return empCodes.includes(emp.EmployeeCode);
+    }
+
+    // Existing Department and Site filtering logic remains
+    const deptIds = parseJsonArraySafe(training.Departments).map(String);
+    const empDeptIds = parseJsonArraySafe(emp.DepartmentName).map(d => String(d.id));
+    if (deptIds.length > 0 && !empDeptIds.some(d => deptIds.includes(d))) {
+        return false;
+    }
+
+    const siteIds = parseJsonArraySafe(training.Sites).map(String);
+    const empSiteIds = parseJsonArraySafe(emp.SiteName).map(s => String(s.id));
+    if (siteIds.length > 0 && !empSiteIds.some(s => siteIds.includes(s))) {
+        return false;
+    }
+
+    return true; // open if no restrictions
+}
+
+
+/* ==========================
+   JSON Flattening
+   ========================== */
+function getFlattenedReport(json) {
+    const safeArray = arr => Array.isArray(arr) ? arr : [];
+    const flatRows = [];
+    const coursesProgressArray = safeArray(json.CoursesProgress);
+
+    safeArray(json.Trainings).forEach(t => {
+        console.log('Training:', t.TrainingTitle);
+
+        const trainingTitle = t?.TrainingTitle || "";
+        const semesters = safeArray(json.Semester).filter(s => String(s?.TrainingId) === String(t?.TrainingId));
+        console.log(semesters);
+
+        const courses = safeArray(json.Courses).filter(c => semesters.some(s => s.SemesterId == c.SemesterId));
+        console.log(courses);
+        if (courses.length === 0) {
+            console.warn(`No courses found for training ${trainingTitle}`);
+        }
+
+        safeArray(json.Employees).forEach(emp => {
+            const eligible = isEmployeeEligibleForTraining(emp, t);
+            console.log(`Employee ${emp.FirstName} ${emp.LastName} eligible for ${trainingTitle}:`, eligible);
+
+            if (!eligible) return;
+
+            courses.forEach(c => {
+                // Find progress entry matching employee code and course id
+                const progress = coursesProgressArray.find(progress =>
+                    progress.EmployeeId === emp.EmployeeCode && progress.CourseId === c.CourseId
                 );
 
-            } catch (err) {
+                flatRows.push({
+                    EmployeeId: emp.EmployeeCode || null,    // EmployeeCode as unique Id
+                    EmployeeName: (emp?.FirstName || "") + " " + (emp?.LastName || ""),
+                    Department: parseJsonArraySafe(emp.DepartmentName).map(d => d.name).join(", ") || "",
+                    SubDept: parseJsonArraySafe(emp.DepartmentSubCategoryName).map(s => s.name).join(", ") || "",
+                    Site: parseJsonArraySafe(emp.SiteName).map(s => s.name).join(", ") || "",
+                    TrainingId: t?.TrainingId || null, // <--- Add this
+                    Training: trainingTitle,
+                    Course: c?.CourseTitle || "",
+                    CourseType: c?.CourseType,
+                    IsCompleted: progress ? progress.IsCompleted : false,
+                    QuizScore: progress && progress.QuizScore ? progress.QuizScore : '-',
+                    PassFail: progress && progress.PassFail ? progress.PassFail : '-'
+                });
+            });
+        });
+    });
 
-                console.error("Error filtering courseProgress for training:", training.TrainingTitle, err);
-
-            }
-
-
-
-            // Calculate totals safely
-
-            let totalAssigned = 0, totalCompleted = 0, inProgress = 0;
-
-            try {
-
-                totalAssigned = new Set(relevantProgress.map(p => `${p.EmployeeId}-${p.CourseId}`)).size;
-
-                totalCompleted = relevantProgress.filter(p => p.IsCompleted).length;
-
-                inProgress = totalAssigned - totalCompleted;
-
-            } catch (err) {
-
-                console.error("Error calculating progress counts for training:", training.TrainingTitle, err);
-
-            }
+    console.log('Generated flatRows:', flatRows.length);
+    return flatRows;
+}
 
 
-
-            return {
-
-                label: training.TrainingTitle,
-
-                Assigned: totalAssigned,
-
-                Completed: totalCompleted,
-
-                'In Progress': inProgress
-
-            };
-
-        }).filter(t => t.Assigned > 0);
-
-    } catch (err) {
-
-        console.error("Unexpected error in getTrainingParticipation:", err);
-
+function parseJsonArraySafe(str) {
+    if (!str) return [];
+    try {
+        return JSON.parse(str);
+    } catch {
         return [];
-
     }
-
 }
 
-
-
-function getTrainingProgress(courses, employees, coursesProgress) {
-
-    // Calculate % progress for courses linked to selected employees
-
-    const courseIds = courses.map(c => c.CourseId);
-
-    const empIds = employees.map(e => e.EmployeeCode);
-
-    console.log(empIds);
-
-
-
-    // Filter progress for these employees and courses
-
-
-
-    console.log(coursesProgress);
-
-    const filteredProgress = coursesProgress.filter(p =>
-
-        empIds.includes(p.EmployeeId) && courseIds.includes(p.CourseId)
-
-    );
-
-
-
-    if (filteredProgress.length === 0) return 0;
-
-
-
-    const completedCount = filteredProgress.filter(p => p.IsCompleted).length;
-
-    return Math.round((completedCount / filteredProgress.length) * 100);
-
+function getEmployeeDepartments(emp) {
+    return parseJsonArraySafe(emp.DepartmentName).map(d => d.name.trim());
 }
 
-
-
-function getCourseCompletionDetailed(courses, employees, coursesProgress) {
-
-    const courseLabels = courses.map(c => c.CourseTitle);
-
-
-
-    // For each employee, create a dataset showing completion (1 or 0) per course
-
-    const datasets = employees.map((emp, idx) => {
-
-        const data = courses.map(course => {
-
-            const progress = coursesProgress.find(p =>
-
-                p.EmployeeId === emp.EmployeeCode && p.CourseId === course.CourseId
-
-            );
-
-            return progress && progress.IsCompleted ? 1 : 0;
-
-        });
-
-
-
-        // Colors - reuse or extend your existing palette
-
-        const colors = [
-
-            '#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14', '#20c997', '#6610f2'
-
-        ];
-
-
-
-        return {
-
-            label: emp.FirstName + ' ' + emp.LastName,
-
-            data,
-
-            backgroundColor: colors[idx % colors.length],
-
-            borderColor: colors[idx % colors.length],
-
-            borderWidth: 1,
-
-            barThickness: 10  // Fix bar thickness here for this dataset
-
-        };
-
-    });
-
-
-
-    return { labels: courseLabels, datasets };
-
+function getEmployeeSubDepts(emp) {
+    return parseJsonArraySafe(emp.DepartmentSubCategoryName).map(d => d.name.trim());
 }
 
-
-
-let courseCompletionChart = null;
-
-function updateCourseCompletionChartDetailed(data) {
-
-    const ctx = document.getElementById('courseCompletionChart').getContext('2d');
-
-    if (courseCompletionChart) courseCompletionChart.destroy();
-
-
-
-    if (!data || !data.datasets.length) {
-
-        courseCompletionChart = new Chart(ctx, {
-
-            type: 'bar',
-
-            data: { labels: [], datasets: [] },
-
-            options: {
-
-                plugins: {
-
-                    legend: { display: false },
-
-                    tooltip: { enabled: false }
-
-                }
-
-            }
-
-        });
-
-        return;
-
-    }
-
-
-
-    courseCompletionChart = new Chart(ctx, {
-
-        type: 'bar',
-
-        data,
-
-        options: {
-
-            responsive: true,
-
-
-
-
-
-            scales: {
-
-                x: { stacked: true },
-
-                y: {
-
-                    beginAtZero: true,
-
-                    max: 1,
-
-                    ticks: {
-
-                        stepSize: 1,
-
-                        callback: val => (val === 1 ? 'Completed' : 'Not Completed')
-
-                    },
-
-                    title: { display: true, text: 'Completion Status' }
-
-                }
-
-            },
-
-            plugins: {
-
-                legend: {
-
-                    display: false,               // Show legend
-
-                    position: 'bottom',          // Position at bottom
-
-                    labels: { boxWidth: 12 }
-
-                },
-
-                tooltip: {
-
-                    enabled: true,
-
-                    mode: 'nearest',            // Show tooltip for nearest data point
-
-                    intersect: true,
-
-                    callbacks: {
-
-                        label: function (ctx) {
-
-                            const label = ctx.dataset.label || 'Unknown Employee';
-
-                            const val = ctx.parsed.y === 1 ? 'Completed' : 'Not Completed';
-
-                            return `${label}: ${val}`;
-
-                        },
-
-                        title: function (ctx) {
-
-                            return ctx[0]?.label || '';  // Course title as tooltip title
-
-                        }
-
-                    }
-
-                },
-
-                datalabels: {
-
-                    anchor: 'end',
-
-                    align: 'top',
-
-                    color: '#333',
-
-                    font: { weight: '600' },
-
-                    formatter: val => (val === 1 ? '✔' : '')
-
-                }
-
-            }
-
-        },
-
-        plugins: [ChartDataLabels]
-
-    });
-
+function getEmployeeSites(emp) {
+    return parseJsonArraySafe(emp.SiteName).map(d => d.name.trim());
 }
-
-
-
-function getQuizReportDetailed(trainings, employees, courses, coursesQuizResult) {
-
-    // Filter quiz courses in selected trainings
-
-    const trainingIds = trainings.map(t => t.TrainingId);
-
-    const employeeIds = employees.map(e => e.EmployeeCode);
-
-
-
-    const quizCourses = courses.filter(c =>
-
-        trainingIds.includes(c.TrainingId) && c.CourseType.toLowerCase() === '3'
-
-    );
-
-
-
-    if (quizCourses.length === 0) return null;
-
-
-
-    const quizLabels = quizCourses.map(qc => qc.CourseTitle);
-
-
-
-    // For each employee, get their scores for each quiz (0 if no score)
-
-    const datasets = employees.map((emp, idx) => {
-
-        const data = quizCourses.map(quiz => {
-
-            const result = coursesQuizResult.find(r =>
-
-                r.EmployeeId === emp.EmployeeCode && r.CourseId === quiz.CourseId
-
-            );
-
-
-
-            console.log(result);
-
-            return result ? result.SecureScore : 0
-
-
-
-        });
-
-
-
-        // Generate a color for each employee, simple distinct colors
-
-        const colors = [
-
-            '#dc3545', '#6f42c1', '#fd7e14', '#20c997', '#6610f2', '#0d6efd', '#198754', '#ffc107',
-
-        ];
-
-        return {
-
-            label: emp.FirstName + ' ' + emp.LastName,
-
-            data,
-
-            backgroundColor: colors[idx % colors.length],
-
-            borderColor: colors[idx % colors.length],
-
-            borderWidth: 1,
-
-            barThickness: 10  // Fix bar thickness here for this dataset
-
-        };
-
-    });
-
-
-
-    return { labels: quizLabels, datasets };
-
-}
-
-function updateQuizChartDetailed(data) {
-
-    console.log(data);
-
-    const ctx = document.getElementById('quizChart').getContext('2d');
-
-    if (quizChart) quizChart.destroy();
-
-
-
-    if (!data) {
-
-        // No quiz data, show empty chart or message
-
-        quizChart = new Chart(ctx, {
-
-            type: 'bar',
-
-            data: { labels: [], datasets: [] },
-
-            options: {
-
-                plugins: {
-
-                    legend: { display: false },
-
-                    tooltip: { enabled: false }
-
-                }
-
-            }
-
-        });
-
-        return;
-
-    }
-
-
-
-    quizChart = new Chart(ctx, {
-
-        type: 'bar',
-
-        data,
-
-        options: {
-
-            responsive: true,
-
-            scales: {
-
-                x: { stacked: false, barThickness: 10 },
-
-                y: {
-
-                    beginAtZero: true,
-
-                    max: 100,
-
-                    title: { display: true, text: 'Score (%)' },
-
-                    ticks: { stepSize: 10 }
-
-                }
-
-            },
-
-            plugins: {
-
-                legend: {
-
-                    display: false,
-
-                    position: 'bottom',
-
-                    labels: { boxWidth: 12 }
-
-                },
-
-                tooltip: {
-
-                    enabled: true,
-
-                    mode: 'nearest',
-
-                    intersect: true,
-
-                    callbacks: {
-
-                        label: function (ctx) {
-
-                            const label = ctx.dataset.label || 'Unknown Employee';
-
-                            const value = ctx.parsed.y ?? 0;
-
-                            return `${label}: ${value}`;
-
-                        },
-
-                        title: function (ctx) {
-
-                            return ctx[0]?.label || '';
-
-                        }
-
-                    }
-
-                },
-
-                datalabels: {
-
-                    anchor: 'end',
-
-                    align: 'top',
-
-                    color: '#333',
-
-                    font: { weight: '600' },
-
-                    formatter: val => (val > 0 ? val : '')
-
-                }
-
-            }
-
-
-
-
-
-        },
-
-        plugins: [ChartDataLabels]
-
-    });
-
-}
-
-
-
-// Chart instances to update later
-
-let deptChart, siteChart, trainingChart, progressChart, structureChart, quizChart;
-
-function createDonutChart(ctx, labels, data, colors, centerCount = '', centerLabel = '') {
-
-
-
-    console.log(data);
-
-
-
-    if (!ctx) return;
-
-
-
-    return new Chart(ctx, {
-
-        type: 'doughnut',
-
-        data: {
-
-            labels,
-
-            datasets: [{
-
-                data,
-
-                backgroundColor: colors,
-
-                borderWidth: 0
-
-            }]
-
-        },
-
-        options: {
-
-            cutout: '70%',
-
-            plugins: {
-
-                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
-
-                tooltip: { enabled: true },
-
-                title: { display: false },
-
-                datalabels: { display: false }
-
-            }
-
-        },
-
-        plugins: [{
-
-            id: 'centerCountPlugin',
-
-            afterDraw(chart) {
-
-                const { ctx, chartArea: { width, height } } = chart;
-
-                ctx.save();
-
-
-
-                // Draw count (larger)
-
-                ctx.font = 'bold 24px Arial';
-
-                ctx.fillStyle = '#000';
-
-                ctx.textAlign = 'center';
-
-                ctx.textBaseline = 'middle';
-
-                ctx.fillText(centerCount, width / 2, height / 2 - 10);
-
-
-
-                // Draw label (smaller)
-
-                if (centerLabel) {
-
-                    ctx.font = '14px Arial';
-
-                    ctx.fillStyle = '#666';
-
-                    ctx.fillText(centerLabel, width / 2, height / 2 + 15);
-
-                }
-
-
-
-                ctx.restore();
-
-            }
-
-        }]
-
-    });
-
-}
-
-function createBarChart(ctx, labels, data, colors = [], chartTitle = '', barThickness = 25) {
-
-    if (!ctx) return;
-
-    return new Chart(ctx, {
-
-        type: 'bar',
-
-        data: {
-
-            labels,
-
-            datasets: [{
-
-                label: chartTitle || 'Count',
-
-                data,
-
-                backgroundColor: colors.length === data.length ? colors : '#0d6efd',
-
-                borderRadius: 0,           // Remove rounded corners for thin line look
-
-                borderSkipped: false,
-
-                barThickness: barThickness // Set bar width (4px by default, you can pass smaller value)
-
-            }]
-
-        },
-
-        options: {
-
-            indexAxis: 'x',
-
-            responsive: true,
-
-            plugins: {
-
-                title: {
-
-                    display: !!chartTitle,
-
-                    text: chartTitle,
-
-                    font: { size: 18, weight: 'bold' },
-
-                    padding: { bottom: 20 }
-
-                },
-
-                legend: { display: false },
-
-                tooltip: { enabled: true },
-
-                datalabels: {
-
-                    anchor: 'end',  // top of the bar
-
-                    align: 'top',   // label above the bar
-
-                    color: '#333',
-
-                    font: { weight: '600' },
-
-                    formatter: val => val
-
-                }
-
-            },
-
-            scales: {
-
-                x: {
-
-                    beginAtZero: true,
-
-                    grid: { color: '#eee' },
-
-                    ticks: { stepSize: 1 },
-
-                    offset: false,  // disables padding before first tick
-
-                },
-
-                y: {
-
-                    beginAtZero: true,
-
-                    grid: { color: '#eee' },
-
-                    ticks: { stepSize: 1 }
-
-                }
-
-            }
-
-        },
-
-        plugins: [ChartDataLabels]
-
-    });
-
-}
-
-function updateDeptChart(data) {
-
-    const ctx = document.getElementById('deptChart').getContext('2d');
-
-    if (deptChart) deptChart.destroy();
-
-
-
-    const labels = data.map(d => d.label);
-
-    const counts = data.map(d => d.count);
-
-    deptChart = createDonutChart(ctx, labels, counts, ['#0d6efd', '#6c757d', '#ffc107', '#198754'], '');
-
-
-
-    // Show total in center
-
-    const centerDiv = document.getElementById('deptChartCenter');
-
-    centerDiv.textContent = counts.reduce((a, b) => a + b, 0);
-
-}
-
-function updateSiteChart(data) {
-
-    const ctx = document.getElementById('siteChart').getContext('2d');
-
-    if (siteChart) siteChart.destroy();
-
-
-
-    const labels = data.map(d => d.label);
-
-    const counts = data.map(d => d.count);
-
-    const colors = ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#fd7e14']; // extend as needed
-
-
-
-    siteChart = createDonutChart(ctx, labels, counts, colors, '');
-
-
-
-    const centerDiv = document.getElementById('siteChartCenter');
-
-    if (centerDiv) {
-
-        centerDiv.textContent = counts.reduce((a, b) => a + b, 0);
-
-        centerDiv.style.display = 'block'; // or 'none' if you want to hide outside count
-
-    }
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function updateTrainingChart(trainingData, canvasId) {
-
-    const labels = trainingData.map(t => t.label);
-
-    const assignedCounts = trainingData.map(t => t.Assigned);
-
-    const completedCounts = trainingData.map(t => t.Completed);
-
-    const inProgressCounts = trainingData.map(t => t['In Progress']);
-
-
-
-    const ctx = document.getElementById(canvasId).getContext('2d');
-
-
-
-    // Destroy previous chart instance if exists to avoid overlap
-
-    if (trainingChart) {
-
-        trainingChart.destroy();
-
-    }
-
-
-
-    trainingChart = new Chart(ctx, {
-
-        type: 'bar',
-
-        data: {
-
-            labels: labels,
-
-            datasets: [
-
-                {
-
-                    label: 'Assigned',
-
-                    data: assignedCounts,
-
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)'
-
-                },
-
-                {
-
-                    label: 'Completed',
-
-                    data: completedCounts,
-
-                    backgroundColor: 'rgba(75, 192, 192, 0.7)'
-
-                },
-
-                {
-
-                    label: 'In Progress',
-
-                    data: inProgressCounts,
-
-                    backgroundColor: 'rgba(255, 206, 86, 0.7)'
-
-                }
-
-            ]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            scales: {
-
-                y: {
-
-                    beginAtZero: true,
-
-                    precision: 0 // to show integer ticks
-
-                }
-
-            }
-
-        }
-
-    });
-
-}
-
-
-
-function updateProgressChart(percent) {
-
-    const ctx = document.getElementById('progressChart').getContext('2d');
-
-    if (progressChart) progressChart.destroy();
-
-
-
-    const data = [percent, 100 - percent];
-
-    progressChart = createDonutChart(ctx, ['Completed', 'Remaining'], data, ['#198754', '#dee2e6']);
-
-}
-
-function updateStructureChart(data) {
-
-    const ctx = document.getElementById('structureChart').getContext('2d');
-
-    if (structureChart) structureChart.destroy();
-
-
-
-    const labels = data.map(d => d.type);
-
-    const percentages = data.map(d => d.percentage);
-
-
-
-    // Color palette for course types bars
-
-    const colors = [
-
-        '#198754', // green
-
-        '#0d6efd', // blue
-
-        '#ffc107', // yellow
-
-        '#dc3545', // red
-
-        '#6f42c1', // purple
-
-        '#fd7e14'  // orange
-
+/* ==========================
+   Filters & Rendering
+   ========================== */
+function populateFilters(rows, jsonData) {
+    const uniqueValues = (arr) => [...new Set(arr.map(s => s.trim()))].filter(Boolean);
+
+    // Departments from JSON + employee rows
+    const allDepartments = [
+        ...jsonData.Departments.map(d => d.DepartmentName),
+        ...rows.flatMap(r => r.Department.split(',').map(s => s.trim()))
     ];
 
-
-
-    structureChart = createBarChart(ctx, labels, percentages, colors, 'Course Completion');
-
-}
-
-function updateQuizChart(avgScore) {
-
-    const ctx = document.getElementById('quizChart').getContext('2d');
-
-    if (quizChart) quizChart.destroy();
+    const allSubDepts = rows.flatMap(r => r.SubDept.split(',').map(s => s.trim()));
+    const allSites = rows.flatMap(r => r.Site.split(',').map(s => s.trim()));
+    const allTrainings = uniqueValues(
+        rows.map(r => `${r.Training} (ID: ${r.TrainingId})`)
+    ).sort();
 
 
 
-    const data = [avgScore, 100 - avgScore];
+    // Employees: include all from JSON
+    const allEmployees = [
+        ...jsonData.Employees.map(e => `${e.FirstName} ${e.LastName}`),
+        ...rows.map(r => r.EmployeeName)
+    ];
 
-    quizChart = createDonutChart(ctx, ['Average Score', 'Remaining'], data, ['#ffc107', '#dee2e6']);
+    const fillSelect = (selId, arr) => {
+        const sel = $(selId).empty().append('<option value="">All</option>');
+        uniqueValues(arr).forEach(v => sel.append(`<option value="${v}">${v}</option>`));
+    };
 
-}
-
-
-
-function initSelect2() {
-
-    // Extract unique values for filters
-
-    const departments = reportData.Departments.map(d => ({ id: d.DepartmentId, text: d.DepartmentName }));
-
-    const subDepts = reportData.DepartmentSubCategories.map(s => ({ id: s.Id, text: s.SubCategoryName }));
-
-    const sites = reportData.Sites.map(s => ({ id: s.Id, text: s.SiteName }));
-
-    const employees = reportData.Employees.map(e => ({ id: e.EmployeeCode, text: e.FirstName + " " + e.LastName }));
-
-    const trainings = reportData.Trainings.map(t => ({ id: t.TrainingId, text: t.TrainingTitle }));
-
-
-
-    $('#deptFilter').select2({ data: departments, theme: 'bootstrap-5', placeholder: 'Select Departments' });
-
-    $('#subDeptFilter').select2({ data: subDepts, theme: 'bootstrap-5', placeholder: 'Select Sub-Departments' });
-
-    $('#siteFilter').select2({ data: sites, theme: 'bootstrap-5', placeholder: 'Select Sites' });
-
-    $('#empFilter').select2({ data: employees, theme: 'bootstrap-5', placeholder: 'Select Employees' });
-
-    $('#trainFilter').select2({ data: trainings, theme: 'bootstrap-5', placeholder: 'Select Trainings' });
-
+    fillSelect('#filterDepartment', allDepartments);
+    fillSelect('#filterSubDept', allSubDepts);
+    fillSelect('#filterSite', allSites);
+    fillSelect('#filterTraining', allTrainings);
+    fillSelect('#filterEmployee', allEmployees);
 }
 
 
 
-function applyFilters() {
 
-    const selectedDept = $('#deptFilter').val() || [];
+function renderFlatTable(rows) {
+    const $tb = $('#flatTable tbody').empty();
+    rows.forEach(r => {
 
-    const selectedSubDept = $('#subDeptFilter').val() || [];
+        // ===== Course Type Icon =====
+        let courseIcon = '';
+        if (r.CourseType === '1') courseIcon = '<i class="bi bi-camera-video-fill text-primary"></i>'; // Video
+        else if (r.CourseType === '2') courseIcon = '<i class="bi bi-journal-text text-info"></i>'; // Lesson
+        else if (r.CourseType === '3') courseIcon = '<i class="bi bi-clipboard-check-fill text-warning"></i>'; // Quiz
+        else courseIcon = '<i class="bi bi-question-circle-fill text-secondary"></i>';
 
-    const selectedSites = $('#siteFilter').val() || [];
-
-    const selectedEmp = $('#empFilter').val() || [];
-
-    const selectedTrain = $('#trainFilter').val() || [];
-
-
-
-    // Step 1: Filter trainings
-
-    const filteredTrainings = reportData.Trainings.filter(tr => {
-
-        if (selectedTrain.length > 0 && !selectedTrain.includes(tr.TrainingId)) return false;
-
-
-
-        console.log(tr);
-
-        try {
-
-            if (tr.Departments) {
-
-
-
-                const deps = JSON.parse(tr.Departments).map(d => d.toString());
-
-                if (selectedDept.length > 0 && !deps.some(d => selectedDept.includes(d))) return false;
-
-            }
-
-            if (tr.Sites) {
-
-                const st = JSON.parse(tr.Sites).map(s => s.toString());
-
-                if (selectedSites.length > 0 && !st.some(s => selectedSites.includes(s))) return false;
-
-            }
-
-            if (tr.Employees) {
-
-                const emps = JSON.parse(tr.Employees).map(e => e.toString());
-
-                if (selectedEmp.length > 0 && !emps.some(e => selectedEmp.includes(e))) return false;
-
-            }
-
-            return true;
-
-        } catch (err) {
-
-            console.error("Error occurred:", err);
-
-            return false;
-
+        // ===== Completion / Quiz Pass-Fail Icon =====
+        let statusIcon = '';
+        if (r.CourseType === '1' || r.CourseType === '2') {
+            statusIcon = r.IsCompleted ? '<i class="bi bi-check-circle-fill text-success"></i>' : '<i class="bi bi-x-circle-fill text-danger"></i>';
+        } else if (r.CourseType === '3') {
+            if (r.PassFail === 'Pass') statusIcon = '<i class="bi bi-check-circle-fill text-success"></i>';
+            else if (r.PassFail === 'Fail') statusIcon = '<i class="bi bi-x-circle-fill text-danger"></i>';
+            else statusIcon = '<i class="bi bi-question-circle-fill text-secondary"></i>';
         }
 
+        $tb.append(`<tr>
+        <td>${escapeHtml(r.EmployeeName)}</td>
+        <td>${escapeHtml(r.Department)}</td>
+        <td>${escapeHtml(r.SubDept)}</td>
+        <td>${escapeHtml(r.Site)}</td>
+        <td>${escapeHtml(r.Training)}</td>
+        <td>${courseIcon} ${escapeHtml(r.Course)}</td>
+        <td class="text-center">${statusIcon}</td>
+        <td class="text-center">${r.QuizScore}</td>
+        <td class="text-center">${r.PassFail}</td>
+    </tr>`);
+    });
+}
 
 
+
+
+function escapeHtml(text) {
+    return $('<div>').text(text).html();
+}
+
+/* ==========================
+   Charts
+   ========================== */
+let chartCompletion, chartPassFail, chartDept, chartSubDept, chartSite, chartTraining;
+
+function renderCharts(rows) {
+    const colors = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#6f42c1', '#fd7e14', '#20c997', '#0dcaf0', '#6610f2', '#e83e8c'];
+
+    // Training Completion % by Employee
+    const empLabels = [...new Set(rows.map(r => r.EmployeeName))];
+    const empData = empLabels.map(emp => {
+        const empRows = rows.filter(r => r.EmployeeName === emp);
+        const completed = empRows.filter(r => r.IsCompleted).length;
+        return empRows.length > 0 ? (completed / empRows.length) * 100 : 0;
+    });
+
+    if (chartCompletion) chartCompletion.destroy();
+    chartCompletion = new Chart(document.getElementById('chartCompletion'), {
+        type: 'bar',
+        data: {
+            labels: empLabels,
+            datasets: [{
+                label: 'Completion %',
+                data: empData,
+                backgroundColor: colors,
+                barThickness: 20,        // fixed thickness
+                maxBarThickness: 30      // maximum thickness
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const employee = context.label;
+                            const empRows = rows.filter(r => r.EmployeeName === employee);
+
+                            const trainings = [...new Set(empRows.map(r => r.Training))].join(", ");
+                            const value = context.raw.toFixed(2) + '%';
+
+                            return [
+                                `Completion: ${value}`,
+                                `Trainings: ${trainings}`
+                            ];
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Completion %'
+                    }
+                }
+            }
+        }
+    });
+
+
+    // Pass/Fail per Training
+    const trainLabels = [...new Set(rows.map(r => r.Training))];
+    const passData = trainLabels.map(t => rows.filter(r => r.Training === t && r.PassFail === 'Pass').length);
+    const failData = trainLabels.map(t => rows.filter(r => r.Training === t && r.PassFail === 'Fail').length);
+    if (chartPassFail) chartPassFail.destroy();
+    chartPassFail = new Chart(document.getElementById('chartPassFail'), {
+        type: 'bar',
+        data: {
+            labels: trainLabels,
+            datasets: [
+                { label: 'Pass', data: passData, backgroundColor: '#198754', barThickness: 15, maxBarThickness: 25 },
+                { label: 'Fail', data: failData, backgroundColor: '#dc3545', barThickness: 15, maxBarThickness: 25 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    // Registered Employees by Department (unique EmployeeIds)
+    const deptLabels = [...new Set(rows.map(r => r.Department))];
+    const deptData = deptLabels.map(d => {
+        const uniqueEmps = new Set(rows.filter(r => r.Department === d).map(r => r.EmployeeId));
+        return uniqueEmps.size;
+    });
+    if (chartDept) chartDept.destroy();
+    chartDept = new Chart(document.getElementById('chartDept'), {
+        type: 'pie',
+        data: {
+            labels: deptLabels,
+            datasets: [{ data: deptData, backgroundColor: colors }]
+        }
+    });
+
+    // SubDepartment (unique EmployeeIds)
+    const subLabels = [...new Set(rows.map(r => r.SubDept))];
+    const subData = subLabels.map(d => {
+        const uniqueEmps = new Set(rows.filter(r => r.SubDept === d).map(r => r.EmployeeId));
+        return uniqueEmps.size;
+    });
+    if (chartSubDept) chartSubDept.destroy();
+    chartSubDept = new Chart(document.getElementById('chartSubDept'), {
+        type: 'pie',
+        data: {
+            labels: subLabels,
+            datasets: [{ data: subData, backgroundColor: colors }]
+        }
+    });
+
+    // Sites (unique EmployeeIds)
+    const siteLabels = [...new Set(rows.map(r => r.Site))];
+    const siteData = siteLabels.map(d => {
+        const uniqueEmps = new Set(rows.filter(r => r.Site === d).map(r => r.EmployeeId));
+        return uniqueEmps.size;
+    });
+    if (chartSite) chartSite.destroy();
+    chartSite = new Chart(document.getElementById('chartSite'), {
+        type: 'pie',
+        data: {
+            labels: siteLabels,
+            datasets: [{ data: siteData, backgroundColor: colors }]
+        }
     });
 
 
 
-    // Step 2: Filter employees
-
-    let filteredEmployees = reportData.Employees.filter(emp => {
-
-
-
-
-
-
-
-
-
-        try {
-
-            const empDeps = JSON.parse(emp.DepartmentName || "[]").map(d => d.id.toString());
-
-            const empSubDeps = JSON.parse(emp.DepartmentSubCategoryName || "[]").map(s => s.id.toString());
-
-            const empSites = JSON.parse(emp.SiteName || "[]").map(s => s.id.toString());
-
-
-
-            const deptMatch = selectedDept.length === 0 || empDeps.some(d => selectedDept.includes(d));
-
-            const subDeptMatch = selectedSubDept.length === 0 || empSubDeps.some(s => selectedSubDept.includes(s));
-
-            const siteMatch = selectedSites.length === 0 || empSites.some(st => selectedSites.includes(st));
-
-            const empMatch = selectedEmp.length === 0 || selectedEmp.includes(emp.EmployeeCode.toString());
-
-
-
-            console.log(deptMatch);
-
-            console.log(subDeptMatch);
-
-            console.log(siteMatch);
-
-            console.log(empMatch);
-
-
-
-
-
-            return deptMatch && subDeptMatch && siteMatch && empMatch;
-
-        } catch (err) {
-
-            console.error("Error occurred:", err);
-
-            return false;
-
-        }
-
-
-
+    // Trainings
+    // Trainings - unique employees per training
+    const trainingLabels = [...new Set(rows.map(r => `${r.Training} (ID: ${r.TrainingId})`))];
+    const trainingData = trainingLabels.map(trainingLabel => {
+        const matchingRows = rows.filter(r => `${r.Training} (ID: ${r.TrainingId})` === trainingLabel);
+        const uniqueEmps = new Set(matchingRows.map(r => r.EmployeeId));
+        return uniqueEmps.size;
     });
-
-
-
-    // ✅ Step 3: If no employees are selected directly, infer from trainings
-
-    if (filteredEmployees.length === 0 && selectedTrain.length > 0) {
-
-        console.log(filteredEmployees);
-
-
-
-        const empIdsFromTrainings = new Set();
-
-
-
-        filteredTrainings.forEach(tr => {
-
-            if (tr.Employees) {
-
-                try {
-
-                    const empList = JSON.parse(tr.Employees).map(e => parseInt(e));
-
-                    empList.forEach(id => empIdsFromTrainings.add(id));
-
-                } catch (err) {
-
-                    console.error("Error occurred:", err);
-
-                    return false;
-
-                }
-
-
-
-            }
-
-            if (tr.Departments) {
-
-                console.log(tr.Departments);
-
-                try {
-
-                    const depList = JSON.parse(tr.DepartmentName).map(d => parseInt(d));
-
-                    reportData.Employees.forEach(emp => {
-
-                        try {
-
-                            const empDeps = JSON.parse(emp.Name).map(d => d.Id);
-
-                            if (empDeps.some(d => depList.includes(d))) {
-
-                                empIdsFromTrainings.add(emp.Id);
-
-                            }
-
-                        } catch (err) {
-
-                            console.error("Error occurred:", err);
-
-                            return false;
-
-                        }
-
-
-
-                    });
-
-                } catch (err) {
-
-                    console.error("Error occurred:", err);
-
-                    return false;
-
-                }
-
-            }
-
-            if (tr.Sites) {
-
-                try {
-
-                    const siteList = JSON.parse(tr.Sites).map(s => parseInt(s));
-
-                    reportData.Employees.forEach(emp => {
-
-                        try {
-
-                            const empSites = JSON.parse(emp.SiteName).map(s => s.Id);
-
-                            if (empSites.some(id => siteList.includes(id))) {
-
-                                empIdsFromTrainings.add(emp.Id);
-
-                            }
-
-                        } catch (err) {
-
-                            console.error("Error occurred:", err);
-
-                            return false;
-
-                        }
-
-
-
-                    });
-
-                } catch (err) {
-
-                    console.error("Error occurred:", err);
-
-                    return false;
-
-                }
-
-
-
-            }
-
+    if (chartTraining) chartTraining.destroy();
+    chartTraining = new Chart(document.getElementById('chartTraining'), {
+        type: 'pie',
+        data: {
+            labels: trainingLabels,
+            datasets: [{
+                data: trainingData,
+                backgroundColor: colors
+            }]
+        }
+    });
+}
+
+/* ==========================
+   Employee Registration Summary
+   ========================== */
+/* ==========================
+   Employee Registration Summary (Unique Employees)
+   ========================== */
+/* ==========================
+   Employee Registration Summary (Unique Employees + List)
+   ========================== */
+function renderRegistrationSummary(rows) {
+    const summary = {};
+
+    rows.forEach(r => {
+        const trainingLabel = `${r.Training} (ID: ${r.TrainingId})`;
+
+        if (!summary[trainingLabel]) summary[trainingLabel] = {};
+        if (!summary[trainingLabel][r.Department]) summary[trainingLabel][r.Department] = {};
+        if (!summary[trainingLabel][r.Department][r.SubDept]) summary[trainingLabel][r.Department][r.SubDept] = {};
+        if (!summary[trainingLabel][r.Department][r.SubDept][r.Site])
+            summary[trainingLabel][r.Department][r.SubDept][r.Site] = new Map();
+
+        summary[trainingLabel][r.Department][r.SubDept][r.Site].set(r.EmployeeId, {
+            id: r.EmployeeId,
+            code: r.EmployeeCode,
+            name: r.EmployeeName
         });
 
-        filteredEmployees = reportData.Employees.filter(emp => empIdsFromTrainings.has(emp.Id));
+        });
+   
 
+    const $accordion = $('#trainingSummaryAccordion').empty();
+    let idx = 0;
+
+    for (const training in summary) {
+        const itemId = `collapseTraining${idx++}`;
+        const headerId = `heading${idx}`;
+
+        let totalEmps = new Set(); // training-level unique employees
+        let contentHtml = '';
+
+        for (const dept in summary[training]) {
+            contentHtml += `<h6 class="mt-2">Department: ${dept}</h6>`;
+            for (const sub in summary[training][dept]) {
+                contentHtml += `<p class="ms-3 fw-semibold">SubDept: ${sub}</p>`;
+                for (const site in summary[training][dept][sub]) {
+                    const empMap = summary[training][dept][sub][site];
+                    const employees = Array.from(empMap.values());
+                    employees.forEach(e => totalEmps.add(e.id));
+
+                    // employee list under this site
+                    const empList = employees.map(e =>
+                        `<li>${e.name}</li>`).join("");
+
+                    contentHtml += `
+        <p class="ms-5">Site: ${site} → <strong>${employees.length}</strong> employees</p>
+        <ul class="ms-7 small text-muted">${empList}</ul>
+        `;
+                }
+            }
+        }
+
+        $accordion.append(`
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="${headerId}">
+                <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#${itemId}"
+                    aria-expanded="false" aria-controls="${itemId}">
+                    🎓 Training: ${training} → <strong>(${totalEmps.size})</strong>  employees
+                </button>
+            </h2>
+            <div id="${itemId}" class="accordion-collapse collapse"
+                aria-labelledby="${headerId}" data-bs-parent="#trainingSummaryAccordion">
+                <div class="accordion-body">
+                    ${contentHtml}
+                </div>
+            </div>
+        </div>
+        `);
     }
-
-    // Step 4: Filter courses for these trainings
-
-    const filteredCourses = reportData.Courses.filter(c =>
-
-        filteredTrainings.some(t => t.TrainingId === c.TrainingId)
-
-    );
-
-    // Step 5: Update charts
-
-    updateDeptChart(getEmployeeCountByDept(filteredEmployees, reportData.Departments));
-
-    updateSiteChart(getEmployeeCountBySite(filteredEmployees, reportData.Sites));
-
-    //updateTrainingChart(getTrainingParticipation(filteredTrainings, filteredEmployees));
-
-    // Assuming reportData.Trainings and reportData.Employees available
-
-    const trainingData = getTrainingParticipation(filteredTrainings, filteredCourses, filteredEmployees, reportData.CoursesProgress);
-
-    updateTrainingChart(trainingData, 'trainingChart');
-
-
-
-
-
-
-
-    updateProgressChart(getTrainingProgress(filteredCourses, filteredEmployees, reportData.CoursesProgress));
-
-
-
-    //updateStructureChart(getCourseCompletion(filteredCourses, filteredEmployees, reportData.CoursesProgress));
-
-
-
-    const courseCompletionData = getCourseCompletionDetailed(filteredCourses, filteredEmployees, reportData.CoursesProgress);
-
-    updateCourseCompletionChartDetailed(courseCompletionData);
-
-
-
-
-
-    const quizData = getQuizReportDetailed(filteredTrainings, filteredEmployees, filteredCourses, reportData.CoursesQuizResult);
-
-    updateQuizChartDetailed(quizData);
-
 }
 
-function clearFilters() {
+function applyFilters(rows) {
+    const dep = $('#filterDepartment').val();
+    const sub = $('#filterSubDept').val();
+    const site = $('#filterSite').val();
+    const training = $('#filterTraining').val();
 
-    $('#deptFilter').val(null).trigger('change');
+    const emp = $('#filterEmployee').val();
 
-    $('#subDeptFilter').val(null).trigger('change');
+    return rows.filter(r => {
+        const matchDep = dep ? r.Department.includes(dep) : true;
+        const matchSub = sub ? r.SubDept.includes(sub) : true;
+        const matchSite = site ? r.Site.includes(site) : true;
+        const matchTraining = training ? `${r.Training} (ID: ${r.TrainingId})` === training : true;
 
-    $('#siteFilter').val(null).trigger('change');
-
-    $('#empFilter').val(null).trigger('change');
-
-    $('#trainFilter').val(null).trigger('change');
-
-
-
-    applyFilters();
-
+        const matchEmp = emp ? r.EmployeeName.includes(emp) : true;
+        return matchDep && matchSub && matchSite && matchTraining && matchEmp;
+    });
 }
 
 
-
+/* ==========================
+   Initialization
+   ========================== */
 $(document).ready(function () {
-
+    const jsonData = DropDownsData;
+    console.log(jsonData);
     hideSpinner();
+    const flatRows = getFlattenedReport(jsonData);
+   
+    const chartData = getRegisteredEmployeesByTraining(flatRows);
+    console.log(flatRows);
+    console.log(jsonData);
+    populateFilters(flatRows, jsonData);
+    renderFlatTable(flatRows);
+    renderCharts(flatRows);
+    renderRegistrationSummary(flatRows);
 
-    initSelect2();
+    $('#filterDepartment, #filterSubDept, #filterSite, #filterTraining, #filterEmployee').on('change', function () {
+        const filteredRows = applyFilters(flatRows);
+        renderFlatTable(filteredRows);
+        renderCharts(filteredRows);
+        renderRegistrationSummary(filteredRows);
+    });
 
-    applyFilters();
-
-
-
-    $('#applyFilter').click(() => applyFilters());
-
-    $('#clearFilter').click(() => clearFilters());
 
 });

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using HrManagement.Data;
 using HrManagement.Helpers;
+using HrManagement.IRepository;
 using HrManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +16,12 @@ namespace HrManagement.WebApi
     {
         private readonly DataContext _context;
         private readonly Email _email;
-        public TrainingAssignAPIController(DataContext context, Email email)
+        private ITrainingNotifactionRepository _trainingNotifactionRepository;
+        public TrainingAssignAPIController(DataContext context, Email email, ITrainingNotifactionRepository trainingNotifactionRepository)
         {
             _context = context;
             _email = email;
+            _trainingNotifactionRepository = trainingNotifactionRepository;
         }
         [HttpPost("AssignTraining")]
         public async Task<IActionResult> AssignTraining(TrainingAssignModel training)
@@ -39,18 +42,28 @@ namespace HrManagement.WebApi
                                                 ,DepartmentsSubCategories = @DepartmentsSubCategories
                                                 ,Employees = @Employees
                                                 ,Sites = @Sites
+                                                ,AssigneDate = @AssigneDate
                                                  WHERE TrainingId = @AssigneId;";
                     training.Assigneby = loggedinUserId;
+                    training.AssigneDate = DateTime.UtcNow;
                     using var connection = _context.CreateConnection();
                     connection.Open();
                     await connection.ExecuteAsync(UpdateQuery, training);
                     connection.Close();
+
+
+                    string sql = "SELECT Title FROM Trainings WHERE TrainingId = @TrainingId";
+
+                    var parameters = new { TrainingId = training.AssigneId };
+                    training.title = await connection.QueryFirstOrDefaultAsync<string>(sql, parameters);
+                    var senEmail = await _trainingNotifactionRepository.SendEmail(training);
                     return StatusCode(200, new
                     {
                         StatusCode = 200,
                         //Message = "Site created successfully!",
                         //Data = new { Id = productId }
                     });
+                   
                 }
                 else
                 {

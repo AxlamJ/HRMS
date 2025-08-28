@@ -69,6 +69,7 @@ builder.Services.AddScoped<IUserQuizRepository, UserQuizRepository>();
 builder.Services.AddScoped<ITrainingUserProgressReportRepository, TrainingUserProgressReportRepository>();
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<ITrainingCommentRepository, TrainingCommentRepository>();
+builder.Services.AddScoped<ITrainingNotifactionRepository, TrainingNotifactionRepository>();
 
 
 // Add services to the container.

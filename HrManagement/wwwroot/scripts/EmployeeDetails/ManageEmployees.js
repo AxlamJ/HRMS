@@ -772,21 +772,21 @@ var addnewemployeeconstraints = {
             message: "is required."
         }
     },
-    "dob": {
-        presence: {
-            message: "is required."
-        }
-    },
+    //"dob": {
+    //    presence: {
+    //        message: "is required."
+    //    }
+    //},
     "on-boarding-date": {
         presence: {
             message: "is required."
         }
     },
-    "phone": {
-        presence: {
-            message: "is required."
-        }
-    },
+    //"phone": {
+    //    presence: {
+    //        message: "is required."
+    //    }
+    //},
     "email": {
         presence: {
             message: "is required."
@@ -797,11 +797,11 @@ var addnewemployeeconstraints = {
             message: "is required."
         }
     },
-    "marital-status": {
-        presence: {
-            message: "is required."
-        }
-    },
+    //"marital-status": {
+    //    presence: {
+    //        message: "is required."
+    //    }
+    //},
     "hiring-date": {
         presence: {
             message: "is required."
@@ -879,7 +879,8 @@ $(document).on("click", "#btn-add-new-employee", function () {
         employee.FirstName = $(form).find("#first-name").val()
         employee.LastName = $(form).find("#last-name").val()
         employee.HiringDate = $(form).find("#hiring-date").val()
-        employee.DOB = $(form).find("#dob").val();
+        let dob = $(form).find("#dob").val();
+        employee.DOB = dob === "" ? null : dob;
         employee.onBoardingDate = $(form).find("#on-boarding-date").val();
         employee.phoneNumber = $(form).find("#phone").val();
         employee.Gender = $(form).find("#gender").val()

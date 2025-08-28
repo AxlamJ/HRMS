@@ -160,6 +160,7 @@ namespace HrManagement.Controllers
                 var LessonProgress = _common.GetAllAsync<UserLessonProgressReport>("UserLessonProgressReport", HttpContext).GetAwaiter().GetResult();
                 var QuizResult = _common.GetAllAsync<QuizReports>("UserQuizAttempt", HttpContext).GetAwaiter().GetResult();
                 var Structure = _common.GetAllAsync<Structure>("TrainingStructure", HttpContext).GetAwaiter().GetResult();
+                var Courses = _common.GetAllAsync<Courses>("TrainingCategory", HttpContext).GetAwaiter().GetResult();
 
 
                 var AssignTrainingByRole = _common.GetAllAsync<Training>("GetTrainingWithPermission", HttpContext).GetAwaiter().GetResult();
@@ -191,7 +192,8 @@ namespace HrManagement.Controllers
                     Employees = Employees,
                     Trainings = Trainings,
                     CoursesQuizResult = QuizResult,
-                    Courses = Structure,
+                    Courses = Courses,
+                    Semester = Structure,
                     CoursesProgress = LessonProgress,
                 };
                 return View();

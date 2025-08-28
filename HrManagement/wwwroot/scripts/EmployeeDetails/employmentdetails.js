@@ -415,7 +415,12 @@ $("#btn-update-employment-details").on("click", function () {
         employee.contractorBusinessChequeName = $("#contractor-business-cheque-name").data('name');
         employee.contractorBusinessChequeUrl = $("#contractor-business-cheque-name").data('href');
 
-        var rolename = $("#role :Selected").text();
+        let roleId = $("#role").val();
+        let rolename = $("#role option:selected").text();
+        employee.roleId = roleId;
+        employee.roleName = rolename;
+        employee.userRoles = roleId;
+       
         if (employee.employmentStatus.toLowerCase().indexOf('contractor') > -1 || rolename.toLowerCase().indexOf('contractor') > -1) {
             if (employee.contractorBusinessName == ''
                 || employee.contractorBusinessName == null
